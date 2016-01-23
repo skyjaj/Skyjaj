@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Skyjaj</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="hello">Hello skyjaj!</string>
+    <string name="settings">Settings</string>
+    <string name="histories">histories</string>
+
+
+
+</resources>

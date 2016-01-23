@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+
+
+    <TextView
+        android:id="@+id/id_from_msg_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="2015-11-25 12:20:02"
+        android:textSize="12sp"
+        android:gravity="center"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="49dp"
+                android:layout_height="49dp"
+                android:src="@drawable/icon"/>
+            <TextView
+                android:id="@+id/id_from_msg_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="习近平"
+                android:layout_gravity="center"
+                android:textSize="18sp"
+                android:textColor="#bebebe"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/id_from_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="59dp"
+            android:background="@drawable/chatfrom_bg_normal"
+            android:text="你好！"
+            android:textSize="22dp"
+            android:gravity="center_vertical"/>
+
+    </LinearLayout>
+</LinearLayout>

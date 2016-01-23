@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+
+    <TextView
+        android:id="@+id/mtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="16sp"
+        android:textColor="#444"
+        android:text="标题"
+        android:singleLine="true"
+        />
+
+    <TextView
+        android:id="@+id/mtext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:minLines="1"
+        android:maxLines="2"
+        android:textSize="14sp"
+        android:textColor="#898989"
+        android:text="医药信息工程学员计算机科学与技术动漫设计。"
+        android:layout_below="@+id/mtitle"
+        />
+
+    <TextView
+        android:id="@+id/mtime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="2015-11-25"
+        android:textColor="#898989"
+        android:textSize="12sp"
+        android:layout_below="@+id/mtext"/>
+    <TextView
+        android:id="@+id/phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/mtext"
+        android:layout_alignParentRight="true"
+        android:background="#2ED667"
+        android:padding="3dp"
+        android:text="10086"
+        android:textColor="#fff"
+        android:textSize="12sp"/>
+
+</RelativeLayout>

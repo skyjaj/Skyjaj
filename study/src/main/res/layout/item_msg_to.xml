@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="right"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+
+    <TextView
+        android:id="@+id/id_to_msg_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="2015-11-25 12:20:02"
+        android:textSize="12sp"
+        android:gravity="center"/>
+
+    <RelativeLayout
+
+        android:gravity="right"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        >
+
+
+        <TextView
+            android:id="@+id/id_to_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/chatto_bg_normal"
+            android:textSize="22dp"
+            android:text="你好"
+            android:layout_marginRight="55dp"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="59dp"/>
+
+
+        <LinearLayout
+            android:layout_alignParentRight="true"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="49dp"
+                android:layout_height="49dp"
+                android:src="@drawable/me"/>
+            <TextView
+                android:id="@+id/id_to_msg_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我"
+                android:layout_gravity="center"
+                android:textSize="18sp"
+                android:textColor="#bebebe"/>
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>
