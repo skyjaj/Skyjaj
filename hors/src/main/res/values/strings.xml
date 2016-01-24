@@ -1,0 +1,127 @@
+<resources>
+
+    <!-- test-->
+    <string name="action_github">Github</string>
+    <string name="start_activity">Start new activity!</string>
+    <string name="finish_activity">Finish Activity</string>
+
+    <string name="key_tracking_mode">key_tracking_mode</string>
+    <string name="tracking_mode_left">Left</string>
+    <string name="tracking_mode_right">Right</string>
+    <string name="tracking_mode_bottom">Bottom</string>
+    <string name="tracking_mode_all">All</string>
+
+    <string name="app_name">HORS</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- indexActivity-->
+    <string-array name="index_array_left_menu">
+        <item>立即欣赏</item>
+        <item>我的乐库</item>
+        <item>播放列表</item>
+    </string-array>
+    <string name="open">打开</string>
+    <string name="close">关闭</string>
+
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">电话号码</string>
+    <string name="prompt_password">密码</string>
+    <string name="action_sign_in">登录</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_mobile">用户名不合法</string>
+    <string name="error_invalid_password">密码长度过短</string>
+    <string name="error_incorrect_password">用户名或密码不正确</string>
+    <string name="error_field_required">必填字段</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <string name="register_title">注册</string>
+
+    
+    <!-- strings related to index activity-->
+    <string name="app_search">查找</string>
+    <string name="app_add">添加</string>
+    <string name="menu_group_chat">发起群聊</string>
+    <string name="menu_feedback">意见反馈</string>
+    <string name="menu_addfriend">添加朋友</string>
+    <string name="menu_scan">扫一扫</string>
+    <string name="tab_service">医疗服务</string>
+    <string name="tab_contact">通讯录</string>
+    <string name="tab_me">我</string>
+    <string name="tab_found">发现</string>
+
+    
+    <!-- index views 主页每个页面的相关信息定义-->
+    <string name="index_service_appointment">预约挂号</string>
+    <string name="index_service_queue_waiting">排队候诊</string>
+    <string name="index_found_map">带我去</string>
+    <string name="index_found_notification_appointment">预约信息</string>
+    <string name="index_found_notification_news">医疗新闻</string>
+    <string name="index_me_setting">设置</string>
+    <string name="index_me_history">查看历史</string>
+    <string name="index_me_person">个人信息</string>
+    <string name="index_me_exit">退出</string>
+
+    
+    
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+</resources>

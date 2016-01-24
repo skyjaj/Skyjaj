@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:background="#eee"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:background="#eb4f38"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <FrameLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/search_et_input"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="10dp"
+                android:drawableLeft="@android:drawable/ic_search_category_default"
+                android:drawablePadding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:hint="请输入关键字"/>
+
+            <ImageView
+                android:visibility="gone"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/ic_menu_myplaces"
+                android:id="@+id/search_iv_delete"
+                android:layout_gravity="right|center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/search_btn_back"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/tab_bg"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:text="返回"
+            android:textColor="#090909"/>
+    </LinearLayout>
+
+    <ListView
+        android:visibility="gone"
+        android:id="@+id/search_lv_tips"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+    </ListView>
+</LinearLayout>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.skyjaj.hors.activities.LoginActivity">
+
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/login_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:popupTheme="@style/AppTheme.IndexPopMenuTheme"
+        android:theme="@style/AppTheme.login">
+    </android.support.v7.widget.Toolbar>
+
+    <!-- Login progress -->
+    <ProgressBar
+        android:id="@+id/login_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"/>
+
+
+
+    <LinearLayout
+        android:id="@+id/login_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="50dp"
+        android:paddingLeft="16dp"
+        android:paddingBottom="16dp"
+        android:paddingRight="16dp">
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="0.5">
+
+            <ImageButton
+                android:layout_width="55dp"
+                android:layout_height="50dp"
+                android:src="@drawable/profile"
+                android:layout_weight="2"/>
+
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/login_username"
+                android:hint="请输入手机号码"
+                android:layout_weight="7"
+                android:phoneNumber="true"
+                android:numeric="integer"
+                android:maxLength="11"
+                android:maxLines="1"
+                android:padding="20dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5">
+
+            <ImageButton
+                android:layout_width="55dp"
+                android:layout_height="50dp"
+                android:id="@+id/iamgeBtn2"
+                android:layout_weight="2"
+                android:src="@android:drawable/ic_lock_idle_lock" />
+
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/login_password"
+                android:hint="请输入密码"
+                android:password="true"
+                android:inputType="textPassword"
+                android:imeActionId="@+id/login"
+                android:capitalize="sentences"
+                android:layout_weight="7"
+                android:maxLength="18"
+                android:maxLines="1"
+                android:padding="20dp"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5">
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="自动登录"
+                android:checked="true"
+                android:layout_weight="1"
+                android:id="@+id/checkBox_auto_login"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="登    录"
+                android:id="@+id/phone_sign_in_button"
+                android:onClick="loginIn"
+                android:textSize="16sp"
+                android:textColor="@color/base_color_text_white"
+                android:background="@drawable/radius_button"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

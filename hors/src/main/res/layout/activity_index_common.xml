@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".activities.IndexCommonActivity">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/index_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:minHeight="?attr/actionBarSize"
+        app:popupTheme="@style/AppTheme.IndexPopMenuTheme"
+        app:theme="@style/AppTheme.indexCommonActivity"/>
+
+<!--    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/index_drawerlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        &lt;!&ndash; 内容页面&ndash;&gt;
+        <FrameLayout
+            android:id="@+id/index_content_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </FrameLayout>
+        &lt;!&ndash; 菜单页&ndash;&gt;
+        <FrameLayout
+            android:id="@+id/index_left_menu_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:background="#ffffffff">
+        </FrameLayout>
+    </android.support.v4.widget.DrawerLayout>-->
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/id_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+    </android.support.v4.view.ViewPager>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@drawable/tab_bg"
+        android:orientation="horizontal" >
+
+
+        <com.skyjaj.hors.widget.ChangeColorIconWithText
+            android:id="@+id/id_indicator_one"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:padding="5dp"
+            app:hors_icon="@drawable/ic_menu_emoticons"
+            app:hors_text="@string/tab_service"
+            app:hors_text_size="12sp"
+            app:hors_color="#ff45c01a" />
+
+
+        <com.skyjaj.hors.widget.ChangeColorIconWithText
+            android:id="@+id/id_indicator_two"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:padding="5dp"
+            app:hors_icon="@drawable/ic_menu_start_conversation"
+            app:hors_text="@string/tab_found"
+            app:hors_text_size="12sp"
+            app:hors_color="#ff45c01a" />
+
+        <com.skyjaj.hors.widget.ChangeColorIconWithText
+            android:id="@+id/id_indicator_three"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:padding="5dp"
+            app:hors_icon="@drawable/ic_menu_myplaces"
+            app:hors_text="@string/tab_me"
+            app:hors_text_size="12sp"
+            app:hors_color="#ff45c01a" />
+    </LinearLayout>
+
+
+</LinearLayout>

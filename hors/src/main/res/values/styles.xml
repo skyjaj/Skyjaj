@@ -1,0 +1,80 @@
+<resources>
+
+    <!-- test-->
+    <style name="SwipeBackLayout">
+        <item name="edge_size">50dip</item>
+        <item name="shadow_left">@drawable/shadow_left</item>
+        <item name="shadow_right">@drawable/shadow_right</item>
+        <item name="shadow_bottom">@drawable/shadow_bottom</item>
+    </style>
+
+    <!-- Base application theme. Theme.AppCompat.Light.DarkActionBar Theme.AppCompat.Light.NoActionBar-->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <!--<item name="android:windowIsTranslucent">true</item>-->
+        <item name="android:windowAnimationStyle">@style/Activity_anim</item>
+        <!-- colorPrimary 是actionbar的颜色colorPrimary-->
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <!-- 状态栏的颜色-->
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!-- colorAccent 对应EditText编辑时、RadioButton选中、CheckBox等选中时的颜色-->
+        <item name="colorAccent">@color/colorAccent</item>
+        <!-- 菜单字体颜色-->
+        <!--<item name="android:actionMenuTextColor">@color/base_color_text_white</item>-->
+    </style>
+
+
+    <!--自定义主题 -->
+    <style name="AppTheme.login" parent="Theme.AppCompat">
+        <item name="android:textColor">@color/base_color_text_white</item>
+        <item name="android:actionDropDownStyle">@style/actionDropDownStyle</item>
+        <item name="android:actionMenuTextColor">@color/base_color_text_white</item>
+        <!--<item name="android:windowCloseOnTouchOutside">true</item>-->
+    </style>
+
+    <style name="login_overflow_button_style">
+        <item name="android:src">@drawable/actionbar_add_icon</item>
+    </style>
+
+    <!-- android:Theme.Holo.Light.DarkActionBar-->
+    <style name="AppTheme.indexCommonActivity" parent="Theme.AppCompat.Light" >
+        <item name="android:actionDropDownStyle">@style/actionDropDownStyle</item>
+        <item name="android:actionMenuTextColor">@color/base_color_text_white</item>
+        <item name="android:textColor">@color/base_color_text_white</item>
+    </style>
+
+    <!-- Activity进退动画-->
+    <style name="Activity_anim" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_in_from_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_out_from_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_in_from_right</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_out_from_left</item>
+    </style>
+
+
+    <!-- 设置弹出菜单样式-->
+    <style name="AppTheme.IndexPopMenuTheme" parent="Base.Widget.AppCompat.PopupMenu" >
+        <item name="android:colorBackground">#FF444444</item>
+        <!--<item name="android:dropDownVerticalOffset">-48dip</item>-->
+        <item name="overlapAnchor">false</item>
+    </style>
+
+    <!-- 按下的颜色-->
+    <style name="actionDropDownStyle">
+        <item name="android:popupBackground">@color/base_color_text_black</item>
+    </style>
+
+    <style name="Smile">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="Smile.TextView">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Smile.TextView._Black">
+        <item name="android:textColor">@color/base_color_text_black</item>
+    </style>
+
+</resources>

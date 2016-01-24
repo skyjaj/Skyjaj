@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/action_register"
+          android:icon="@drawable/menu_register_icon"
+          android:title="注册"  app:showAsAction="always" />
+
+    <item android:id="@+id/action_role"
+          android:icon="@drawable/menu_add_icon"
+          android:title="切换角色" android:showAsAction="always">
+
+        <menu>
+            <group>
+                <item
+                    android:id="@+id/action_role_common"
+                   android:icon="@drawable/tab_find_frd_normal"
+                  android:title="患者"  app:showAsAction="always" />
+
+                <item
+                    android:id="@+id/action_role_doctor"
+                    android:icon="@drawable/tab_find_frd_normal"
+                    android:title="医生"  app:showAsAction="always" />
+
+                <item
+                    android:id="@+id/action_role_manager"
+                    android:icon="@drawable/tab_find_frd_normal"
+                    android:title="管理员"  app:showAsAction="always" />
+            </group>
+        </menu>
+
+    </item>
+
+    <item android:id="@+id/action_forget_password"
+        android:icon="@drawable/menu_feedback_icon"
+        android:title="忘记密码" android:showAsAction="always" />
+
+</menu>

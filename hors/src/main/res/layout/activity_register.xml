@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/register_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        app:popupTheme="@style/AppTheme.IndexPopMenuTheme"
+        app:theme="@style/AppTheme.indexCommonActivity">
+    </android.support.v7.widget.Toolbar>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp">
+
+             <LinearLayout
+                 android:layout_weight="0.5"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:orientation="horizontal">
+                 <EditText
+                     android:id="@+id/register_mobile"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:hint="请输入手机号码"
+                     android:drawableLeft="@drawable/profile"
+                     android:paddingLeft="10dp"
+                     android:phoneNumber="true"
+                     android:numeric="integer"
+                     android:maxLength="11"
+                     android:maxLines="1"/>
+             </LinearLayout>
+
+              <LinearLayout
+                  android:layout_weight="0.5"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal">
+
+                  <EditText
+                      android:id="@+id/register_psw_one"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:password="true"
+                      android:maxLength="18"
+                      android:singleLine="true"
+                      android:hint="请输入密码"
+                      android:drawableLeft="@android:drawable/ic_lock_idle_lock"/>
+
+              </LinearLayout>
+
+                <LinearLayout
+                    android:layout_weight="0.5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/register_psw_two"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:password="true"
+                        android:maxLength="18"
+                        android:singleLine="true"
+                        android:hint="请再次输入密码"
+                        android:drawableLeft="@android:drawable/ic_lock_idle_lock"/>
+
+                </LinearLayout>
+
+               <LinearLayout
+                   android:layout_weight="0.5"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:orientation="vertical"
+                   android:paddingTop="20dp"
+                   android:paddingLeft="5dp"
+                   android:paddingRight="20dp">
+
+                   <TextView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="性别 :"/>
+
+                   <RadioGroup
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:paddingLeft="20dp"
+                       android:orientation="horizontal"
+                       android:layout_weight="3">
+
+                       <RadioButton
+                           android:layout_weight="2"
+                           android:id="@+id/register_sex_f"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:onClick="onRadioButton"
+                           android:text="女"/>
+
+                       <RadioButton
+                           android:id="@+id/register_sex_m"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:text="男"
+                           android:onClick="onRadioButton"
+                           android:checked="true"/>
+                   </RadioGroup>
+               </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="注  册"
+                    android:textSize="16sp"
+                    android:textColor="@color/base_color_text_white"
+                    android:background="@drawable/radius_button"
+                    android:onClick="onRegister"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+</LinearLayout>
