@@ -2,6 +2,7 @@ package com.skyjaj.hors.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,8 +35,6 @@ public class ViewHolder {
             holder.mPosition=position;
             return holder;
         }
-
-
     }
 
     public <T extends View> T getView(int viewId) {
@@ -66,6 +65,19 @@ public class ViewHolder {
     }
 
     /**
+     * 设置文本颜色
+     * @param viewId
+     * @param color
+     * @return
+     */
+    public  ViewHolder setTextColor(int viewId,int color){
+        TextView tv = getView(viewId);
+        tv.setTextColor(color);
+        return this;
+    }
+
+
+    /**
      * 加载bitmap图片资源
      * @param viewId
      * @param bitmap
@@ -87,6 +99,19 @@ public class ViewHolder {
     public ViewHolder setImageResource(int viewId,int resId) {
         ImageView view = getView(viewId);
         view.setImageResource(resId);
+        return this;
+    }
+
+    /**
+     * 设置view背景颜色
+     * @param viewId
+     * @param color
+     * @return
+     */
+
+    public ViewHolder setViewBackground(int viewId,int color) {
+        View view = getView(viewId);
+        view.setBackgroundColor(color);
         return this;
     }
 

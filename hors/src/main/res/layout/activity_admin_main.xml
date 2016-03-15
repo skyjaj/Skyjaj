@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/common_toolbar" />
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/index_drawerlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--内容页面-->
+        <FrameLayout
+            android:id="@+id/index_content_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </FrameLayout>
+        <!-- 菜单页 layout_gravity可以设置侧滑是在左边还是右边 -->
+        <FrameLayout
+            android:id="@+id/index_menu_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:background="#ffffffff">
+        </FrameLayout>
+
+    </android.support.v4.widget.DrawerLayout>
+
+
+</LinearLayout>

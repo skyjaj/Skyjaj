@@ -1,65 +1,43 @@
 package com.skyjaj.hors.activities;
 
-import android.app.Activity;
-import android.content.res.Resources;
-import android.graphics.Color;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.menu.BaseMenuPresenter;
 import android.support.v7.view.menu.MenuBuilder;
-import android.support.v7.view.menu.MenuPresenter;
-import android.support.v7.widget.ActionMenuView;
-import android.support.v7.widget.TintManager;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
-import android.view.Window;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.skyjaj.hors.R;
-import com.skyjaj.hors.index.widget.IndexView;
+import com.skyjaj.hors.utils.ToolbarStyle;
 import com.skyjaj.hors.widget.ChangeColorIconWithText;
-import com.skyjaj.hors.widget.IndexContentFragment;
-import com.skyjaj.hors.widget.IndexLeftMenuFragment;
 import com.skyjaj.hors.widget.TabFragment;
+
+import org.androidpn.client.ServiceManager;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IndexCommonActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,View.OnClickListener{
-
-/*    private ActionBarDrawerToggle mActionBarDrawerToggle;
-
-    private DrawerLayout mDrawerLayout;
-
-
-    private IndexLeftMenuFragment mLeftMenuFragment;
-    private IndexContentFragment mCurrentFragment;
-    private FragmentManager fm=null;*/
-
-//    private String mTitle;
-//    private static final String TAG = "com.skyjaj.hors";
-//    private static final String KEY_TITLLE = "key_title";
+public class IndexCommonActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,View.OnClickListener,View.OnTouchListener{
 
 
 
+
+
+    private ServiceTask mTask;
+    private String username;
     private ViewPager mViewPager;
     private List<Fragment> mTabs = new ArrayList<Fragment>();
     private String[] mTitles = new String[]
@@ -72,22 +50,24 @@ public class IndexCommonActivity extends AppCompatActivity implements ViewPager.
     Toolbar mToolbar = null;
 
 
+    private SharedPreferences sharedPreferences;
+    private ServiceManager serviceManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_index_common);
-
+        MyActivityManager.getInstance().addActivity(this);
         initToolbar();
         initContentViews();
         initDatas();
         mViewPager.setAdapter(mAdapter);
         mViewPager.addOnPageChangeListener(this);
-        //initViews();
-        //初始化默认标题
-        //restoreTitle(savedInstanceState);
-        //初始化fragments
-       // initFragments();
+        sharedPreferences = this.getSharedPreferences("horsUserInfo", MODE_PRIVATE);
 
+
+        mTask = new ServiceTask();
+        mTask.execute();
     }
 
     private void initDatas() {
@@ -125,118 +105,27 @@ public class IndexCommonActivity extends AppCompatActivity implements ViewPager.
         mTabIndicators.add(two);
         ChangeColorIconWithText three = (ChangeColorIconWithText) findViewById(R.id.id_indicator_three);
         mTabIndicators.add(three);
-//        ChangeColorIconWithText four = (ChangeColorIconWithText) findViewById(R.id.id_indicator_four);
-//        mTabIndicators.add(four);
 
         one.setOnClickListener(this);
         two.setOnClickListener(this);
         three.setOnClickListener(this);
-//        four.setOnClickListener(this);
         one.setIconAlpha(1.0f);
+
     }
 
 
-/*    private void initFragments() {
-        fm = getSupportFragmentManager();
-        //查找当前显示的Fragment
-        mCurrentFragment = (IndexContentFragment) fm.findFragmentByTag(mTitle);
 
-        if (mCurrentFragment == null) {
-            mCurrentFragment = IndexContentFragment.newInstance(mTitle);
-            fm.beginTransaction().add(R.id.index_content_container, mCurrentFragment, mTitle).commit();
-        }
-
-        mLeftMenuFragment = (IndexLeftMenuFragment) fm.findFragmentById(R.id.index_left_menu_container);
-        if (mLeftMenuFragment == null) {
-            mLeftMenuFragment = new IndexLeftMenuFragment();
-            fm.beginTransaction().add(R.id.index_left_menu_container, mLeftMenuFragment).commit();
-        }
-
-        //隐藏别的Fragment，如果存在的话
-        List<Fragment> fragments = fm.getFragments();
-        if (fragments != null)
-            for (Fragment fragment : fragments) {
-                if (fragment == mCurrentFragment || fragment == mLeftMenuFragment) continue;
-                fm.beginTransaction().hide(fragment).commit();
-            }
-
-        //设置MenuItem的选择回调
-        mLeftMenuFragment.setOnMenuItemSelectedListener(new IndexLeftMenuFragment.OnMenuItemSelectedListener() {
-            @Override
-            public void menuItemSelected(String title) {
-
-//                FragmentManager fm = getSupportFragmentManager();
-                IndexContentFragment fragment = (IndexContentFragment) getSupportFragmentManager().findFragmentByTag(title);
-                if (fragment == mCurrentFragment) {
-                    mDrawerLayout.closeDrawer(Gravity.LEFT);
-                    return;
-                }
-
-                FragmentTransaction transaction = fm.beginTransaction();
-                transaction.hide(mCurrentFragment);
-
-                if (fragment == null) {
-                    fragment = IndexContentFragment.newInstance(title);
-                    transaction.add(R.id.index_content_container, fragment, title);
-                } else {
-                    transaction.show(fragment);
-                }
-                transaction.commit();
-
-                mCurrentFragment = fragment;
-                mTitle = title;
-                mToolbar.setTitle(mTitle);
-                mDrawerLayout.closeDrawer(Gravity.LEFT);
-
-            }
-        });
-    }*/
 
 
     private void initToolbar() {
-        mToolbar = (Toolbar) findViewById(R.id.index_toolbar);
-        mToolbar.setBackgroundColor(Color.DKGRAY);
-        mToolbar.setTitle("hors");
-        mToolbar.setTitleTextColor(Color.WHITE);
+        mToolbar = ToolbarStyle.initToolbarWithNoBackKey(this, R.id.index_toolbar, "hors");
         mToolbar.setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.actionbar_add_icon));
-//        mToolbar.setNavigationContentDescription("init toolbar..");
         setSupportActionBar(mToolbar);
-//        mToolbar.setNavigationIcon(R.drawable.tab_settings_normal);
-//        Log.i("skyjaj", "init bar id " + mToolbar.getNavigationContentDescription());
-//        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(IndexCommonActivity.this, "action addfriend ", Toast.LENGTH_SHORT).show();
-//            }
-//        });
     }
 
-  /*  private void initViews() {
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.index_drawerlayout);
 
-        mActionBarDrawerToggle = new ActionBarDrawerToggle(this,
-                mDrawerLayout, mToolbar, R.string.open, R.string.close);
-        mActionBarDrawerToggle.syncState();
-        mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
-    }*/
 
-  /*  @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(KEY_TITLLE, mTitle);
-    }*/
 
-/*    private void restoreTitle(Bundle savedInstanceState) {
-        if (savedInstanceState != null)
-            mTitle = savedInstanceState.getString(KEY_TITLLE);
-
-        if (TextUtils.isEmpty(mTitle)) {
-            mTitle = getResources().getStringArray(
-                    R.array.index_array_left_menu)[0];
-        }
-
-        mToolbar.setTitle(mTitle);
-    }*/
 
 
     @Override
@@ -284,6 +173,7 @@ public class IndexCommonActivity extends AppCompatActivity implements ViewPager.
         switch (id){
 
             case R.id.action_addfriend:
+
                 Toast.makeText(this,"action addfriend ",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.action_feedback:
@@ -331,23 +221,22 @@ public class IndexCommonActivity extends AppCompatActivity implements ViewPager.
 
     private void clickTab(View v)
     {
-        resetOtherTabs();
+            resetOtherTabs();
 
-        switch (v.getId())
-        {
-            case R.id.id_indicator_one:
-                mTabIndicators.get(0).setIconAlpha(1.0f);
-                mViewPager.setCurrentItem(0, false);
-                break;
-            case R.id.id_indicator_two:
-                mTabIndicators.get(1).setIconAlpha(1.0f);
-                mViewPager.setCurrentItem(1, false);
-                break;
-            case R.id.id_indicator_three:
-                mTabIndicators.get(2).setIconAlpha(1.0f);
-                mViewPager.setCurrentItem(2, false);
-                break;
-
+            switch (v.getId())
+            {
+                case R.id.id_indicator_one:
+                    mTabIndicators.get(0).setIconAlpha(1.0f);
+                    mViewPager.setCurrentItem(0, false);
+                    break;
+                case R.id.id_indicator_two:
+                    mTabIndicators.get(1).setIconAlpha(1.0f);
+                    mViewPager.setCurrentItem(1, false);
+                    break;
+                case R.id.id_indicator_three:
+                    mTabIndicators.get(2).setIconAlpha(1.0f);
+                    mViewPager.setCurrentItem(2, false);
+                    break;
         }
     }
 
@@ -357,4 +246,69 @@ public class IndexCommonActivity extends AppCompatActivity implements ViewPager.
             mTabIndicators.get(i).setIconAlpha(0);
         }
     }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        return false;
+    }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent home = new Intent(Intent.ACTION_MAIN);
+             home.addCategory(Intent.CATEGORY_HOME);
+             startActivity(home);
+            //返回true表示已处理该事件，不再传递
+            return  true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+
+    @Override
+    protected void onStop() {
+        Log.i("skyjaj", "act on stop ..");
+        super.onStop();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.i("skyjaj", "on destroy ");
+        if (serviceManager != null) {
+            serviceManager.stopService();
+        }
+        MyActivityManager.getInstance().remove(this);
+        super.onDestroy();
+    }
+
+
+
+    public class ServiceTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+
+            serviceManager = new ServiceManager(IndexCommonActivity.this);
+            serviceManager.setNotificationIcon(R.drawable.me);
+            serviceManager.startService();
+
+
+            username = sharedPreferences.getString("HORS_USERNAME","username");
+            if (!"username".equals(username)) {
+                //角色+手机号
+                serviceManager.setAlias("patient" + username);
+                List<String> list = new ArrayList<>();
+                list.add("sport");
+                list.add("music");
+                serviceManager.setTags(list);
+            }
+
+            return true;
+        }
+    }
+
+
+
 }

@@ -1,10 +1,12 @@
 package com.skyjaj.hors.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.SectionIndexer;
 
 
 import com.skyjaj.hors.bean.BaseMessage;
@@ -15,7 +17,7 @@ import java.util.Map;
 /**
  * Created by Administrator on 2015/11/25.
  */
-public abstract class CommonAdapter<T extends BaseMessage> extends BaseAdapter {
+public abstract class CommonAdapter<T extends BaseMessage> extends BaseAdapter{
 
     protected Context mContext;
     protected List<T> mDatas;
@@ -36,7 +38,7 @@ public abstract class CommonAdapter<T extends BaseMessage> extends BaseAdapter {
     @Override
     public int getItemViewType(int position) {
         T t = mDatas.get(position);
-        if(t.getType()== BaseMessage.Type.INCOMING){
+        if(t.getItemType()== BaseMessage.Type.INCOMING) {
             return 0;
         }else{
             return 1;
@@ -65,8 +67,12 @@ public abstract class CommonAdapter<T extends BaseMessage> extends BaseAdapter {
     }
 
 
+
     public abstract void convert(ViewHolder viewHolder,T t);
 
+    public void setmDatas(List<T> datas) {
+        this.mDatas=datas;
+    }
 
     @Override
     public T getItem(int position) {

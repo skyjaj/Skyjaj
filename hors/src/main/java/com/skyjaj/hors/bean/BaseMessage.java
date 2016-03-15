@@ -6,7 +6,9 @@ package com.skyjaj.hors.bean;
 public class BaseMessage {
 
 
-    protected Type type;
+    protected Type itemType = Type.INCOMING;
+    //拼音索引
+    private String index;
 
     public  enum Type{
 
@@ -14,11 +16,19 @@ public class BaseMessage {
 
     }
 
-    public Type getType() {
-        return type;
+    public void setIndex(String index) {
+        this.index = index;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public String getIndex() {
+        return index;
+    }
+
+    public Type getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(Type type) {
+       this.itemType=type;
     }
 }

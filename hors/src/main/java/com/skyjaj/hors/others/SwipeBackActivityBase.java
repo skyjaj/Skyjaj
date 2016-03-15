@@ -1,8 +1,6 @@
 package com.skyjaj.hors.others;
 
-/**
- * @author Yrom
- */
+
 public interface SwipeBackActivityBase {
     /**
      * @return the SwipeBackLayout associated with this activity.

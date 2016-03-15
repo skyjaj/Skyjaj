@@ -16,9 +16,12 @@
 
     <!-- indexActivity-->
     <string-array name="index_array_left_menu">
-        <item>立即欣赏</item>
-        <item>我的乐库</item>
-        <item>播放列表</item>
+        <item>用户管理</item>
+        <item>科室管理</item>
+        <item>预约管理</item>
+        <item>消息管理</item>
+        <item>我</item>
+
     </string-array>
     <string name="open">打开</string>
     <string name="close">关闭</string>
@@ -42,7 +45,7 @@
 
     <string name="register_title">注册</string>
 
-    
+
     <!-- strings related to index activity-->
     <string name="app_search">查找</string>
     <string name="app_add">添加</string>
@@ -55,7 +58,7 @@
     <string name="tab_me">我</string>
     <string name="tab_found">发现</string>
 
-    
+
     <!-- index views 主页每个页面的相关信息定义-->
     <string name="index_service_appointment">预约挂号</string>
     <string name="index_service_queue_waiting">排队候诊</string>
@@ -67,8 +70,17 @@
     <string name="index_me_person">个人信息</string>
     <string name="index_me_exit">退出</string>
 
-    
-    
+
+    <!-- 自定义loading dialog -->
+    <style name="loading_dialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/radius_loading_bg</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 

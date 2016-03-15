@@ -9,7 +9,12 @@
     <color name="androidColorE">#FF4444</color>
 
     <!-- hors-->
-    <color name="state_menu_item_selected">#44009688</color>
+    <color name="state_menu_item_selected">#df4657a3</color>
+
+    <color name="color_button_login_normal">#009a00</color>
+    <color name="color_button_login_press">#93b593</color>
+    <color name="color_button_login_focus">#194619</color>
+    <!-- end-->
 
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
@@ -23,6 +28,7 @@
     <color name="pull_refresh_textview">#000000</color>
     <color name="base_color_text_black">#3e3e39</color>
     <color name="base_color_text_gray">#9fa0a0</color>
+    <color name="base_color_little_gray">#d2d4d4</color>
     <color name="base_color_text_white">#ffffff</color>
     <color name="home_item_color_bg">#f4f6f6</color>
     <color name="base_bg">#f4f6f6</color>

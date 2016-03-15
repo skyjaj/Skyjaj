@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="#ffffff"
+    android:padding="10dp"
+    android:gravity="center"
+    android:layout_width="180dp"
+    android:layout_height="131dp">
+
+
+
+    <LinearLayout
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            android:drawableLeft="@drawable/ic_info_black_24dp"
+            android:id="@+id/switchOtherAccount"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:drawablePadding="10dp"
+            android:onClick="exitOrSwitchOtherAccount"
+            android:text="注销帐号"
+            android:background="@drawable/selector_textview"/>
+
+    </LinearLayout>
+
+
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="1dp"
+        android:background="#e3e0e0"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        />
+
+
+
+    <LinearLayout
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <!--//android:drawable/ic_lock_power_off-->
+        <TextView
+            android:drawableLeft="@drawable/ic_info_black_24dp"
+            android:id="@+id/close_application"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:drawablePadding="10dp"
+            android:onClick="exitOrSwitchOtherAccount"
+            android:text="退出程序"
+            android:background="@drawable/selector_textview"/>
+
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>

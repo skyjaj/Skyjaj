@@ -89,6 +89,7 @@ public class SearchActivity extends Activity implements SearchView.SearchViewLis
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_search);
+        MyActivityManager.getInstance().addActivity(this);
         initData();
         initViews();
     }

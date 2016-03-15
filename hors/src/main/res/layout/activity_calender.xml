@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#96dbf2"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#5e5d5c">
+
+        <ImageButton
+            android:id="@+id/calender_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:onClick="onClick"
+            android:background="@drawable/ic_menu_back" />
+
+        <TextView
+            android:id="@+id/tvCurrentMonth"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:singleLine="true"
+            android:ellipsize="middle"
+            android:gravity="center_horizontal"
+            android:text="日期选择"
+            android:textColor="#ffffff"
+            android:textSize="22sp" />
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="2dp">
+
+            <TableRow>
+
+                <TextView
+                    style="@style/dateStyle"
+                    android:text="日"
+                    android:textColor="#323232" />
+
+                <TextView
+                    style="@style/dateStyle"
+                    android:text="一"
+                    android:textColor="#323232" />
+                <TextView
+                    style="@style/dateStyle"
+                    android:text="二"
+                    android:textColor="#323232" />
+
+                <TextView
+                    style="@style/dateStyle"
+                    android:text="三"
+                    android:textColor="#323232" />
+
+                <TextView
+                    style="@style/dateStyle"
+                    android:text="四"
+                    android:textColor="#323232" />
+
+                <TextView
+                    style="@style/dateStyle"
+                    android:text="五"
+                    android:textColor="#323232" />
+
+                <TextView
+                    style="@style/dateStyle"
+                    android:text="六"
+                    android:textColor="#323232" />
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+
+
+    <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1">
+
+    <LinearLayout
+        android:id="@+id/calender_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+    </LinearLayout>
+
+</ScrollView>
+
+</LinearLayout> 

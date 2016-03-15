@@ -9,9 +9,6 @@ import android.view.View;
 import com.skyjaj.hors.R;
 
 
-/**
- * @author Yrom
- */
 public class SwipeBackActivityHelper {
     private Activity mActivity;
 

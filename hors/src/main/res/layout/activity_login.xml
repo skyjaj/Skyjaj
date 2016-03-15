@@ -23,7 +23,7 @@
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="30dp"
+        android:layout_margin="100dp"
         android:layout_gravity="center_horizontal"
         android:visibility="gone"/>
 
@@ -123,7 +123,7 @@
                 android:onClick="loginIn"
                 android:textSize="16sp"
                 android:textColor="@color/base_color_text_white"
-                android:background="@drawable/radius_button"/>
+                android:background="@drawable/selector_button"/>
 
         </LinearLayout>
 

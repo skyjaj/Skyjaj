@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    tools:context=".activities.IndexCommonActivity">
+    android:orientation="vertical">
 
 
     <android.support.v7.widget.Toolbar
@@ -16,25 +15,7 @@
         app:popupTheme="@style/AppTheme.IndexPopMenuTheme"
         app:theme="@style/AppTheme.indexCommonActivity"/>
 
-<!--    <android.support.v4.widget.DrawerLayout
-        android:id="@+id/index_drawerlayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        &lt;!&ndash; 内容页面&ndash;&gt;
-        <FrameLayout
-            android:id="@+id/index_content_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </FrameLayout>
-        &lt;!&ndash; 菜单页&ndash;&gt;
-        <FrameLayout
-            android:id="@+id/index_left_menu_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"
-            android:background="#ffffffff">
-        </FrameLayout>
-    </android.support.v4.widget.DrawerLayout>-->
+
 
     <android.support.v4.view.ViewPager
         android:id="@+id/id_viewpager"

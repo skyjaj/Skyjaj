@@ -23,10 +23,6 @@ import android.widget.Toast;
 import com.skyjaj.hors.R;
 
 
-/**
- * Created by yetwish on 2015-05-11
- */
-
 public class SearchView extends LinearLayout implements View.OnClickListener {
 
     /**

@@ -3,9 +3,10 @@ package com.skyjaj.hors.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Context;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -20,27 +21,37 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewConfiguration;
-import android.view.Window;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.skyjaj.hors.R;
 
-import java.lang.reflect.Field;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.skyjaj.hors.R;
+import com.skyjaj.hors.admin.activities.AdminMainActivity;
+import com.skyjaj.hors.bean.LoginInformation;
+import com.skyjaj.hors.bean.Patient;
+import com.skyjaj.hors.doctor.activities.HomePage;
+import com.skyjaj.hors.network.LoginResult;
+import com.skyjaj.hors.utils.OkHttpManager;
+import com.skyjaj.hors.utils.RoleConstant;
+import com.skyjaj.hors.utils.ServerAddress;
+
+import org.androidpn.client.ServiceManager;
+import org.litepal.crud.DataSupport;
+import org.litepal.tablemanager.Connector;
+
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class LoginActivity extends AppCompatActivity{
 
-    //临时模拟
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
+
 
     //自动登录
     private SharedPreferences sharedPreferences = null;
@@ -52,6 +63,7 @@ public class LoginActivity extends AppCompatActivity{
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private String role;
 
     Toolbar mToolbar=null;
     
@@ -59,11 +71,9 @@ public class LoginActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        MyActivityManager.getInstance().addActivity(this);
         mToolbar = (Toolbar) findViewById(R.id.login_toolbar);
         mToolbar.setBackgroundColor(Color.DKGRAY);
-        //标题
-        mToolbar.setTitle("skyjaj");
         mToolbar.setTitleTextColor(Color.WHITE);
         //导航
         mToolbar.setNavigationIcon(R.drawable.profile);
@@ -72,18 +82,40 @@ public class LoginActivity extends AppCompatActivity{
        /* toolbar.setSubtitle("hors");*/
         /*toolbar.setLogo(R.drawable.icon_msg_search);*/
         Log.i("skyjaj", "theme :" + mToolbar.getPopupTheme());
+
+
+
+
+
+
+        sharedPreferences = this.getSharedPreferences("horsUserInfo", MODE_PRIVATE);
+        role = sharedPreferences.getString("role", "1");
+        Log.i("skyjaj", "role :" + role);
+        if (RoleConstant.PATIENT.equals(role)) {
+            mToolbar.setTitle("普通用户登录");
+        }else if (RoleConstant.DOCTOR.equals(role)) {
+            mToolbar.setTitle("医生登录");
+        } else {
+            mToolbar.setTitle("管理员登录");
+        }
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                /*导航的监听*/
+                List<LoginInformation> lif = DataSupport.where("username = ?", "13631158354").find(LoginInformation.class);
+                if (lif != null) {
+                    for (LoginInformation loginInformation : lif) {
+                        Log.i("skyjaj ", "name :" + loginInformation.getUsername() + "　" +
+                                "id " + loginInformation.getUid() + " psw :" + loginInformation.getPassword()
+                                + " token :" + loginInformation.getToken() + "  role :" + loginInformation.getRole() +
+                                " state :" + loginInformation.getState());
+                    }
+                    Toast.makeText(LoginActivity.this, "navigation :" + lif.size(), Toast.LENGTH_SHORT).show();
+                }
                 Toast.makeText(LoginActivity.this, "navigation", Toast.LENGTH_SHORT).show();
             }
         });
-
-
-        sharedPreferences = this.getSharedPreferences("horsUserInfo", 1);
-
         autoLoginCheckBox = (CheckBox) findViewById(R.id.checkBox_auto_login);
         autoLoginCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -111,19 +143,19 @@ public class LoginActivity extends AppCompatActivity{
         });
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-//        if (!sharedPreferences.getBoolean("AUTO_LOGIN_ISCHECK", false)) {
-//            Log.i("skyjaj", sharedPreferences.getBoolean("AUTO_LOGIN_ISCHECK", false) + " if");
-////            mMobileView.setText(sharedPreferences.getString("HORS_USERNAME", ""));
-////            mPasswordView.setText(sharedPreferences.getString("HORS_PASSWORD", ""));
-//        }else if(sharedPreferences.getBoolean("AUTO_LOGIN_ISCHECK", true)) {
-//            Log.i("skyjaj", sharedPreferences.getBoolean("AUTO_LOGIN_ISCHECK", true) + " else");
+        if (!sharedPreferences.getBoolean("AUTO_LOGIN_ISCHECK", false)) {
+            Log.i("skyjaj", sharedPreferences.getBoolean("AUTO_LOGIN_ISCHECK", false) + " if");
 //            mMobileView.setText(sharedPreferences.getString("HORS_USERNAME", ""));
 //            mPasswordView.setText(sharedPreferences.getString("HORS_PASSWORD", ""));
-//            //尝试登录
-//            showProgress(true);
-//            mAuthTask = new UserLoginTask(sharedPreferences.getString("HORS_USERNAME", "username"), sharedPreferences.getString("HORS_PASSWORD", "password"));
-//            mAuthTask.execute((Void) null);
-//        }
+        }else if(sharedPreferences.getBoolean("AUTO_LOGIN_ISCHECK", true)) {
+            Log.i("skyjaj", sharedPreferences.getBoolean("AUTO_LOGIN_ISCHECK", true) + " else");
+            mMobileView.setText(sharedPreferences.getString("HORS_USERNAME", ""));
+            mPasswordView.setText(sharedPreferences.getString("HORS_PASSWORD", ""));
+            //尝试登录
+            showProgress(true);
+            mAuthTask = new UserLoginTask(sharedPreferences.getString("HORS_USERNAME", "username"), sharedPreferences.getString("HORS_PASSWORD", "password"));
+            mAuthTask.execute((Void) null);
+        }
     }
 
 
@@ -179,23 +211,39 @@ public class LoginActivity extends AppCompatActivity{
 
             //注册
             case R.id.action_register:
-                Toast.makeText(this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
                 Intent registerIntent = new Intent(LoginActivity.this, RegistereActivity.class);
                 startActivity(registerIntent);
                 return  true;
             //角色选择
             case R.id.action_role_common:
+                if (!"1".equals(role)) {
+                    role = "1";
+                    mToolbar.setTitle("普通用户登录");
+                    sharedPreferences.edit().putString("role", role).commit();
+                }
                 Toast.makeText(this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
                 return  true;
             case R.id.action_role_doctor:
+                if (!"2".equals(role)) {
+                    role = "2";
+                    mToolbar.setTitle("医生登录");
+                    sharedPreferences.edit().putString("role", role).commit();
+                }
                 Toast.makeText(this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
                 return  true;
             case R.id.action_role_manager:
+                if (!"3".equals(role)) {
+                    role = "3";
+                    mToolbar.setTitle("管理员登录");
+                    sharedPreferences.edit().putString("role", role).commit();
+                }
                 Toast.makeText(this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
                 return  true;
 
             //忘记密码
             case R.id.action_forget_password:
+                DataSupport.deleteAll(LoginInformation.class, "state >=?" , "0");
                 Toast.makeText(this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
                 return  true;
         }
@@ -209,12 +257,11 @@ public class LoginActivity extends AppCompatActivity{
      * @param v
      */
     public void loginIn(View v) {
-        //attemptLogin();
-        Intent intent = new Intent(LoginActivity.this, IndexCommonActivity.class);
-        startActivity(intent);
+        attemptLogin();
+//        Intent intent = new Intent(LoginActivity.this, IndexCommonActivity.class);
+//        startActivity(intent);
         //设置Activity进入、退出动画
         //overridePendingTransition(R.anim.activity_in_from_right, R.anim.activity_out_from_left);
-        Toast.makeText(this, "login... ", Toast.LENGTH_SHORT).show();
     }
 
     //登录验证
@@ -236,7 +283,7 @@ public class LoginActivity extends AppCompatActivity{
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (TextUtils.isEmpty(password) || !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -267,7 +314,7 @@ public class LoginActivity extends AppCompatActivity{
 
     //验证密码输入是否有效
     private boolean isPasswordValid(String password) {
-        return password.length()>6;
+        return password.length()>=6;
     }
 
     //手机号码验证
@@ -310,6 +357,13 @@ public class LoginActivity extends AppCompatActivity{
         }
     }
 
+
+
+
+
+
+    private String result;
+    private LoginResult loginResult;
     //异步登录任务
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -323,61 +377,115 @@ public class LoginActivity extends AppCompatActivity{
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: 通过网络进行身份验证
 
-
-            Log.d("xys","doInBackground");
+            //网络验证
+            Patient patient = new Patient();
+            patient.setMobile(mMobile);
+            patient.setPassword(mPassword);
+            String url="";
+            if (RoleConstant.PATIENT.equals(role)) {
+                url = ServerAddress.PATIENT_LOGIN_URL;
+            }else if (RoleConstant.DOCTOR.equals(role)) {
+                url = ServerAddress.DOCTOR_LOGIN_URL;
+            } else {
+                url = ServerAddress.ADMIN_LOGIN_URL;
+            }
             try {
-                // 模拟网络访问
-                Thread.sleep(800);
-            } catch (InterruptedException e) {
+                result = OkHttpManager.post(url, new Gson().toJson(patient));
+                Log.i("skyjaj","try : "+result);
+                try {
+                    loginResult = new Gson().fromJson(result, new TypeToken<LoginResult>() {}.getType());
+                } catch (Exception e) {
+                    result = "解析失败";
+                    return false;
+                }
+                Log.i("skyjaj","loginresult : "+loginResult);
+                if (loginResult != null && loginResult.getResult()) {
+                    result = loginResult.getMessage();
+                    return  true;
+                }
+                Log.i("skyjaj","loginresult : "+loginResult.getResult());
+            } catch (Exception e) {
+                result = "网络请求失败";
                 return false;
             }
-            //DUMMY_CREDENTIALS为模拟数据
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                Log.i("skyjaj", pieces[0] + " password :" + pieces[1]);
-                if (pieces[0].equals(mMobile)) {
-                    Log.d("xys",true+"");
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: 匹配失败，可以提示注册新帐号
-            return true;
+            Log.d("xys", "doInBackground");
+            return false;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-            Log.d("xys", "onPostExecute :"+success);
+            Log.d("xys", "onPostExecute :" + success);
             if (success) {
+                ContentValues values =new ContentValues();
+                values.put("state",0);
+                DataSupport.updateAll(LoginInformation.class,values, "state = ?", "1");
+                SQLiteDatabase db = Connector.getDatabase();
+                Log.d("xys", "login id :" + loginResult.getUid());
+                List<LoginInformation> lif = DataSupport.where("username = ? and role = ?", mMobile, loginResult.getRole()).find(LoginInformation.class);
+                if (lif != null && lif.size() >= 1) {
+                    LoginInformation login = lif.get(0);
+                    login.setPassword(mPassword);
+                    login.setAutoLogin(autoLoginCheckBox.isChecked());
+                    login.setRole(loginResult.getRole());
+                    login.setToken(loginResult.getToken());
+                    login.setState(1);
+                    login.setUid(loginResult.getUid());
+                    login.save();
+                    Log.i("skyjaj ", "update  db ");
+                } else {
+                    Log.i("skyjaj ", "insert db ");
+                    LoginInformation inf = new LoginInformation();
+                    inf.setState(1);
+                    inf.setUsername(mMobile);
+                    inf.setPassword(mPassword);
+                    inf.setRole(loginResult.getRole());
+                    inf.setToken(loginResult.getToken());
+                    inf.setAutoLogin(autoLoginCheckBox.isChecked());
+                    inf.setUid(loginResult.getUid());
+                    inf.save();
+                }
                 if (autoLoginCheckBox.isChecked()) {
                     // 记住用户名、密码、
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean("AUTO_LOGIN_ISCHECK", true);
                     editor.putString("HORS_USERNAME", mMobile);
-
+                    editor.putString("HORS_PASSWORD", mPassword);
+                    editor.putString("role", role);
                     editor.commit();
-                }else{
+                } else {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean("AUTO_LOGIN_ISCHECK", false);
+                    editor.putString("HORS_USERNAME", null);
+                    editor.putString("HORS_PASSWORD", null);
+                    editor.putString("role", role);
                     editor.commit();
                 }
-                Intent intent = new Intent(LoginActivity.this, IndexCommonActivity.class);
+                Intent intent = null;
+                if (RoleConstant.PATIENT.equals(role)) {
+                    intent = new Intent(LoginActivity.this, IndexCommonActivity.class);
+                }else if (RoleConstant.DOCTOR.equals(role)) {
+                    intent = new Intent(LoginActivity.this, HomePage.class);
+                }else if (RoleConstant.ADMIN.equals(role)) {
+                    intent = new Intent(LoginActivity.this, AdminMainActivity.class);
+                }
                 startActivity(intent);
                 //设置Activity进入、退出动画
-                overridePendingTransition(R.anim.activity_in_from_right,R.anim.activity_out_from_left);
+                overridePendingTransition(R.anim.activity_in_from_right, R.anim.activity_out_from_left);
                 LoginActivity.this.finish();
 
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                mPasswordView.setError(result);
                 mPasswordView.requestFocus();
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("HORS_PASSWORD", "");
                 editor.commit();
+                if (mAuthTask != null) {
+                    mAuthTask.cancel(true);
+                    mAuthTask=null;
+                }
             }
         }
 
@@ -392,6 +500,7 @@ public class LoginActivity extends AppCompatActivity{
 
     @Override
     protected void onDestroy() {
+        MyActivityManager.getInstance().remove(this);
         super.onDestroy();
         Log.i("login activity ", " : onDestroy");
     }
@@ -418,6 +527,10 @@ public class LoginActivity extends AppCompatActivity{
     @Override
     protected void onStop() {
         super.onStop();
+        if (mAuthTask != null) {
+            mAuthTask.cancel(true);
+            mAuthTask = null;
+        }
         Log.i("login activity ", " : onStop");
     }
 }

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:paddingTop="20dp"
+    android:paddingTop="0dp"
     android:background="#e3e3e3"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <ListView
         android:id="@+id/index_service_one"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:dividerHeight="20dp">
     </ListView>
 
 </LinearLayout>

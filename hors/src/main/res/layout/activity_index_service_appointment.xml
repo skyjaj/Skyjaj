@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="#e3e3e3"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--     android:background="#e3e3e3"-->
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/index_service_appointment_toolbar"
@@ -15,10 +15,40 @@
         app:popupTheme="@style/AppTheme.IndexPopMenuTheme"
         app:theme="@style/AppTheme.indexCommonActivity"/>
 
-    <ListView
-        android:id="@+id/index_service_appointment_listview"
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </ListView>
+        android:layout_height="match_parent">
+
+
+        <ListView
+            android:id="@+id/index_service_appointment_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:dividerHeight="0dp">
+        </ListView>
+
+        <TextView
+            android:id="@+id/index_service_appointment_tips"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            android:textSize="40dp"
+            android:text="M"
+            android:visibility="invisible" />
+
+        <com.skyjaj.hors.widget.PinyinBarView
+            android:id="@+id/index_service_appointment_pinyinbar"
+            android:layout_width="25dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right|center"/>
+
+
+    </FrameLayout>
+
+
 
 </LinearLayout>

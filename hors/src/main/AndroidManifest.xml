@@ -3,13 +3,21 @@
     package="com.skyjaj.hors">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <!-- actvitity可视化-->
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <!-- 网络权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- actvitity可视化 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
+        android:name="org.litepal.LitePalApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -17,24 +25,65 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.SystemLoginActivity"
-            android:label="@string/app_name">
-        </activity>
+            android:label="@string/app_name" />
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings" />
-        <activity android:name=".activities.IndexCommonActivity">
-        </activity>
         <activity
-            android:name=".activities.LoginActivity">
+            android:name=".activities.IndexCommonActivity"
+            android:windowSoftInputMode="stateUnchanged|adjustPan" />
+        <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.DemoActivity"/>
-        <activity android:name=".activities.SearchActivity"/>
+        <activity android:name=".activities.DemoActivity" />
+        <activity android:name=".activities.SearchActivity" />
         <activity android:name=".activities.RegistereActivity" />
-        <activity android:name=".activities.IndexServiceAppointmentActivity"/>
+        <activity android:name=".activities.IndexServiceAppointmentActivity" />
+        <activity android:name=".activities.IndexDepartmentDoctorActivity" />
+        <activity android:name=".activities.IndexDoctorAppointmentActivity" />
+        <activity android:name=".activities.IndexReservationConfirmActivity" />
+        <activity android:name=".activities.CalenderActivity" />
+        <activity android:name=".activities.PointOfTimeActivity" />
+        <activity android:name=".activities.ShowResultActivity" />
+        <activity android:name=".activities.UserInformactionAcitvity" />
+        <activity android:name=".activities.ShowHistoryActivity" />
+        <activity
+            android:name=".doctor.activities.HomePage"
+            android:windowSoftInputMode="stateUnchanged|adjustPan" />
+
+        <receiver android:name="org.androidpn.client.BootCompletedReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="org.androidpn.client.NotificationService"
+            android:enabled="true"
+            android:label="NotificationService">
+            <intent-filter>
+                <action android:name="org.androidpn.client.NotificationService" />
+            </intent-filter>
+        </service>
+
+        <activity android:name=".doctor.activities.ReservationInformation" />
+        <activity android:name=".doctor.activities.DoctorWorkRecord" />
+        <activity android:name=".admin.activities.AdminMainActivity" />
+        <activity
+            android:name=".activities.ActionForActivity"
+            android:theme="@android:style/Theme.Translucent" />
+        <activity android:name=".admin.activities.DoctorManagerActivity" />
+        <!-- windowSoftInputMode设置避免输入法把布局顶上去 -->
+        <activity
+            android:name=".admin.activities.MessageManagerActivity"
+            android:windowSoftInputMode="stateUnchanged|adjustPan" />
+        <activity android:name=".admin.activities.DepartmentManagerActivity" />
+        <activity android:name=".admin.activities.ReservationManagerActivity" />
+        <activity android:name=".activities.SearchViewActiviy" android:windowSoftInputMode="stateUnchanged|adjustPan"/>
     </application>
 
 </manifest>

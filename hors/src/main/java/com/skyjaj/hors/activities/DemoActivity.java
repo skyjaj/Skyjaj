@@ -19,9 +19,6 @@ import com.skyjaj.hors.others.SwipeBackActivity;
 import com.skyjaj.hors.others.SwipeBackLayout;
 
 
-/**
- * Created by Issac on 8/11/13.
- */
 public class DemoActivity extends SwipeBackActivity implements View.OnClickListener {
     private static final int VIBRATE_DURATION = 20;
 
@@ -181,4 +178,10 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        MyActivityManager.getInstance().remove(this);
+        super.onDestroy();
+
+    }
 }

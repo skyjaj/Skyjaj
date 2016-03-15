@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/manager_department_dialog_view"
+    android:orientation="vertical"
+    android:layout_width="240dp"
+    android:gravity="center"
+    android:background="@drawable/radius_dialog_bg"
+    android:layout_gravity="center"
+    android:layout_height="122dp">
+
+
+
+        <TextView
+            android:id="@+id/manager_department_update"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@drawable/selector_textview"
+            android:text="修改信息"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#8ce6e9ee"/>
+
+        <TextView
+            android:id="@+id/manager_department_delete"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@drawable/selector_textview"
+            android:text="删除该科室"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#8ce6e9ee"/>
+
+        <TextView
+            android:id="@+id/manager_department_stop"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@drawable/selector_textview"
+            android:text="停诊该科室"/>
+
+
+
+
+</LinearLayout>

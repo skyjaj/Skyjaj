@@ -609,7 +609,7 @@ public class ViewDragHelper {
     /**
      * Animate the view <code>child</code> to the given (left, top) position. If
      * this method returns true, the caller should invoke
-     * {@link #continueSettling(boolean)} on each subsequent frame to continue
+     * {@link #continueSettling(boolean)} on each subsequent loading_frame to continue
      * the motion until it returns false. If this method returns false there is
      * no further work to do to complete the movement.
      * <p>
@@ -635,7 +635,7 @@ public class ViewDragHelper {
      * Settle the captured view at the given (left, top) position. The
      * appropriate velocity from prior motion will be taken into account. If
      * this method returns true, the caller should invoke
-     * {@link #continueSettling(boolean)} on each subsequent frame to continue
+     * {@link #continueSettling(boolean)} on each subsequent loading_frame to continue
      * the motion until it returns false. If this method returns false there is
      * no further work to do to complete the movement.
      *
@@ -775,7 +775,7 @@ public class ViewDragHelper {
     /**
      * Settle the captured view based on standard free-moving fling behavior.
      * The caller should invoke {@link #continueSettling(boolean)} on each
-     * subsequent frame to continue the motion until it returns false.
+     * subsequent loading_frame to continue the motion until it returns false.
      *
      * @param minLeft Minimum X position for the view's left edge
      * @param minTop  Minimum Y position for the view's top edge
@@ -799,7 +799,7 @@ public class ViewDragHelper {
     /**
      * Move the captured settling view by the appropriate amount for the current
      * time. If <code>continueSettling</code> returns true, the caller should
-     * call it again on the next frame to continue.
+     * call it again on the next loading_frame to continue.
      *
      * @param deferCallbacks true if state callbacks should be deferred via
      *                       posted message. Set this to true if you are calling this

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.skyjaj.hors.R;
+import com.skyjaj.hors.doctor.widget.MenuViewUtil;
 import com.skyjaj.hors.index.widget.IndexView;
 
 
@@ -56,7 +57,13 @@ public class TabFragment extends Fragment
 				mListView = (ListView) fragmentView.findViewById(R.id.index_service_one);
 //				Log.i("skyjaj","ListView of "+mTitle +" "+mListView);
 				return fragmentView;
-			}else {
+			}else if (mTitle.equals("doctor_index_service")) {
+				this.fragmentView = MenuViewUtil.getIndexServiceView(inflater, container, getContext(), mTitle);
+				return fragmentView;
+			}else if (mTitle.equals("doctor_index_me")) {
+				this.fragmentView = MenuViewUtil.getIndexMeView(inflater, container, getContext(), mTitle);
+				return fragmentView;
+			} else {
 				TextView tv = new TextView(getContext());
 				tv.setGravity(Gravity.CENTER);
 				tv.setText("无任何信息...");
@@ -64,7 +71,7 @@ public class TabFragment extends Fragment
 			}
 
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 		TextView tv = new TextView(getContext());
 		tv.setGravity(Gravity.CENTER);
