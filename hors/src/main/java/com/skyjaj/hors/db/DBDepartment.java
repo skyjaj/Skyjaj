@@ -1,20 +1,23 @@
-package com.skyjaj.hors.bean;
+package com.skyjaj.hors.db;
 
+
+import com.skyjaj.hors.bean.BaseMessage;
 
 import org.litepal.annotation.Column;
+import org.litepal.crud.DataSupport;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Administrator on 2016/1/22.
  * 科室部门表
  */
-public class Department extends BaseMessage implements Serializable {
+public class DBDepartment extends DataSupport implements Serializable {
 
-    private String id ;
+    @Column(unique = true)
+    private String departId ;
     /*中文名称*/
     private String nameEn;
     /*英文名称*/
@@ -36,17 +39,23 @@ public class Department extends BaseMessage implements Serializable {
     /*排列序号*/
     private Integer departmentOrder;
 
-    private List<Department> children;
+    //名字索引
+    private String nameIndex;
 
-
-
-
-    public String getId() {
-        return id;
+    public void setNameIndex(String nameIndex) {
+        this.nameIndex = nameIndex;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getNameIndex() {
+        return nameIndex;
+    }
+
+    public String getDepartId() {
+        return departId;
+    }
+
+    public void setDepartId(String departId) {
+        this.departId = departId;
     }
 
     public String getNameEn() {
@@ -153,13 +162,6 @@ public class Department extends BaseMessage implements Serializable {
         this.departmentOrder = departmentOrder;
     }
 
-    public List<Department> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<Department> children) {
-        this.children = children;
-    }
 
 
 }

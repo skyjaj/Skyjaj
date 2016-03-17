@@ -83,7 +83,10 @@
             android:windowSoftInputMode="stateUnchanged|adjustPan" />
         <activity android:name=".admin.activities.DepartmentManagerActivity" />
         <activity android:name=".admin.activities.ReservationManagerActivity" />
-        <activity android:name=".activities.SearchViewActiviy" android:windowSoftInputMode="stateUnchanged|adjustPan"/>
+        <activity
+            android:name=".activities.SearchViewActiviy"
+            android:windowSoftInputMode="stateUnchanged|adjustPan" />
+        <activity android:name=".activities.SearchMoreActivity"></activity>
     </application>
 
 </manifest>

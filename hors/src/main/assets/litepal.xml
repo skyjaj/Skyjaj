@@ -19,8 +19,8 @@
             For example:    
         <version value="1" ></version>
     -->
-    <version value="3" ></version>
-
+    <version value="2" ></version>
+    <!-- 7-->
     <!--
         Define your models in the list with mapping tag, LitePal will
         create tables for each mapping class. The supported fields
@@ -32,5 +32,6 @@
     -->
     <list>
         <mapping  class="com.skyjaj.hors.bean.LoginInformation"></mapping>
+        <mapping  class="com.skyjaj.hors.db.DBDepartment"></mapping>
     </list>
 </litepal>

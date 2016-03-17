@@ -15,6 +15,9 @@ import android.widget.EditText;
 
 import com.skyjaj.hors.R;
 
+/**
+ * 自定义一个EditText，清除已输入的信息
+ */
 public class ClearEditTextView extends EditText implements
         OnFocusChangeListener, TextWatcher { 
 
@@ -25,7 +28,7 @@ public class ClearEditTextView extends EditText implements
     	this(context, attrs, android.R.attr.editTextStyle);
     }
 
-    //这里构造方法也很重要，不加这个很多属性不能再XML里面定义
+
     public ClearEditTextView(Context context) {
         this(context, null);
     }
@@ -37,11 +40,10 @@ public class ClearEditTextView extends EditText implements
     
     
     private void init() {
-        //获取EditText的DrawableRight,假如没有设置我们就使用默认的图片
+        //获取EditText的DrawableRight
     	mClearDrawable = getCompoundDrawables()[2];
         if (mClearDrawable == null) { 
-        	mClearDrawable = getResources() 
-                    .getDrawable(R.drawable.clear);
+        	mClearDrawable = getResources().getDrawable(R.drawable.clear);
         } 
         mClearDrawable.setBounds(0, 0, mClearDrawable.getIntrinsicWidth(), mClearDrawable.getIntrinsicHeight()); 
         setClearIconVisible(false); 
@@ -50,11 +52,6 @@ public class ClearEditTextView extends EditText implements
     }
 
 
-    /**
-     * 因为我们不能直接给EditText设置点击事件，所以我们用记住我们按下的位置来模拟点击事件
-     * 当我们按下的位置 在  EditText的宽度 - 图标到控件右边的间距 - 图标的宽度  和
-     * EditText的宽度 - 图标到控件右边的间距之间我们就算点击了图标，竖直方向没有考虑
-     */
     @Override 
     public boolean onTouchEvent(MotionEvent event) { 
         if (getCompoundDrawables()[2] != null) { 
@@ -72,7 +69,7 @@ public class ClearEditTextView extends EditText implements
     }
 
     /**
-     * 当ClearEditText焦点发生变化的时候，判断里面字符串长度设置清除图标的显示与隐藏
+     * 焦点发生变化
      */
     @Override 
     public void onFocusChange(View v, boolean hasFocus) { 
@@ -85,7 +82,7 @@ public class ClearEditTextView extends EditText implements
 
 
     /**
-     * 设置清除图标的显示与隐藏，调用setCompoundDrawables为EditText绘制上去
+     * 设置右图标的显示与隐藏
      */
     protected void setClearIconVisible(boolean visible) { 
         Drawable right = visible ? mClearDrawable : null; 
@@ -111,26 +108,6 @@ public class ClearEditTextView extends EditText implements
          
     }
 
-
-    /**
-     * 设置晃动动画
-     */
-    public void setShakeAnimation(){
-    	this.setAnimation(shakeAnimation(5));
-    }
-
-
-    /**
-     * 一秒晃动频率
-     * @param counts
-     * @return
-     */
-    public static Animation shakeAnimation(int counts){
-    	Animation translateAnimation = new TranslateAnimation(0, 10, 0, 0);
-    	translateAnimation.setInterpolator(new CycleInterpolator(counts));
-    	translateAnimation.setDuration(1000);
-    	return translateAnimation;
-    }
  
  
 }

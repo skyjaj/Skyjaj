@@ -4,7 +4,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#dfe0df">
+    android:background="#dfe0df"
+    >
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/user_informaction_toolbar"
@@ -31,6 +32,9 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
+                android:id="@+id/user_informaction_head_view"
+                android:background="@drawable/selector_textview"
+                android:onClick="onClick"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="65dp"
@@ -61,12 +65,15 @@
                 />
 
             <LinearLayout
+                android:id="@+id/user_informaction_account_view"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:focusable="true">
+                android:focusable="true"
+                android:onClick="onClick"
+                android:background="@drawable/selector_textview">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -93,11 +100,14 @@
                 />
 
             <LinearLayout
+                android:id="@+id/user_informaction_nickname_view"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                android:paddingRight="10dp"
+                android:onClick="onClick"
+                android:background="@drawable/selector_textview">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -108,6 +118,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
                     android:text="Tanja"
                     android:layout_gravity="center"
                     android:gravity="right"/>
@@ -121,11 +132,14 @@
                 android:layout_gravity="center_horizontal" />
 
             <LinearLayout
+                android:id="@+id/user_informaction_sex_view"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                android:paddingRight="10dp"
+                android:onClick="onClick"
+                android:background="@drawable/selector_textview">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -152,11 +166,14 @@
                 />
 
             <LinearLayout
+                android:id="@+id/user_informaction_region_view"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                android:paddingRight="10dp"
+                android:onClick="onClick"
+                android:background="@drawable/selector_textview">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -171,6 +188,7 @@
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:layout_gravity="center"
+                    style="?android:attr/textViewStyle"
                     android:gravity="right"/>
             </LinearLayout>
 
@@ -186,27 +204,38 @@
                 />
 
             <LinearLayout
+                android:id="@+id/user_informaction_signtrue_view"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                android:paddingRight="10dp"
+                android:onClick="onClick"
+                android:background="@drawable/selector_textview">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="个性签名"
                     android:layout_gravity="center"/>
                 <TextView
                     android:id="@+id/user_informaction_signtrue"
-                    android:layout_width="90dp"
+                    android:layout_width="20dp"
                     android:layout_height="wrap_content"
-                    android:text="哎哟，不错哦"
+                    android:layout_weight="1"
+                    android:text="哎哟，不错"
+                    android:layout_marginLeft="10dp"
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:layout_gravity="center"
-                    android:gravity="right"/>
+                    android:gravity="right"
+                    android:focusable="false" />
+
             </LinearLayout>
+
+            <!-- style="?android:attr/textViewStyle"
+                    android:background="@null"
+                    android:textColor="@null"-->
+
         </LinearLayout>
 
 

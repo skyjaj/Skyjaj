@@ -1,10 +1,12 @@
 package com.skyjaj.hors.bean;
 
+import org.litepal.annotation.Column;
+import org.litepal.crud.DataSupport;
+
 /**
  * Created by Administrator on 2015/11/26.
  */
-public class BaseMessage {
-
+public class BaseMessage{
 
     protected Type itemType = Type.INCOMING;
     //拼音索引

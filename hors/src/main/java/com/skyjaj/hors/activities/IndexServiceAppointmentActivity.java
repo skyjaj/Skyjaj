@@ -7,9 +7,12 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -27,6 +30,8 @@ import com.skyjaj.hors.adapter.TimestampTypeAdapter;
 import com.skyjaj.hors.bean.BaseMessage;
 import com.skyjaj.hors.bean.Department;
 import com.skyjaj.hors.bean.IndexServiceMenu;
+import com.skyjaj.hors.db.DBDepartment;
+import com.skyjaj.hors.utils.DBUtil;
 import com.skyjaj.hors.utils.DialogStylel;
 import com.skyjaj.hors.utils.OkHttpManager;
 import com.skyjaj.hors.utils.PinYinUtil;
@@ -35,6 +40,9 @@ import com.skyjaj.hors.utils.ToolbarStyle;
 import com.skyjaj.hors.widget.CustomProgressDialog;
 import com.skyjaj.hors.widget.PinyinBarView;
 
+import org.litepal.crud.DataSupport;
+
+import java.lang.reflect.Method;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,8 +62,6 @@ public class IndexServiceAppointmentActivity extends AppCompatActivity implement
     private Toolbar mToolbar;
     private PinyinBarView mPinyinBarView;
     private TextView mPinyinTips;
-
-
     private Dialog dialog;
 
     @Override
@@ -71,6 +77,13 @@ public class IndexServiceAppointmentActivity extends AppCompatActivity implement
             case R.string.index_service_appointment:
                 setContentView(R.layout.activity_index_service_appointment);
                 mToolbar = ToolbarStyle.initToolbar(this, R.id.index_service_appointment_toolbar, R.string.index_service_appointment);
+                setSupportActionBar(mToolbar);
+                mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                });
                 initAppointmentView();
                 break;
             case R.string.index_service_queue_waiting:
@@ -218,6 +231,65 @@ public class IndexServiceAppointmentActivity extends AppCompatActivity implement
         }
     }
 
+
+    //update db
+    public void updateDb() {
+        synchronized (IndexServiceAppointmentActivity.class) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    DataSupport.deleteAll(DBDepartment.class, "");
+                    for (Department d : departmentList) {
+                        if (d.getItemType() == BaseMessage.Type.INCOMING) {
+                            DBUtil.turn2DB(d).save();
+                        }
+                    }
+                }
+            }).start();
+        }
+    }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+        //通过反射显示菜单的图标
+        if (MenuBuilder.class.isInstance(menu)) {
+            MenuBuilder builder = (MenuBuilder) menu;
+            builder.setShortcutsVisible(true);
+            Method method = null;
+            try {
+                method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
+                method.setAccessible(true);
+                method.invoke(menu, true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+//        List<DBDepartment> ds = DataSupport.findAll(DBDepartment.class);
+//        for (DBDepartment d : ds) {
+//            Log.i("skyjaj", "getNameIndex :" + d.getNameIndex() + " name :" + d.getNameCn()+ "en :"+d.getNameEn());
+//        }
+//        item.setEnabled()
+//        item.setVisible()
+
+        if (item.getItemId() == R.id.action_bar_search) {
+            Intent intent = new Intent(this, SearchMoreActivity.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "getItemId", Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
     //异步任务
     public class NetworkTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -256,8 +328,6 @@ public class IndexServiceAppointmentActivity extends AppCompatActivity implement
                         }
 
                     }
-
-
                 }
 
                 departments.clear();
@@ -326,6 +396,8 @@ public class IndexServiceAppointmentActivity extends AppCompatActivity implement
                 Log.i("skyjaj", "请求成功");
                 mAdapter.setmDatas(departmentList);
                 mAdapter.notifyDataSetChanged();
+                //更新数据库
+                updateDb();
             }else {
                 Toast.makeText(IndexServiceAppointmentActivity.this, "暂时无法连接服务器", Toast.LENGTH_SHORT).show();
                 Log.i("skyjaj", "请求失败");

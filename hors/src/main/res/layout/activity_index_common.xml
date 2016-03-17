@@ -37,7 +37,7 @@
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:padding="5dp"
-            app:hors_icon="@drawable/ic_menu_emoticons"
+            app:hors_icon="@drawable/ic_menu_index"
             app:hors_text="@string/tab_service"
             app:hors_text_size="12sp"
             app:hors_color="#ff45c01a" />
