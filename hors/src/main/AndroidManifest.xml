@@ -87,6 +87,7 @@
             android:name=".activities.SearchViewActiviy"
             android:windowSoftInputMode="stateUnchanged|adjustPan" />
         <activity android:name=".activities.SearchMoreActivity"></activity>
+        <activity android:name=".activities.SettingActivity" />
     </application>
 
 </manifest>

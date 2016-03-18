@@ -34,6 +34,16 @@ public class Patient {
 
     private String token;
 
+    private String remark;
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
     public void setToken(String token) {
         this.token = token;
     }

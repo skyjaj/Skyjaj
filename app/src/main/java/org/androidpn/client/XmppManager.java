@@ -84,6 +84,7 @@ public class XmppManager {
 
     private Thread reconnection;
 
+
     public XmppManager(NotificationService notificationService) {
     	
         context = notificationService;
@@ -172,7 +173,7 @@ public class XmppManager {
 
     public void startReconnectionThread() {
         synchronized (reconnection) {
-        	//修改2015-05-19
+        	//修改2015-12-20
             if (!reconnection.isAlive() || reconnection == null) {
             	reconnection = new ReconnectionThread(this);
                 reconnection.setName("Xmpp Reconnection Thread");

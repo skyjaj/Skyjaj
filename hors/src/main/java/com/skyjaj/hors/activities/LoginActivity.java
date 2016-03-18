@@ -396,7 +396,7 @@ public class LoginActivity extends AppCompatActivity{
                 try {
                     loginResult = new Gson().fromJson(result, new TypeToken<LoginResult>() {}.getType());
                 } catch (Exception e) {
-                    result = "网络请求失败";
+                    e.printStackTrace();
                     return false;
                 }
                 Log.i("skyjaj","loginresult : "+loginResult);

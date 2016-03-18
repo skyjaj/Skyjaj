@@ -33,16 +33,19 @@ public class ServerAddress {
     //获取病人个人自信
     public static final String PATIENT_INFORMACTION_URL = REMOTE_SERVER_ULR + "patient/informaction";
     public static final String PATIENT_INFORMACTION_UPDATE_URL = REMOTE_SERVER_ULR + "patient/updateInformaction";
+    public static final String PATIENT_INFORMACTION_UPDATE_PASSWORD_URL = REMOTE_SERVER_ULR + "patient/updatePassword";
 
     public static final String PATIENT_DELETE_ERSERVATION_URL = REMOTE_SERVER_ULR + "patient/deleteReservation";
     public static final String PATIENT_CANCEL_RESERVATION_URL = REMOTE_SERVER_ULR + "patient/cancelReservation";
 
     public static final String DOCTOR_INFORMACTION_URL = REMOTE_SERVER_ULR + "doctor/information";
     public static final String DOCTOR_INFORMACTION_UPDATE_URL = REMOTE_SERVER_ULR + "doctor/updateInformaction";
+    public static final String DOCTOR_INFORMACTION_UPDATE_PASSWORD_URL = REMOTE_SERVER_ULR + "doctor/updatePassword";
 
 
     public static final String ADMIN_INFORMACTION_URL = REMOTE_SERVER_ULR + "admin/information";
     public static final String ADMIN_INFORMACTION_UPDATE_URL = REMOTE_SERVER_ULR + "admin/updateInformation";
+    public static final String ADMIN_INFORMACTION_UPDATE_PASSWORD_URL = REMOTE_SERVER_ULR + "admin/updatePassword";
 
     public static final String ADMIN_NOTIFICATION_TO_USER_URL = REMOTE_SERVER_ULR + "push/sendToUser";
     public static final String ADMIN_NOTIFICATION_SEND_BROADCAST_URL = REMOTE_SERVER_ULR + "push/sendBroadcase";

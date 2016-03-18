@@ -99,7 +99,10 @@ public class NotificationPacketListener implements PacketListener {
                 xmppManager.getConnection().sendPacket(deliverConfirmIQ);
                 
             }
+
         }
+
+        Log.i("skyjaj","receive a packet  :"+packet.toString());
 
     }
 

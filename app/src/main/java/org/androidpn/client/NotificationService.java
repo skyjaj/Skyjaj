@@ -20,6 +20,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -158,8 +159,9 @@ public class NotificationService extends Service {
         return true;
     }
 
-    public static Intent getIntent() {
-        return new Intent(SERVICE_NAME);
+    public static Intent getIntent(Context ctx) {
+        Intent intent =new Intent(ctx,NotificationService.class);
+        return intent;
     }
 
     public ExecutorService getExecutorService() {

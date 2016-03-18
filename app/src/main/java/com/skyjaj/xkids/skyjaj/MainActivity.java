@@ -34,6 +34,7 @@ public class MainActivity extends Activity {
             }
         });
 
+
         Button historiesbButton = (Button)findViewById(R.id.btn_histories);
         historiesbButton.setOnClickListener(new View.OnClickListener() {
 

@@ -21,6 +21,7 @@ import com.skyjaj.hors.activities.IndexCommonActivity;
 import com.skyjaj.hors.activities.IndexServiceAppointmentActivity;
 import com.skyjaj.hors.activities.LoginActivity;
 import com.skyjaj.hors.activities.MyActivityManager;
+import com.skyjaj.hors.activities.SettingActivity;
 import com.skyjaj.hors.activities.ShowHistoryActivity;
 import com.skyjaj.hors.activities.UserInformactionAcitvity;
 import com.skyjaj.hors.adapter.CommonAdapter;
@@ -217,6 +218,8 @@ public class IndexView {
                         ctx.startActivity(intent1);
                         break;
                     case 2:
+                        Intent settingIntent = new Intent(ctx, SettingActivity.class);
+                        ctx.startActivity(settingIntent);
                         break;
                     case 3:
                             LinearLayout exitDialogLayout = (LinearLayout) inflater.inflate(R.layout.dialog_exit, null);
