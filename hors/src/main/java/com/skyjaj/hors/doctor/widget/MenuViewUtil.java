@@ -18,6 +18,7 @@ import com.skyjaj.hors.activities.LoginActivity;
 import com.skyjaj.hors.activities.ActionForActivity;
 import com.skyjaj.hors.activities.MyActivityManager;
 import com.skyjaj.hors.activities.SearchViewActiviy;
+import com.skyjaj.hors.activities.SettingActivity;
 import com.skyjaj.hors.activities.UserInformactionAcitvity;
 import com.skyjaj.hors.adapter.CommonAdapter;
 import com.skyjaj.hors.bean.BaseMessage;
@@ -112,7 +113,7 @@ public class MenuViewUtil {
 
 
 
-        menu = new IndexServiceMenu(R.drawable.tab_settings_normal,ctx.getString(R.string.index_me_exit), 0);
+        menu = new IndexServiceMenu(R.drawable.tab_settings_normal,ctx.getString(R.string.index_me_setting), 0);
         menu.setItemType(BaseMessage.Type.INCOMING);
         mDatas.add(menu);
 
@@ -155,46 +156,50 @@ public class MenuViewUtil {
                         break;
 
                     case 2:
-                        LinearLayout exitDialogLayout = (LinearLayout) inflater.inflate(R.layout.dialog_exit, null);
-                        TextView switchTv = (TextView) exitDialogLayout.findViewById(R.id.switchOtherAccount);
-                        TextView exitTv = (TextView) exitDialogLayout.findViewById(R.id.close_application);
-                        //切换帐号
-                        switchTv.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                SharedPreferences.Editor editor = ctx.getSharedPreferences("horsUserInfo", Context.MODE_PRIVATE).edit();
-                                editor.putBoolean("AUTO_LOGIN_ISCHECK", false);
-                                editor.putString("HORS_USERNAME", null);
-                                editor.putString("HORS_PASSWORD", null);
-                                editor.commit();
-                                if (ad != null) {
-                                    ad.dismiss();
-                                    ad = null;
-                                }
-                                Intent intent = new Intent(ctx, LoginActivity.class);
-                                if (activity != null) {
-                                    activity.finish();
-                                }
-                                MyActivityManager.getInstance().exit();
-                                ctx.startActivity(intent);
-                            }
-                        });
-                        //直接退出
-                        exitTv.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                //发送关闭程序
-                                if (ad != null) {
-                                    ad.dismiss();
-                                    ad = null;
-                                }
-                                MyActivityManager.getInstance().exit();
-                                System.exit(0);
-                            }
-                        });
-                        ad = new AlertDialog.Builder(ctx)
-                                .setView(exitDialogLayout)
-                                .show();
+
+                        Intent settingIntent = new Intent(ctx, SettingActivity.class);
+                        ctx.startActivity(settingIntent);
+
+//                        LinearLayout exitDialogLayout = (LinearLayout) inflater.inflate(R.layout.dialog_exit, null);
+//                        TextView switchTv = (TextView) exitDialogLayout.findViewById(R.id.switchOtherAccount);
+//                        TextView exitTv = (TextView) exitDialogLayout.findViewById(R.id.close_application);
+//                        //切换帐号
+//                        switchTv.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                SharedPreferences.Editor editor = ctx.getSharedPreferences("horsUserInfo", Context.MODE_PRIVATE).edit();
+//                                editor.putBoolean("AUTO_LOGIN_ISCHECK", false);
+//                                editor.putString("HORS_USERNAME", null);
+//                                editor.putString("HORS_PASSWORD", null);
+//                                editor.commit();
+//                                if (ad != null) {
+//                                    ad.dismiss();
+//                                    ad = null;
+//                                }
+//                                Intent intent = new Intent(ctx, LoginActivity.class);
+//                                if (activity != null) {
+//                                    activity.finish();
+//                                }
+//                                MyActivityManager.getInstance().exit();
+//                                ctx.startActivity(intent);
+//                            }
+//                        });
+//                        //直接退出
+//                        exitTv.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                //发送关闭程序
+//                                if (ad != null) {
+//                                    ad.dismiss();
+//                                    ad = null;
+//                                }
+//                                MyActivityManager.getInstance().exit();
+//                                System.exit(0);
+//                            }
+//                        });
+//                        ad = new AlertDialog.Builder(ctx)
+//                                .setView(exitDialogLayout)
+//                                .show();
                         break;
                 }
 

@@ -3,6 +3,7 @@ package com.skyjaj.hors.activities;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.skyjaj.hors.adapter.TimestampTypeAdapter;
 import com.skyjaj.hors.bean.Department;
 import com.skyjaj.hors.bean.Doctor;
 import com.skyjaj.hors.utils.CommonAdapter;
+import com.skyjaj.hors.utils.DateUtil;
 import com.skyjaj.hors.utils.DialogStylel;
 import com.skyjaj.hors.utils.OkHttpManager;
 import com.skyjaj.hors.utils.ServerAddress;
@@ -48,6 +50,7 @@ public class IndexDepartmentDoctorActivity extends AppCompatActivity{
     private List<Doctor> mDatas=new ArrayList<Doctor>();
     private Department department;
     private Dialog dialog;
+    private boolean isNowDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,7 @@ public class IndexDepartmentDoctorActivity extends AppCompatActivity{
         MyActivityManager.getInstance().addActivity(this);
         Intent intent = getIntent();
         department = (Department) intent.getSerializableExtra("department");
+        isNowDay = intent.getBooleanExtra("isNowDay",false);
         mToolbar = ToolbarStyle.initToolbar(this, R.id.index_service_department_doctor_toolbar, department.getNameCn());
 
         initView();
@@ -99,14 +103,27 @@ public class IndexDepartmentDoctorActivity extends AppCompatActivity{
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(IndexDepartmentDoctorActivity.this, "view id c :" + view.getId(), Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(IndexDepartmentDoctorActivity.this, CalenderActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("doctor",mDatas.get(position));
-                bundle.putSerializable("department", department);
-                intent.putExtras(bundle);
-                intent.putExtra("department_name", department.getNameCn());
-                IndexDepartmentDoctorActivity.this.startActivity(intent);
+
+                Intent intent = null;
+                if (isNowDay) {
+                    intent = new Intent(IndexDepartmentDoctorActivity.this, NowDayPointTime.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("doctor", mDatas.get(position));
+                    bundle.putSerializable("department", department);
+                    intent.putExtra("department_name", department.getNameCn());
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+//                    intent.putExtra("workday", DateUtil.Timestamp2String(scheduleOfmonth.getWorkday()));
+                } else {
+                    intent = new Intent(IndexDepartmentDoctorActivity.this, CalenderActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("doctor", mDatas.get(position));
+                    bundle.putSerializable("department", department);
+                    intent.putExtra("department_name", department.getNameCn());
+                    intent.putExtras(bundle);
+                    IndexDepartmentDoctorActivity.this.startActivity(intent);
+                }
+
             }
         });
     }

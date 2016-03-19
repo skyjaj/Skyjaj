@@ -86,8 +86,9 @@
         <activity
             android:name=".activities.SearchViewActiviy"
             android:windowSoftInputMode="stateUnchanged|adjustPan" />
-        <activity android:name=".activities.SearchMoreActivity"></activity>
+        <activity android:name=".activities.SearchMoreActivity" />
         <activity android:name=".activities.SettingActivity" />
+        <activity android:name=".activities.NowDayPointTime"></activity>
     </application>
 
 </manifest>

@@ -61,7 +61,7 @@
 
     <!-- index views 主页每个页面的相关信息定义-->
     <string name="index_service_appointment">预约挂号</string>
-    <string name="index_service_queue_waiting">排队候诊</string>
+    <string name="index_service_queue_waiting">当天预约</string>
     <string name="index_found_map">带我去</string>
     <string name="index_found_notification_appointment">预约信息</string>
     <string name="index_found_notification_news">医疗新闻</string>

@@ -95,7 +95,7 @@ public class UserInformactionAcitvity extends AppCompatActivity {
                     if (mDialog != null && mDialog.isShowing()) {
                         mDialog.dismiss();
                     }
-                    Toast.makeText(UserInformactionAcitvity.this, (String) msg.obj, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserInformactionAcitvity.this, (String)msg.obj.toString().replaceAll("\"",""), Toast.LENGTH_SHORT).show();
 
             }
 
@@ -285,7 +285,7 @@ public class UserInformactionAcitvity extends AppCompatActivity {
             Log.i("skyjaj", " sex :" + mSexTv.getText().toString());
             updateInformation(mNicknameTv.getText().toString(), mRegionTv.getText().toString(),
                     mSignitureTv.getText().toString(), "男".equals(mSexTv.getText().toString()) ? true : false);
-            Toast.makeText(this, "save ", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "save ", Toast.LENGTH_SHORT).show();
         }
 
         return super.onOptionsItemSelected(item);

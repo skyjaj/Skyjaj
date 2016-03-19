@@ -49,7 +49,7 @@ public class IndexView {
         menu.setItemType(BaseMessage.Type.INCOMING);
         mDatas.add(menu);
 
-        menu = new IndexServiceMenu(R.drawable.men_scan_icon,ctx.getString(R.string.index_service_queue_waiting), 0);
+        menu = new IndexServiceMenu(R.drawable.men_scan_icon, ctx.getString(R.string.index_service_queue_waiting), 0);
         menu.setItemType(BaseMessage.Type.INCOMING);
         mDatas.add(menu);
 
@@ -94,7 +94,7 @@ public class IndexView {
                         break;
                     case 1 :
                         Intent queueIntent = new Intent(ctx, IndexServiceAppointmentActivity.class);
-                        queueIntent.putExtra("index_menu", R.string.index_service_queue_waiting);
+                        queueIntent.putExtra("index_menu",R.string.index_service_queue_waiting);
                         ctx.startActivity(queueIntent);
                         break;
                 }
@@ -170,15 +170,6 @@ public class IndexView {
 
 
 
-
-//        menu = new IndexServiceMenu(0, "", 0);
-//        menu.setType(BaseMessage.Type.OUTCOMING);
-//        mDatas.add(menu);
-
-        menu = new IndexServiceMenu(R.drawable.tab_settings_normal,ctx.getString(R.string.index_me_exit), 0);
-        menu.setItemType(BaseMessage.Type.INCOMING);
-        mDatas.add(menu);
-
         menu = new IndexServiceMenu(0, "", 0);
         menu.setItemType(BaseMessage.Type.OUTCOMING);
         mDatas.add(menu);
@@ -220,51 +211,6 @@ public class IndexView {
                     case 2:
                         Intent settingIntent = new Intent(ctx, SettingActivity.class);
                         ctx.startActivity(settingIntent);
-                        break;
-                    case 3:
-                            LinearLayout exitDialogLayout = (LinearLayout) inflater.inflate(R.layout.dialog_exit, null);
-                            TextView switchTv = (TextView) exitDialogLayout.findViewById(R.id.switchOtherAccount);
-                            TextView exitTv = (TextView) exitDialogLayout.findViewById(R.id.close_application);
-                            //切换帐号
-                            switchTv.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    SharedPreferences.Editor editor = ctx.getSharedPreferences("horsUserInfo", 1).edit();
-                                    editor.putBoolean("AUTO_LOGIN_ISCHECK", false);
-                                    editor.putString("HORS_USERNAME", null);
-                                    editor.putString("HORS_PASSWORD", null);
-                                    editor.commit();
-                                    if (ad != null) {
-                                        ad.dismiss();
-                                        ad = null;
-                                    }
-                                    Intent intent = new Intent(ctx, LoginActivity.class);
-                                    if (activity != null) {
-//                                        Intent intent2 = NotificationService.getIntent(activity);
-//                                        activity.stopService(intent2);
-                                        activity.finish();
-                                    }
-//                                    MyActivityManager.getInstance().exit();
-                                    ctx.startActivity(intent);
-                                }
-                            });
-                            //直接退出
-                            exitTv.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    //发送关闭程序
-                                    if (ad != null) {
-                                        ad.dismiss();
-                                        ad = null;
-                                    }
-                                    MyActivityManager.getInstance().exit();
-                                    System.exit(0);
-
-                                }
-                            });
-                            ad = new AlertDialog.Builder(ctx)
-                                    .setView(exitDialogLayout)
-                                    .show();
                         break;
                 }
 

@@ -122,7 +122,6 @@ public class DepartmentManagerActivity extends AppCompatActivity {
                                     case R.id.manager_department_stop:
                                         Toast.makeText(DepartmentManagerActivity.this, "manager_department_stop", Toast.LENGTH_SHORT).show();
                                         break;
-
                                 }
                             }
 

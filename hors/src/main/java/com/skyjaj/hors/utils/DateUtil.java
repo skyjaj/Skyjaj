@@ -72,6 +72,26 @@ public class DateUtil {
     }
 
 
+    /**
+     * time 形如  yyyy-MM-dd HH:mm 返回的格式：yyyyMMdd HH:mm
+     * @param time
+     * @return
+     */
+    public static String string2TimeFormatfour(String time) {
+
+        if (time == null || "".equals(time)) {
+            return null;
+        }
+        try {
+            Date date = sdf1.parse(time);
+            return sdf3.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
 
     /**
      * time 形如 yyyyMMdd HH:mm 返回的格式：yyyy年MM月

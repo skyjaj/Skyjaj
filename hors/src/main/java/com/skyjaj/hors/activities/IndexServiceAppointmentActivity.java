@@ -63,6 +63,7 @@ public class IndexServiceAppointmentActivity extends AppCompatActivity implement
     private PinyinBarView mPinyinBarView;
     private TextView mPinyinTips;
     private Dialog dialog;
+    private boolean isNowDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,58 +85,30 @@ public class IndexServiceAppointmentActivity extends AppCompatActivity implement
                         finish();
                     }
                 });
+                isNowDay = false;
                 initAppointmentView();
                 break;
             case R.string.index_service_queue_waiting:
-                setContentView(R.layout.activity_index_service_queue);
-                mToolbar = ToolbarStyle.initToolbar(this, R.id.index_service_queue_toolbar, R.string.index_service_queue_waiting);
-                initQueueView();
+                setContentView(R.layout.activity_index_service_appointment);
+
+                mToolbar = ToolbarStyle.initToolbar(this, R.id.index_service_appointment_toolbar, "科室列表");
+                setSupportActionBar(mToolbar);
+                mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                });
+                isNowDay = true;
+                initAppointmentView();
+
                 break;
         }
 
 
     }
 
-    private void initQueueView() {
-        mListView = (ListView) findViewById(R.id.index_service_queue_listview);
-        List<IndexServiceMenu> mDatas = new ArrayList<IndexServiceMenu>();
 
-
-        IndexServiceMenu menu = new IndexServiceMenu(R.drawable.menu_feedback_icon, this.getString(R.string.index_service_appointment), 0);
-        menu.setItemType(BaseMessage.Type.INCOMING);
-        mDatas.add(menu);
-
-        menu = new IndexServiceMenu(0, "", 0);
-        menu.setItemType(BaseMessage.Type.OUTCOMING);
-        mDatas.add(menu);
-
-        menu = new IndexServiceMenu(R.drawable.men_scan_icon, this.getString(R.string.index_service_queue_waiting), 0);
-        menu.setItemType(BaseMessage.Type.INCOMING);
-        mDatas.add(menu);
-
-
-        Map<BaseMessage.Type, Integer> itemViews = new HashMap<BaseMessage.Type, Integer>();
-        itemViews.put(BaseMessage.Type.INCOMING, R.layout.index_service_item);
-        itemViews.put(BaseMessage.Type.OUTCOMING, R.layout.index_service_item_bg);
-
-        CommonAdapter<IndexServiceMenu> mAdapter = new CommonAdapter<IndexServiceMenu>(this, mDatas, itemViews) {
-            @Override
-            public void convert(com.skyjaj.hors.adapter.ViewHolder viewHolder, IndexServiceMenu indexServiceMenu) {
-                if (indexServiceMenu.getItemType() == BaseMessage.Type.INCOMING) {
-                    viewHolder.setImageResource(R.id.index_service_item_icon, indexServiceMenu.getResId())
-                            .setText(R.id.index_service_item_text, indexServiceMenu.getText());
-                }
-            }
-        };
-
-        mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(IndexServiceAppointmentActivity.this, "position :" + position, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     List<Department> departmentList=new ArrayList<Department>();
     CommonSearchAdapter<Department> mAdapter =null;
@@ -186,8 +159,8 @@ public class IndexServiceAppointmentActivity extends AppCompatActivity implement
                             .setText(R.id.index_service_item_text, department.getNameCn());
                 } else {
                     viewHolder.setText(R.id.index_service_item_tv, department.getNameCn())
-                            .setTextColor(R.id.index_service_item_tv, Color.WHITE)
-                            .setViewBackground(R.id.index_service_text_view, Color.parseColor("#FFB4B0B0"));
+                            .setTextColor(R.id.index_service_item_tv, Color.parseColor("#9f9d9d")) //white
+                            .setViewBackground(R.id.index_service_text_view, Color.parseColor("#e3e0e0"));//FFB4B0B0
                 }
             }
         };
@@ -201,6 +174,7 @@ public class IndexServiceAppointmentActivity extends AppCompatActivity implement
                     Intent intent = new Intent(IndexServiceAppointmentActivity.this, IndexDepartmentDoctorActivity.class);
                     Bundle mBundle = new Bundle();
                     mBundle.putSerializable("department", department);
+                    mBundle.putBoolean("isNowDay",isNowDay);
                     intent.putExtras(mBundle);
                     IndexServiceAppointmentActivity.this.startActivity(intent);
                 }
