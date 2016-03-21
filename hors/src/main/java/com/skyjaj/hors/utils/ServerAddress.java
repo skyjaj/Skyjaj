@@ -10,7 +10,7 @@ public class ServerAddress {
     public static final String LOCAL_SERVER = "http://192.168.31.230:8080/";//http://192.168.231.2:8080/";
     //远程服务端地址
     public static final String REMOTE_SERVER = "http://139.129.8.184:8080/entrance-service/";
-    public static final String REMOTE_SERVER_ULR = REMOTE_SERVER;
+    public static final String REMOTE_SERVER_ULR = LOCAL_SERVER;
 
     //患者登录
     public static final String PATIENT_LOGIN_URL = REMOTE_SERVER_ULR+"patient/login";
@@ -54,6 +54,7 @@ public class ServerAddress {
     public static final String PATIENT_RESERVATION_HISTORY_URL = REMOTE_SERVER_ULR + "patient/reservationHistory";
 
     //获取医生被预约历史信息
+    public static final String DOCTOR_HISTORY_RESERVATION_URL = REMOTE_SERVER_ULR+"doctor/getHistoryReservations";
     public static final String DOCTOR_RESERVATION_URL = REMOTE_SERVER_ULR+"doctor/getReservations";
 
 }

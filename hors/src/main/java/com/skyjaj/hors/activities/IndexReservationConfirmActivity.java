@@ -16,6 +16,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.skyjaj.hors.R;
 import com.skyjaj.hors.adapter.TimestampTypeAdapter;
+import com.skyjaj.hors.allipay.PayEnterActivity;
 import com.skyjaj.hors.bean.Reservation;
 import com.skyjaj.hors.utils.DateUtil;
 import com.skyjaj.hors.utils.DialogStylel;
@@ -104,10 +105,15 @@ public class IndexReservationConfirmActivity extends AppCompatActivity {
             if (mReservation == null) {
                 //重新登录
             }
-            dialog = DialogStylel.createLoadingDialog(this, "提交中...");
-            dialog.show();
-            mNetworkTask = new NetworkTask(mReservation);
-            mNetworkTask.execute();
+//            dialog = DialogStylel.createLoadingDialog(this, "提交中...");
+//            dialog.show();
+//            mNetworkTask = new NetworkTask(mReservation);
+//            mNetworkTask.execute();
+            Intent intent = new Intent(this, PayEnterActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("reservation", mReservation);
+            intent.putExtras(bundle);
+            startActivity(intent);
         }
 
     }

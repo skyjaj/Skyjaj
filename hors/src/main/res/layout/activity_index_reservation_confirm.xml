@@ -248,12 +248,7 @@
                     android:textSize="20sp"
                     android:textColor="@color/base_color_text_white"
                     android:background="@drawable/selector_button"/>
-
             </LinearLayout>
-
-
-
-
 
 
         </LinearLayout>

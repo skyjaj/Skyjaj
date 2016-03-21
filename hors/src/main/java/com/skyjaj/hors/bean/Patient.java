@@ -36,6 +36,28 @@ public class Patient {
 
     private String remark;
 
+    private String region;
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+
+    private String signature;
+
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+
     public void setRemark(String remark) {
         this.remark = remark;
     }

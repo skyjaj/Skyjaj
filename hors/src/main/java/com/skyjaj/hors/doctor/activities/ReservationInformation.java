@@ -1,5 +1,6 @@
 package com.skyjaj.hors.doctor.activities;
 
+import android.app.Dialog;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import com.skyjaj.hors.bean.BaseMessage;
 import com.skyjaj.hors.bean.LoginInformation;
 import com.skyjaj.hors.bean.Reservation;
 import com.skyjaj.hors.utils.DateUtil;
+import com.skyjaj.hors.utils.DialogStylel;
 import com.skyjaj.hors.utils.OkHttpManager;
 import com.skyjaj.hors.utils.ServerAddress;
 import com.skyjaj.hors.utils.ToolbarStyle;
@@ -44,7 +46,7 @@ public class ReservationInformation extends AppCompatActivity {
     private List<Reservation> mDatas;
     private Map<BaseMessage.Type,Integer> mViews;
     private NetWorkTask mTask;
-    CustomProgressDialog dialog;
+    private Dialog dialog;
 
 
     @Override
@@ -123,7 +125,7 @@ public class ReservationInformation extends AppCompatActivity {
     private void initView() {
 
         mListView = (ListView) findViewById(R.id.reservation_information_listview);
-        dialog = new CustomProgressDialog(this, "数据加载中...", R.anim.loading_frame);
+        dialog = DialogStylel.createLoadingDialog(this,"正在加载..");
         dialog.show();
     }
 
@@ -201,9 +203,9 @@ public class ReservationInformation extends AppCompatActivity {
                         time = DateUtil.string2TimeFormatTwo(r.getAppointmentTime());
                         Reservation rs = new Reservation();
                         //设置提示信息
-                        re.setItemType(BaseMessage.Type.OUTCOMING);
-                        re.setAppointmentTime(time);
-                        reservations.add(re);
+                        rs.setItemType(BaseMessage.Type.OUTCOMING);
+                        rs.setAppointmentTime(time);
+                        reservations.add(rs);
                         reservations.add(r);
                     }
                 }

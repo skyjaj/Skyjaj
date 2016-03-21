@@ -47,6 +47,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 /**
+ * 用户信息显示界面
  * Created by Administrator on 2016/3/5.
  */
 public class UserInformactionAcitvity extends AppCompatActivity {
@@ -140,8 +141,8 @@ public class UserInformactionAcitvity extends AppCompatActivity {
             mAccountTv.setText(mPatient.getMobile());
             mNicknameTv.setText(mPatient.getUsername());
             mSexTv.setText(mPatient.getSex() == 1 ? "男" : "女");
-            mRegionTv.setVisibility(View.GONE);
-
+            mRegionTv.setText(mPatient.getRegion());
+            mSignitureTv.setText(mPatient.getSignature());
         }
     }
 
@@ -151,7 +152,7 @@ public class UserInformactionAcitvity extends AppCompatActivity {
             mNicknameTv.setText(mDoctor.getUsername());
             mSexTv.setText(mDoctor.getSex() == 1 ? "男" : "女");
             mRegionTv.setText(mDoctor.getAddress() != null ? mDoctor.getAddress() : "");
-
+            mSignitureTv.setText(mDoctor.getSignature()+"");
         }
     }
 
@@ -323,12 +324,15 @@ public class UserInformactionAcitvity extends AppCompatActivity {
                             patient.setUsername(nickname);
                             patient.setSex(sex == true ? 1 : 0);
                             patient.setMobile(mPatient.getMobile());
+                            patient.setSignature(signtrue);
+                            patient.setRegion(region);
                             updateResult = OkHttpManager.post(ServerAddress.PATIENT_INFORMACTION_UPDATE_URL, gson.toJson(patient));
                         } else if (doctor != null && RoleConstant.DOCTOR.equals(role)) {
                             doctor.setUsername(nickname);
                             doctor.setSex(sex == true ? 1 : 0);
                             doctor.setAddress(region);
                             doctor.setMobile(mDoctor.getMobile());
+                            doctor.setSignature(signtrue);
                             updateResult = OkHttpManager.post(ServerAddress.DOCTOR_INFORMACTION_UPDATE_URL, gson.toJson(doctor));
                         } else if (systemUser != null && RoleConstant.ADMIN.equals(role)) {
                             systemUser.setUsername(nickname);

@@ -186,7 +186,7 @@ public class RegistereActivity extends AppCompatActivity {
                     return false;
                 }
 
-                if (mPatientResult != null && mPatientResult.getToken()!=null) {
+                if (mPatientResult != null) {
                     return  true;
                 }
 

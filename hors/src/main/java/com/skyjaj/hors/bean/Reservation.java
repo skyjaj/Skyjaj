@@ -1,12 +1,13 @@
 package com.skyjaj.hors.bean;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * Created by Administrator on 2016/1/22.
  * 预约表
  */
-public class Reservation extends BaseMessage{
+public class Reservation extends BaseMessage implements Serializable{
 
     private String id;
     private String name;

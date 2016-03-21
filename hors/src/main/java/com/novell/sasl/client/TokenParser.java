@@ -88,7 +88,7 @@ class TokenParser extends Object
                 if (isValidTokenChar(currChar))
                 {
                     break;
-                }
+            }
                 else if (isWhiteSpace(currChar))
                 {
                     token = m_tokens.substring(m_scanStart, m_curPos);

@@ -89,6 +89,7 @@
         <activity android:name=".activities.SearchMoreActivity" />
         <activity android:name=".activities.SettingActivity" />
         <activity android:name=".activities.NowDayPointTime"></activity>
+        <activity android:name=".allipay.PayEnterActivity"></activity>
     </application>
 
 </manifest>
