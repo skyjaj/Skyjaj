@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.skyjaj.hors.R;
 import com.skyjaj.hors.utils.ToolbarStyle;
+import com.skyjaj.hors.weixin.wxapi.WXEntryActivity;
 import com.skyjaj.hors.widget.ChangeColorIconWithText;
 import com.skyjaj.hors.widget.TabFragment;
 
@@ -183,6 +184,8 @@ public class IndexCommonActivity extends AppCompatActivity implements ViewPager.
                 Toast.makeText(this,"action scan ",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.action_gruop_chat:
+                Intent intent = new Intent(this, WXEntryActivity.class);
+                startActivity(intent);
                 Toast.makeText(this,"action action gruop chat ",Toast.LENGTH_SHORT).show();
                 break;
         }

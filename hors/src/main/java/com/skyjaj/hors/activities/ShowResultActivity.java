@@ -12,6 +12,9 @@ import android.widget.Toast;
 import com.skyjaj.hors.R;
 import com.skyjaj.hors.bean.Reservation;
 import com.skyjaj.hors.utils.DateUtil;
+import com.skyjaj.hors.weixin.wxapi.WXEntryActivity;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+
 
 public class ShowResultActivity extends Activity {
 
@@ -30,6 +33,8 @@ public class ShowResultActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+
 
         setContentView(R.layout.activity_show_result);
         initView();
@@ -77,7 +82,10 @@ public class ShowResultActivity extends Activity {
             MyActivityManager.getInstance().exit();
             startActivity(intent);
             finish();
+        }else if (view.getId() == R.id.weixin_shared) {
 
+            Intent intent = new Intent(this, WXEntryActivity.class);
+            startActivity(intent);
         }
 
     }

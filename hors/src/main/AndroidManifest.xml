@@ -7,6 +7,10 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <!-- 写入外存-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     <!-- 网络权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- actvitity可视化 -->
@@ -90,6 +94,8 @@
         <activity android:name=".activities.SettingActivity" />
         <activity android:name=".activities.NowDayPointTime"></activity>
         <activity android:name=".allipay.PayEnterActivity"></activity>
+        <activity android:name=".weixin.wxapi.WXEntryActivity" android:exported="true"/>
+
     </application>
 
 </manifest>
