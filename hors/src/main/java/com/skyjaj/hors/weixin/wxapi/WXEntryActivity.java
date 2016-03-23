@@ -18,12 +18,12 @@ import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.ThumbnailUtils;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -55,7 +55,6 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 //		msg.mediaObject = textObject;
 //		msg.description = textObject.text;
 //
-//
 //		SendMessageToWX.Req req = new SendMessageToWX.Req();
 //		req.transaction = System.currentTimeMillis() + "";
 //		req.message = msg;
@@ -64,23 +63,21 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 		//会话
 //		req.scene = SendMessageToWX.Req.WXSceneSession;
 
-
-		Bitmap bitmap = getIntent().getParcelableExtra("bitmap");
-
-
-
+		Bitmap bitmap =
+				getIntent().getParcelableExtra("bitmap");
+		Log.i("skyjaj", "bitmap " + bitmap);
 		//send img
 		WXImageObject imageObject = new WXImageObject(bitmap);
 		WXMediaMessage msg = new WXMediaMessage();
 		msg.mediaObject = imageObject;
-		Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap, 500, 500, true);
-		if (bitmap != null) {
-			bitmap.recycle();
-		}
+		Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap, 150, 150, true);
+		Log.i("skyjaj", "bitmap1 " + bitmap1);
+		Toast.makeText(this, "Bitmap1 " + bitmap1, Toast.LENGTH_SHORT).show();
 		msg.thumbData = Util.bmpToByteArray(bitmap1, true);
 		SendMessageToWX.Req req = new SendMessageToWX.Req();
-		req.transaction = System.currentTimeMillis() + "";
-
+		req.transaction = System.currentTimeMillis() + "img";
+		req.message = msg;
+		req.scene = SendMessageToWX.Req.WXSceneSession;
 
 		api.sendReq(req);
 

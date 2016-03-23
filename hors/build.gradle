@@ -18,7 +18,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs =['libs']
+
+        }
+    }
 }
+
+
+
+
 
 
 
@@ -35,4 +47,5 @@ dependencies {
     compile 'com.github.erd:android-volley:1.0.0'
     compile files('src/main/libs/pinyin4j-2.5.0.jar')
     compile files('src/main/libs/libammsdk.jar')
+    compile files('src/main/libs/locSDK_6.23.jar')
 }
