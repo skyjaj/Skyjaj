@@ -31,6 +31,8 @@ public class ServerAddress {
     //获取具体的时间
     public static final String DOCTOR_SCHEDULE_TIME = REMOTE_SERVER_ULR + "doctor/reservationPointTimes";
     public static final String DOCTOR_NOWDAY_SCHEDULE_TIME = REMOTE_SERVER_ULR + "doctor/reservationNowdayPoinTimes";
+    //模糊搜索
+    public static final String FIND_DOCTORS_BY_NAME = REMOTE_SERVER_ULR + "doctor/findDoctorsByName";
     //获取病人个人自信
     public static final String PATIENT_INFORMACTION_URL = REMOTE_SERVER_ULR + "patient/informaction";
     public static final String PATIENT_INFORMACTION_UPDATE_URL = REMOTE_SERVER_ULR + "patient/updateInformaction";

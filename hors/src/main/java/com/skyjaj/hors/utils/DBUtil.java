@@ -42,5 +42,13 @@ public class DBUtil {
         return dbDepartment;
     }
 
+    public static Department turn2Department(DBDepartment dbDepartment) {
+
+        Department department = new Department();
+        department.setId(dbDepartment.getDepartId());
+        department.setNameCn(dbDepartment.getNameCn());
+        department.setNameEn(dbDepartment.getNameEn());
+        return department;
+    }
 
 }

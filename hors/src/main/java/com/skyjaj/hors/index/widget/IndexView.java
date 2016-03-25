@@ -49,7 +49,7 @@ public class IndexView {
         menu.setItemType(BaseMessage.Type.INCOMING);
         mDatas.add(menu);
 
-        menu = new IndexServiceMenu(R.drawable.men_scan_icon, ctx.getString(R.string.index_service_queue_waiting), 0);
+        menu = new IndexServiceMenu(R.drawable.menu_feedback_icon, ctx.getString(R.string.index_service_queue_waiting), 0);
         menu.setItemType(BaseMessage.Type.INCOMING);
         mDatas.add(menu);
 

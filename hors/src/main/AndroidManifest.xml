@@ -29,6 +29,25 @@
     <!-- SD卡读取权限，用户写入离线定位数据-->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"></uses-permission>
 
+    <!--<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />-->
+    <!--<uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />-->
+    <!--<uses-permission android:name="android.permission.ACCES_MOCK_LOCATION" />-->
+    <!--<uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />-->
+    <!--<uses-permission android:name="android.permission.WAKE_LOCK" />-->
+    <!--<uses-permission android:name="android.permission.ACCESS_GPS" />-->
+    <!--&lt;!&ndash; SDK1.5需要android.permission.GET_TASKS权限判断本程序是否为当前运行的应用? &ndash;&gt;-->
+    <!--&lt;!&ndash;<uses-permission android:name="android.permission.GET_TASKS" />&ndash;&gt;-->
+    <!--<uses-permission android:name="android.permission.BROADCAST_STICKY" />-->
+    <!--<uses-permission android:name="android.permission.WRITE_SETTINGS" />-->
+    <!--&lt;!&ndash; 来电消音 &ndash;&gt;-->
+    <!--<uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />-->
+    <!--<uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
+    <!--<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />-->
+    <!--<uses-permission android:name="android.permission.RECORD_AUDIO" />-->
+    <!--&lt;!&ndash;摄影机&ndash;&gt;-->
+    <!--<uses-permission android:name="android.permission.CAMERA" />-->
+
+
 
     <application
         android:name="org.litepal.LitePalApplication"
@@ -116,6 +135,11 @@
         <activity android:name=".weixin.wxapi.WXEntryActivity" android:exported="true"/>
         <activity android:name=".clipview.MainActivity"/>
         <activity android:name=".clipview.ClipActivity" />
+        <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
 
     </application>

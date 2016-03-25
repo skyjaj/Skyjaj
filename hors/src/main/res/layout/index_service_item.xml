@@ -3,6 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:paddingLeft="10dp"
+    android:background="@drawable/selector_textview"
     android:layout_height="55dp">
 
     <LinearLayout
