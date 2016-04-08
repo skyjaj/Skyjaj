@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -194,6 +195,34 @@ public class ShowHistoryActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        //添加下拉加载
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                    Log.i("skyjaj", "onscrooll");
+                    if (mDatas == null || mDatas.size() == 0) {
+                        return;
+                    }
+                    if (view.getLastVisiblePosition() == view.getCount()-1) {
+                        Log.i("skyjaj", "onscrooll end");
+                        if (mDialog != null && !mDialog.isShowing()) {
+                            mDialog.show();
+                        }
+
+                        mNetworkTask = new NetworkTask();
+                        mNetworkTask.setTime(mDatas.get(mDatas.size() - 1).getRemark());
+                        mNetworkTask.execute();
+                    }
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
     }
 
 
@@ -285,12 +314,19 @@ public class ShowHistoryActivity extends AppCompatActivity {
 
         private String result;
         private boolean isEmpty;
+        //通过时间线拉取数据
+        private String time;
+
+        public void setTime(String time) {
+            this.time = time;
+        }
 
         @Override
         protected Boolean doInBackground(Void... params) {
 
             List<LoginInformation> lif = DataSupport.where("state = ?", "1").find(LoginInformation.class);
             Patient patient = new Patient();
+            List<Reservation> reservationsTemp=null;
             isEmpty = false;
             if (lif != null) {
                 patient.setId(lif.get(0).getUid());
@@ -301,6 +337,7 @@ public class ShowHistoryActivity extends AppCompatActivity {
             }
 
             try {
+                patient.setRemark(time);
                 result = OkHttpManager.post(ServerAddress.PATIENT_RESERVATION_HISTORY_URL, new Gson().toJson(patient));
                 Log.i("skyjaj", result);
             } catch (Exception e) {
@@ -310,27 +347,38 @@ public class ShowHistoryActivity extends AppCompatActivity {
             }
 
             try {
-                mDatas = gson.fromJson(result, new TypeToken<List<Reservation>>() {}.getType());
+                reservationsTemp = gson.fromJson(result, new TypeToken<List<Reservation>>() {}.getType());
             } catch (Exception e) {
                 result = "获取信息失败";
                 return false;
             }
 
-            if (mDatas != null && mDatas.size() == 0) {
+            if (reservationsTemp != null && reservationsTemp.size() == 0) {
                 isEmpty = true;
+                result = "没有可加载的数据了";
                 return false;
             }
 
-            if (mDatas != null && mDatas.size() != 0) {
+            if (reservationsTemp != null && reservationsTemp.size() != 0) {
                 //处理服务器返回的信息，即分月排版显示
                 List<Reservation> reservations = new ArrayList<Reservation>();
-                String time = DateUtil.string2TimeFormatTwo(mDatas.get(0).getAppointmentTime());
-                Reservation re = new Reservation();
-                //设置提示信息
-                re.setItemType(BaseMessage.Type.OUTCOMING);
-                re.setAppointmentTime(time);
-                reservations.add(re);
-                for (Reservation r : mDatas) {
+                //上一次拉取数据的预约时间
+                String lastTime = "";
+                if (mDatas != null && mDatas.size() > 0) {
+                    lastTime = DateUtil.string2TimeFormatTwo(mDatas.get(mDatas.size()-1).getAppointmentTime());
+                }
+                String time = DateUtil.string2TimeFormatTwo(reservationsTemp.get(0).getAppointmentTime());
+
+                //若与上一次时间不在同一月份则显示
+                if (!(!TextUtils.isEmpty(lastTime) && lastTime.equals(time))) {
+                    Reservation re = new Reservation();
+                    //设置提示信息
+                    re.setItemType(BaseMessage.Type.OUTCOMING);
+                    re.setAppointmentTime(time);
+                    reservations.add(re);
+                }
+
+                for (Reservation r : reservationsTemp) {
                     if (!TextUtils.isEmpty(time) && time.equals(DateUtil.string2TimeFormatTwo((r.getAppointmentTime())))) {
                         reservations.add(r);
                     } else if (!TextUtils.isEmpty(time) && !TextUtils.isEmpty(r.getAppointmentTime())) {
@@ -344,7 +392,9 @@ public class ShowHistoryActivity extends AppCompatActivity {
                         reservations.add(r);
                     }
                 }
-                mDatas = new ArrayList<Reservation>(reservations);
+                for (Reservation rsvt : reservations) {
+                    mDatas.add(rsvt);
+                }
                 reservations = null;
                 return true;
             } else {
@@ -367,7 +417,7 @@ public class ShowHistoryActivity extends AppCompatActivity {
                     mAdapter.notifyDataSetChanged();
                 }
             } else {
-                if (isEmpty) {
+                if (isEmpty&&mDatas.size()==0) {
                     Reservation text = new Reservation();
                     text.setItemType(BaseMessage.Type.OUTCOMING);
                     text.setAppointmentTime("暂无信息");
@@ -376,7 +426,7 @@ public class ShowHistoryActivity extends AppCompatActivity {
                     mAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(ShowHistoryActivity.this, result, Toast.LENGTH_SHORT).show();
-                    finish();
+                    //finish();
                 }
             }
         }

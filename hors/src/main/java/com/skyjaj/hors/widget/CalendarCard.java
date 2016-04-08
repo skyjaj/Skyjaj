@@ -382,7 +382,8 @@ public class CalendarCard extends View {
 
                 CustomDate date = nextRows[index-1].cells[col].date;
                 date.week = col;
-                mCellClickListener.ensureDate(date, rows[index-1].cells[col].scheduleOfMonth);
+
+                mCellClickListener.ensureDate(date, nextRows[index-1].cells[col].scheduleOfMonth);
                 // 刷新界面
                 update();
             }

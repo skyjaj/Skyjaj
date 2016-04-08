@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.skyjaj.hors.R;
 
 /**
- * Created by Administrator on 2016/3/15.
+ * Created by skyjaj on 2016/3/15.
  */
 public class PinyinBarView extends View {
     // 触摸事件
@@ -117,22 +117,13 @@ public class PinyinBarView extends View {
         return true;
     }
 
-    /**
-     * 回调
-     *
-     * @param onTouchingLetterChangedListener
-     */
+
     public void setOnTouchingLetterChangedListener(
             OnTouchingLetterChangedListener onTouchingLetterChangedListener) {
         this.onTouchingLetterChangedListener = onTouchingLetterChangedListener;
     }
 
-    /**
-     * 接口回调
-     *
-     * @author coder
-     *
-     */
+
     public interface OnTouchingLetterChangedListener {
         public void onTouchingLetterChanged(String s);
     }

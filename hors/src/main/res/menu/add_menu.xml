@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_add"
+        android:icon="@drawable/actionbar_add_icon"
+        android:title="添加"
+        android:visible="true"
+        app:showAsAction="always" />
+
+</menu>

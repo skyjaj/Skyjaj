@@ -94,9 +94,13 @@ public class SearchMoreActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                if (TextUtils.isEmpty(mEditContent.getText().toString())) {
+                    return;
+                }
+
                 if (dialog == null) {
                     dialog = DialogStylel.createLoadingDialog(SearchMoreActivity.this, "搜索中..");
-                }else if (dialog != null && !dialog.isShowing()) {
+                } else if (dialog != null && !dialog.isShowing()) {
                     dialog.show();
                 }
                 task = new NetworkTask(mEditContent.getText().toString());
@@ -294,10 +298,10 @@ public class SearchMoreActivity extends AppCompatActivity {
 
             Log.i("skyjaj", result + " input :" + input);
             try {
-                Department department = new Department();
-                department.setItemType(null);
-                department.setId(input);
-                result = OkHttpManager.post(ServerAddress.FIND_DOCTOR_BY_DEPARTMENT_ID_URL, new Gson().toJson(department));
+                Doctor doctor = new Doctor();
+                doctor.setItemType(null);
+                doctor.setName(input);
+                result = OkHttpManager.post(ServerAddress.FIND_DOCTORS_BY_NAME, new Gson().toJson(doctor));
                 Log.i("skyjaj", "result " + result);
             } catch (Exception e) {
                 result = "无法访问网络，请稍候重试";

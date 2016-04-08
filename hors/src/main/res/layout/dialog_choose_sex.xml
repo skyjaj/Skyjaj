@@ -24,13 +24,13 @@
         android:showDividers="middle"
         android:layout_marginTop="10dp">
 
+
         <RadioButton
             android:id="@+id/choose_sex_f"
             android:layout_width="150dp"
             android:layout_height="30dp"
             android:layout_weight="1"
-            android:button="@null"
-            android:drawableRight="@android:drawable/radiobutton_on_background"
+            android:paddingLeft="80dp"
             android:checked="true"
             android:text="男"
             android:background="@drawable/selector_textview"/>
@@ -42,12 +42,13 @@
             android:layout_height="30dp"
             android:layout_weight="1"
             android:layout_marginTop="10dp"
-            android:button="@null"
-            android:drawableRight="@android:drawable/radiobutton_off_background"
+            android:paddingLeft="80dp"
             android:text="女"
             android:background="@drawable/selector_textview"/>
     </RadioGroup>
-
+<!--    android:button="@null"
+        android:drawableRight="@android:drawable/radiobutton_off_background"
+-->
 
 
 

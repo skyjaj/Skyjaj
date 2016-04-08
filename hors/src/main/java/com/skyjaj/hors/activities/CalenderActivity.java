@@ -173,6 +173,10 @@ public class CalenderActivity extends Activity implements  CalendarCard.OnCellCl
             if (dialog != null) {
                 dialog.dismiss();
             }
+            if (scheduleOfMonths == null || scheduleOfMonths.size() == 0) {
+                Toast.makeText(CalenderActivity.this, "暂无排班数据", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (success) {
                 setUI();
                 Toast.makeText(CalenderActivity.this, "已获取数据", Toast.LENGTH_SHORT).show();
