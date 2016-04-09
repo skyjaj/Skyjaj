@@ -201,7 +201,6 @@ public class SearchMoreActivity extends AppCompatActivity {
                 }
 
 
-
                 Toast.makeText(SearchMoreActivity.this, "postion :" + position, Toast.LENGTH_SHORT).show();
             }
         });

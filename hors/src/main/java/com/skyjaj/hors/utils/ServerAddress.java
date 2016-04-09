@@ -40,6 +40,7 @@ public class ServerAddress {
     public static final String PATIENT_INFORMACTION_URL = REMOTE_SERVER_ULR + "patient/informaction";
     public static final String PATIENT_INFORMACTION_UPDATE_URL = REMOTE_SERVER_ULR + "patient/updateInformaction";
     public static final String PATIENT_INFORMACTION_UPDATE_PASSWORD_URL = REMOTE_SERVER_ULR + "patient/updatePassword";
+    public static final String PATIENT_FORGET_PASSWORD_URL = REMOTE_SERVER_ULR + "patient/forgetPassword";
 
     public static final String PATIENT_DELETE_ERSERVATION_URL = REMOTE_SERVER_ULR + "patient/deleteReservation";
     public static final String PATIENT_CANCEL_RESERVATION_URL = REMOTE_SERVER_ULR + "patient/cancelReservation";

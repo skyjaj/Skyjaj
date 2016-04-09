@@ -37,16 +37,21 @@ import com.skyjaj.hors.bean.Patient;
 import com.skyjaj.hors.doctor.activities.HomePage;
 import com.skyjaj.hors.network.LoginResult;
 import com.skyjaj.hors.utils.OkHttpManager;
+import com.skyjaj.hors.utils.PinYinUtil;
 import com.skyjaj.hors.utils.RoleConstant;
 import com.skyjaj.hors.utils.ServerAddress;
-
 import org.androidpn.client.ServiceManager;
 import org.litepal.crud.DataSupport;
 import org.litepal.tablemanager.Connector;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
+import cn.smssdk.gui.RegisterPage;
 
 
 public class LoginActivity extends AppCompatActivity{
@@ -243,7 +248,12 @@ public class LoginActivity extends AppCompatActivity{
 
             //忘记密码
             case R.id.action_forget_password:
-                DataSupport.deleteAll(LoginInformation.class, "state >=?" , "0");
+//                DataSupport.deleteAll(LoginInformation.class, "state >=?" , "0");
+
+
+                Intent intent = new Intent(this, com.skyjaj.hors.loadtest.MainActivity.class);
+                startActivity(intent);
+
                 Toast.makeText(this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
                 return  true;
         }

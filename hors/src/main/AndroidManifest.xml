@@ -46,6 +46,14 @@
     <!-- <uses-permission android:name="android.permission.RECORD_AUDIO" /> -->
     <!-- &lt;!&ndash;摄影机&ndash;&gt; -->
     <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
+
+
+
+    <!-- 短信-->
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+
+
     <application
         android:name="org.litepal.LitePalApplication"
         android:allowBackup="true"
@@ -63,6 +71,12 @@
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote"></service>
+
+        <activity
+            android:name="com.mob.tools.MobUIShell"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
 
         <activity
             android:name=".activities.SystemLoginActivity"
@@ -146,6 +160,7 @@
         <activity android:name=".admin.activities.UpdateDoctorActivity"></activity>
         <activity android:name=".admin.activities.UpdatePatientActivity"></activity>
         <activity android:name=".admin.activities.UpdateDepartmentActivity"></activity>
+        <activity android:name=".loadtest.MainActivity"></activity>
 
     </application>
 
