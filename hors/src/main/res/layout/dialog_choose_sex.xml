@@ -24,6 +24,7 @@
         android:showDividers="middle"
         android:layout_marginTop="10dp">
 
+
         <RadioButton
             android:id="@+id/choose_sex_f"
             android:layout_width="150dp"

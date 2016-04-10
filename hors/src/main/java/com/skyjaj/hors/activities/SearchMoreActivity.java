@@ -96,9 +96,13 @@ public class SearchMoreActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 
+                if (TextUtils.isEmpty(mEditContent.getText().toString())) {
+                    return;
+                }
+
                 if (dialog == null) {
                     dialog = DialogStylel.createLoadingDialog(SearchMoreActivity.this, "搜索中..");
-                }else if (dialog != null && !dialog.isShowing()) {
+                } else if (dialog != null && !dialog.isShowing()) {
                     dialog.show();
                 }
                 task = new NetworkTask(mEditContent.getText().toString());
@@ -229,7 +233,6 @@ public class SearchMoreActivity extends BaseActivity {
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }
-
 
 
                 Toast.makeText(SearchMoreActivity.this, "postion :" + position, Toast.LENGTH_SHORT).show();

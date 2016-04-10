@@ -14,6 +14,12 @@
     <color name="color_button_login_normal">#009a00</color>
     <color name="color_button_login_press">#93b593</color>
     <color name="color_button_login_focus">#194619</color>
+
+    <!--头部刷新时候的四种颜色-->
+    <color name="refresh_color_1">#ff00ddff</color>
+    <color name="refresh_color_2">#ff99cc00</color>
+    <color name="refresh_color_3">#ffffbb33</color>
+    <color name="refresh_color_4">#ffff4444</color>
     <!-- end-->
 
     <color name="colorPrimary">#3F51B5</color>
