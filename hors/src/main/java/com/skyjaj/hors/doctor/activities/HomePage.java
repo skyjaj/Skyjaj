@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.skyjaj.hors.R;
+import com.skyjaj.hors.activities.BaseActivity;
 import com.skyjaj.hors.activities.MyActivityManager;
 import com.skyjaj.hors.utils.ToolbarStyle;
 import com.skyjaj.hors.widget.ChangeColorIconWithText;
@@ -21,7 +22,7 @@ import org.androidpn.client.ServiceManager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomePage extends AppCompatActivity implements ViewPager.OnPageChangeListener,View.OnClickListener {
+public class HomePage extends BaseActivity implements ViewPager.OnPageChangeListener,View.OnClickListener {
 
     private Toolbar mToolbar;
     private ViewPager mViewPager;
@@ -44,7 +45,6 @@ public class HomePage extends AppCompatActivity implements ViewPager.OnPageChang
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
         mToolbar = ToolbarStyle.initToolbarWithNoBackKey(this, R.id.mToolbar, "医生主页");
-        MyActivityManager.getInstance().addActivity(this);
         initContentViews();
         initDatas();
         mViewPager.setAdapter(mAdapter);

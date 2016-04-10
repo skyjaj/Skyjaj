@@ -31,7 +31,7 @@ import java.util.List;
  *
  */
 
-public class IndexDoctorAppointmentActivity extends AppCompatActivity {
+public class IndexDoctorAppointmentActivity extends BaseActivity {
 
 
     private Toolbar mToolbar;
@@ -58,7 +58,6 @@ public class IndexDoctorAppointmentActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_index_doctor_appointment);
 
-        MyActivityManager.getInstance().addActivity(this);
 
         doctor = (Doctor) getIntent().getSerializableExtra("doctor");
         mDepartment = (Department) getIntent().getSerializableExtra("department");

@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.skyjaj.hors.R;
+import com.skyjaj.hors.activities.BaseActivity;
 import com.skyjaj.hors.activities.MyActivityManager;
 import com.skyjaj.hors.adapter.CommonAdapter;
 import com.skyjaj.hors.adapter.TimestampTypeAdapter;
@@ -36,7 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ReservationManagerActivity extends AppCompatActivity {
+public class ReservationManagerActivity extends BaseActivity {
 
     private Toolbar mToolbar;
     private ListView mListView;
@@ -51,7 +52,6 @@ public class ReservationManagerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reservation_manager);
-        MyActivityManager.getInstance().addActivity(this);
         mToolbar = ToolbarStyle.initToolbar(this, R.id.mToolbar, "已预约病人");
         initView();
         initDatas();

@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.skyjaj.hors.R;
+import com.skyjaj.hors.activities.BaseActivity;
 import com.skyjaj.hors.adapter.TimestampTypeAdapter;
 import com.skyjaj.hors.bean.Department;
 import com.skyjaj.hors.bean.Notification;
@@ -26,7 +27,7 @@ import org.androidpn.client.NotificationIQ;
 import java.sql.Timestamp;
 import java.util.List;
 
-public class MessageManagerActivity extends AppCompatActivity {
+public class MessageManagerActivity extends BaseActivity {
 
     private static Gson gson = new GsonBuilder().registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter()).create();
     private Toolbar mToolbar;

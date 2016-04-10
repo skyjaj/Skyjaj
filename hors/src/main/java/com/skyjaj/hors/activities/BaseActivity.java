@@ -20,14 +20,16 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.AppTheme);
-        dialog = DialogStylel.createLoadingDialog(this, "加载中...");
-        dialog.show();
+//        setTheme(R.style.AppTheme);
+//        dialog = DialogStylel.createLoadingDialog(this, "加载中...");
+//        dialog.show();
+        MyActivityManager.getInstance().addActivity(this);
     }
 
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        MyActivityManager.getInstance().remove(this);
     }
 }

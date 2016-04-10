@@ -26,7 +26,7 @@ import com.skyjaj.hors.utils.ToolbarStyle;
 
 import java.sql.Timestamp;
 
-public class IndexReservationConfirmActivity extends AppCompatActivity {
+public class IndexReservationConfirmActivity extends BaseActivity {
 
     private Toolbar mToobar;
     private Reservation mReservationResult;
@@ -49,7 +49,6 @@ public class IndexReservationConfirmActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_index_reservation_confirm);
-        MyActivityManager.getInstance().addActivity(this);
         //初始化所有预约信息
         initView();
         initDatas();
@@ -105,15 +104,15 @@ public class IndexReservationConfirmActivity extends AppCompatActivity {
             if (mReservation == null) {
                 //重新登录
             }
-//            dialog = DialogStylel.createLoadingDialog(this, "提交中...");
-//            dialog.show();
-//            mNetworkTask = new NetworkTask(mReservation);
-//            mNetworkTask.execute();
-            Intent intent = new Intent(this, PayEnterActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("reservation", mReservation);
-            intent.putExtras(bundle);
-            startActivity(intent);
+            dialog = DialogStylel.createLoadingDialog(this, "提交中...");
+            dialog.show();
+            mNetworkTask = new NetworkTask(mReservation);
+            mNetworkTask.execute();
+//            Intent intent = new Intent(this, PayEnterActivity.class);
+//            Bundle bundle = new Bundle();
+//            bundle.putSerializable("reservation", mReservation);
+//            intent.putExtras(bundle);
+//            startActivity(intent);
         }
 
     }
@@ -121,7 +120,6 @@ public class IndexReservationConfirmActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        MyActivityManager.getInstance().remove(this);
         super.onDestroy();
     }
 

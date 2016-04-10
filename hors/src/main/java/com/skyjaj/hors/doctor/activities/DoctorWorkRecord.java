@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.skyjaj.hors.R;
+import com.skyjaj.hors.activities.BaseActivity;
 import com.skyjaj.hors.activities.MyActivityManager;
 import com.skyjaj.hors.adapter.CommonAdapter;
 import com.skyjaj.hors.adapter.TimestampTypeAdapter;
@@ -37,7 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DoctorWorkRecord extends AppCompatActivity {
+public class DoctorWorkRecord extends BaseActivity {
 
     private Toolbar mToolbar;
     private ListView mListView;
@@ -55,7 +56,6 @@ public class DoctorWorkRecord extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctor_work_record);
         mToolbar = ToolbarStyle.initToolbar(this, R.id.mToolbar, "我的工作记录");
-        MyActivityManager.getInstance().addActivity(this);
         initView();
         initDatas();
 

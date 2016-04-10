@@ -55,7 +55,7 @@ import java.util.Map;
  * 显示科室信息
  * Created by Administrator on 2016/1/21.
  */
-public class IndexServiceAppointmentActivity extends AppCompatActivity implements PinyinBarView.OnTouchingLetterChangedListener{
+public class IndexServiceAppointmentActivity extends BaseActivity implements PinyinBarView.OnTouchingLetterChangedListener{
 
     private ListView mListView;
 
@@ -69,7 +69,6 @@ public class IndexServiceAppointmentActivity extends AppCompatActivity implement
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        MyActivityManager.getInstance().addActivity(this);
         int viewId = intent.getIntExtra("index_menu", 0);
 
 
@@ -192,7 +191,6 @@ public class IndexServiceAppointmentActivity extends AppCompatActivity implement
     @Override
     protected void onDestroy() {
         dialog = null;
-        MyActivityManager.getInstance().remove(this);
         super.onDestroy();
 
     }

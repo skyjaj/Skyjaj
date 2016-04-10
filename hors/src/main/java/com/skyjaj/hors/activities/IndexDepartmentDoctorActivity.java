@@ -41,7 +41,7 @@ import java.util.Map;
  * 科室医生
  */
 
-public class IndexDepartmentDoctorActivity extends AppCompatActivity{
+public class IndexDepartmentDoctorActivity extends BaseActivity{
 
     private Toolbar mToolbar;
     private NetworkTask mNetworkTask=null;
@@ -56,7 +56,6 @@ public class IndexDepartmentDoctorActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_index_department_doctor);
-        MyActivityManager.getInstance().addActivity(this);
         Intent intent = getIntent();
         department = (Department) intent.getSerializableExtra("department");
         isNowDay = intent.getBooleanExtra("isNowDay",false);
@@ -131,9 +130,8 @@ public class IndexDepartmentDoctorActivity extends AppCompatActivity{
 
     @Override
     protected void onDestroy() {
-        dialog = null;
-        MyActivityManager.getInstance().remove(this);
         super.onDestroy();
+        dialog = null;
     }
 
     //异步任务

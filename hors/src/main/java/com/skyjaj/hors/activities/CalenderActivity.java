@@ -98,8 +98,8 @@ public class CalenderActivity extends Activity implements  CalendarCard.OnCellCl
 
     @Override
     protected void onDestroy() {
-        MyActivityManager.getInstance().remove(this);
         super.onDestroy();
+        MyActivityManager.getInstance().remove(this);
         if (mTask != null) {
             mTask.cancel(true);
             mTask = null;
@@ -173,6 +173,13 @@ public class CalenderActivity extends Activity implements  CalendarCard.OnCellCl
             if (dialog != null) {
                 dialog.dismiss();
             }
+
+            if (scheduleOfMonths == null || scheduleOfMonths.size() == 0) {
+                Toast.makeText(CalenderActivity.this, "暂无数据", Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            }
+
             if (success) {
                 setUI();
                 Toast.makeText(CalenderActivity.this, "已获取数据", Toast.LENGTH_SHORT).show();

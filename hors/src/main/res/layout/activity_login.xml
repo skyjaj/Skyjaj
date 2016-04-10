@@ -17,7 +17,7 @@
         android:theme="@style/AppTheme.login">
     </android.support.v7.widget.Toolbar>
 
-    <!-- Login progress -->
+    <!-- 登录进度条 -->
     <ProgressBar
         android:id="@+id/login_progress"
         style="?android:attr/progressBarStyleLarge"

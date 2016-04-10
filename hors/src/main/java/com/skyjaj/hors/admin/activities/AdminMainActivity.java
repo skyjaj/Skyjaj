@@ -12,13 +12,14 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import com.skyjaj.hors.R;
+import com.skyjaj.hors.activities.BaseActivity;
 import com.skyjaj.hors.activities.MyActivityManager;
 import com.skyjaj.hors.admin.wigwet.IndexContentFragment;
 import com.skyjaj.hors.admin.wigwet.IndexMenuFragment;
 import com.skyjaj.hors.utils.ToolbarStyle;
 import java.util.List;
 
-public class AdminMainActivity extends AppCompatActivity {
+public class AdminMainActivity extends BaseActivity {
 
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private DrawerLayout mDrawerLayout;
@@ -34,7 +35,6 @@ public class AdminMainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_main);
-        MyActivityManager.getInstance().addActivity(this);
         initViews();
       //初始化默认标题
         restoreTitle(savedInstanceState);

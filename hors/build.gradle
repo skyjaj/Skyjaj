@@ -26,16 +26,30 @@ android {
 
         }
     }
+//添加splits以在模拟器上运行baidu api
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'armeabi-v7a'
+            universalApk true
+        }
+    }
+}
+
+
+//解释 arr
+repositories{
+    flatDir{
+        dirs 'libs'
+    }
 }
 
 
 
-
-
-
-
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    /*compile fileTree(include: ['*.jar'], dir: 'libs')*/
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
@@ -48,4 +62,5 @@ dependencies {
     compile files('src/main/libs/pinyin4j-2.5.0.jar')
     compile files('src/main/libs/libammsdk.jar')
     compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+    compile name:'SMSSDK-2.0.2',ext:'aar'
 }

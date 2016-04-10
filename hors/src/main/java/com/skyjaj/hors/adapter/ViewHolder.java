@@ -3,6 +3,10 @@ package com.skyjaj.hors.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,6 +77,26 @@ public class ViewHolder {
     public  ViewHolder setTextColor(int viewId,int color){
         TextView tv = getView(viewId);
         tv.setTextColor(color);
+        return this;
+    }
+
+    /**
+     * 专业对搜索结果关键字对应字体颜色高亮
+     * @param viewId
+     * @param color
+     * @param start
+     * @param end
+     * @return
+     */
+    public ViewHolder setSubTextColor(int viewId, int color, int start, int end) {
+        TextView tv = getView(viewId);
+
+        Log.i("skyjaj", tv.getText().toString());
+        SpannableStringBuilder builder = new SpannableStringBuilder(tv.getText().toString());
+        //ForegroundColorSpan 为文字前景色，BackgroundColorSpan为文字背景色
+        ForegroundColorSpan greenSpan = new ForegroundColorSpan(color);
+        builder.setSpan(greenSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tv.setText(builder);
         return this;
     }
 

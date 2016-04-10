@@ -296,16 +296,16 @@
         </LinearLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/weixin_shared"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/selector_button"
-        android:textColor="#ffffff"
-        android:layout_margin="5dp"
-        android:padding="3dp"
-        android:text="分享到微信朋友圈"
-        android:onClick="onClick"/>
+    <!--<Button-->
+        <!--android:id="@+id/weixin_shared"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:background="@drawable/selector_button"-->
+        <!--android:textColor="#ffffff"-->
+        <!--android:layout_margin="5dp"-->
+        <!--android:padding="3dp"-->
+        <!--android:text="分享到微信朋友圈"-->
+        <!--android:onClick="onClick"/>-->
 
 </LinearLayout>

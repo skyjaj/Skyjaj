@@ -33,7 +33,8 @@ public class MyActivityManager extends Application {
     }
 
 
-    public void addActivity(Activity activity) {
+    public synchronized void addActivity(Activity activity) {
+        Log.i(this.getClass().getName(), "add " + activity.getClass().getName());
         if (activities == null) {
             activities = new ArrayList<Activity>();
         }
@@ -45,6 +46,7 @@ public class MyActivityManager extends Application {
 
 
     public void remove(Activity activity) {
+        Log.i(this.getClass().getName(), "remove " + activity.getClass().getName());
         synchronized (MyActivityManager.class) {
             try {
                 if (activity != null && activities != null && activities.size() != 0) {
@@ -60,21 +62,17 @@ public class MyActivityManager extends Application {
     }
 
 
-
-
-
-    public void exit() {
+    public void finishButThis(String activityName) {
         try {
             if (activities != null) {
                 for (Activity activity : activities) {
-                    if (activity != null) {
+                    if (activity != null && !activity.isFinishing() &&
+                            !activity.getClass().getName().equals(activityName)) {
                         activity.finish();
                     } else {
                         Log.i("skyjaj", "activity :" + activity);
                     }
                 }
-                activities.clear();
-                activities = null;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,6 +80,27 @@ public class MyActivityManager extends Application {
             //System.exit(0);
         }
     }
+
+
+    public void exit() {
+        try {
+            if (activities != null) {
+                for (Activity activity : activities) {
+                    if (activity != null && !activity.isFinishing()) {
+                        activity.finish();
+                    } else {
+                        Log.i("skyjaj", "activity :" + activity);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            //System.exit(0);
+        }
+    }
+
+
 
     @Override
     public void onLowMemory() {

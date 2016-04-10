@@ -33,7 +33,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NowDayPointTime extends AppCompatActivity {
+public class NowDayPointTime extends BaseActivity {
 
 
     private Toolbar mToolbar;

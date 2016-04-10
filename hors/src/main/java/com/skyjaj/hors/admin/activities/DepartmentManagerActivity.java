@@ -4,10 +4,15 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -17,6 +22,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.skyjaj.hors.R;
+import com.skyjaj.hors.activities.BaseActivity;
 import com.skyjaj.hors.activities.IndexDepartmentDoctorActivity;
 import com.skyjaj.hors.activities.MyActivityManager;
 import com.skyjaj.hors.adapter.CommonAdapter;
@@ -26,6 +32,8 @@ import com.skyjaj.hors.admin.wigwet.DoctorManagerForOnItemLongClickDialog;
 import com.skyjaj.hors.bean.BaseMessage;
 import com.skyjaj.hors.bean.Department;
 import com.skyjaj.hors.bean.IndexServiceMenu;
+import com.skyjaj.hors.bean.Reservation;
+import com.skyjaj.hors.bean.SystemUser;
 import com.skyjaj.hors.utils.DialogStylel;
 import com.skyjaj.hors.utils.OkHttpManager;
 import com.skyjaj.hors.utils.ServerAddress;
@@ -39,7 +47,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DepartmentManagerActivity extends AppCompatActivity {
+public class DepartmentManagerActivity extends BaseActivity {
 
     private ListView mListView;
 
@@ -50,13 +58,51 @@ public class DepartmentManagerActivity extends AppCompatActivity {
 
     private boolean isLongClick;
 
+    private final int DELETE = 0,STOP = 1, FALSE = 2;
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                //delete
+                case DELETE:
+                    departmentList.remove(msg.obj);
+                    mAdapter.setmDatas(departmentList);
+                    mAdapter.notifyDataSetChanged();
+                    Toast.makeText(DepartmentManagerActivity.this,"已删除", Toast.LENGTH_SHORT).show();
+                    break;
+                //STOP
+                case STOP:
+                    Department department = (Department) msg.obj;
+                    department.setState(0);
+                    mAdapter.setmDatas(departmentList);
+                    mAdapter.notifyDataSetChanged();
+                    Toast.makeText(DepartmentManagerActivity.this,"已停诊该科室", Toast.LENGTH_SHORT).show();
+                    break;
+                case FALSE:
+                    Toast.makeText(DepartmentManagerActivity.this,(String)msg.obj, Toast.LENGTH_SHORT).show();
+                    break;
+            }
+            if (dialog != null && dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        MyActivityManager.getInstance().addActivity(this);
         setContentView(R.layout.activity_department_manager);
         mToolbar = ToolbarStyle.initToolbar(this, R.id.mToolbar, "科室管理");
+        setSupportActionBar(mToolbar);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         initAppointmentView();
 
     }
@@ -105,7 +151,7 @@ public class DepartmentManagerActivity extends AppCompatActivity {
 
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 
                 DepartmentManagerForOnItemLongClick.OnItemClickListener listener =
                         new DepartmentManagerForOnItemLongClick.OnItemClickListener() {
@@ -114,32 +160,37 @@ public class DepartmentManagerActivity extends AppCompatActivity {
                                 isLongClick = false;
                                 switch (resId) {
                                     case R.id.manager_department_update:
-                                        Toast.makeText(DepartmentManagerActivity.this, "manager_department_update", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(DepartmentManagerActivity.this, UpdateDepartmentActivity.class);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putSerializable("department", departmentList.get(position));
+                                        intent.putExtras(bundle);
+                                        startActivity(intent);
+//                                        Toast.makeText(DepartmentManagerActivity.this, "manager_department_update", Toast.LENGTH_SHORT).show();
                                         break;
                                     case R.id.manager_department_delete:
-                                        Toast.makeText(DepartmentManagerActivity.this, "manager_department_delete", Toast.LENGTH_SHORT).show();
+                                        deleteDepartment(ServerAddress.ADMIN_DELETE_DEPARTMENT_URL, departmentList.get(position),DELETE);
+//                                        Toast.makeText(DepartmentManagerActivity.this, "manager_department_delete", Toast.LENGTH_SHORT).show();
                                         break;
                                     case R.id.manager_department_stop:
-                                        Toast.makeText(DepartmentManagerActivity.this, "manager_department_stop", Toast.LENGTH_SHORT).show();
+                                        deleteDepartment(ServerAddress.ADMIN_STOP_DEPARTMENT_URL, departmentList.get(position),STOP);
+//                                        Toast.makeText(DepartmentManagerActivity.this, "manager_department_stop", Toast.LENGTH_SHORT).show();
                                         break;
                                 }
                             }
 
                             @Override
                             public void onDismissListener(DialogInterface dialog) {
-                                Toast.makeText(DepartmentManagerActivity.this, "onDismissListener", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(DepartmentManagerActivity.this, "onDismissListener", Toast.LENGTH_SHORT).show();
                                 isLongClick = false;
                             }
 
                             @Override
                             public void onCancelListener(DialogInterface dialog) {
-                                Toast.makeText(DepartmentManagerActivity.this, "onCancelListener", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(DepartmentManagerActivity.this, "onCancelListener", Toast.LENGTH_SHORT).show();
                             }
-
                         };
                 DepartmentManagerForOnItemLongClick longClick = new DepartmentManagerForOnItemLongClick(listener, DepartmentManagerActivity.this);
                 isLongClick = true;
-
                 return false;
             }
         });
@@ -151,10 +202,67 @@ public class DepartmentManagerActivity extends AppCompatActivity {
     }
 
 
+    public void deleteDepartment(final String url,final Department department,final int what) {
+        if (dialog != null && !dialog.isShowing()) {
+            dialog.show();
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SystemUser systemUser = new SystemUser();
+                systemUser.setId(department.getId());
+                systemUser.setRemark(department.getId());
+                String result="";
+                try {
+                    result = OkHttpManager.post(url, new Gson().toJson(systemUser));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    result = "无法请求服务器,请稍后重试";
+                }
+                Message msg = new Message();
+                if (!TextUtils.isEmpty(result)) {
+                    result = result.replaceAll("\"", "");
+                }
+                if ("已停".equals(result) || "已删除".equals(result)) {
+                    msg.what = what;
+                    msg.obj = department;
+                    mHandler.sendMessage(msg);
+                } else {
+                    msg.what = FALSE;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                }
+            }
+        }).start();
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (R.id.action_add == item.getItemId()) {
+            Intent intent = new Intent(this, UpdateDepartmentActivity.class);
+            startActivity(intent);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.add_menu, menu);
+        return true;
+    }
+
+
+
+
     @Override
     protected void onDestroy() {
         dialog = null;
-        MyActivityManager.getInstance().remove(this);
         super.onDestroy();
 
     }
@@ -162,9 +270,7 @@ public class DepartmentManagerActivity extends AppCompatActivity {
     //异步任务
     public class NetworkTask extends AsyncTask<Void, Void, Boolean> {
 
-        NetworkTask() {
-
-        }
+        NetworkTask() {}
 
         @Override
         protected Boolean doInBackground(Void... params) {
@@ -221,10 +327,8 @@ public class DepartmentManagerActivity extends AppCompatActivity {
                         }
                     }
                 }
-
                 map = null;
                 departments=null;
-
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;

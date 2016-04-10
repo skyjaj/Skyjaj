@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import com.skyjaj.hors.R;
 import com.skyjaj.hors.baidu.MyLocationListener;
-import com.skyjaj.hors.clipview.MainActivity;
 import com.skyjaj.hors.utils.ToolbarStyle;
 import com.skyjaj.hors.weixin.wxapi.WXEntryActivity;
 import com.skyjaj.hors.widget.ChangeColorIconWithText;
@@ -33,7 +32,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IndexCommonActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,View.OnClickListener,View.OnTouchListener{
+public class IndexCommonActivity extends BaseActivity implements ViewPager.OnPageChangeListener,View.OnClickListener,View.OnTouchListener{
 
 
 
@@ -60,7 +59,6 @@ public class IndexCommonActivity extends AppCompatActivity implements ViewPager.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_index_common);
-        MyActivityManager.getInstance().addActivity(this);
 //        mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
 //        mLocationClient.registerLocationListener(myListener);    //注册监听函数
         initToolbar();
@@ -69,7 +67,6 @@ public class IndexCommonActivity extends AppCompatActivity implements ViewPager.
         mViewPager.setAdapter(mAdapter);
         mViewPager.addOnPageChangeListener(this);
         sharedPreferences = this.getSharedPreferences("horsUserInfo", MODE_PRIVATE);
-
 
         mTask = new ServiceTask();
         mTask.execute();
@@ -144,6 +141,14 @@ public class IndexCommonActivity extends AppCompatActivity implements ViewPager.
             }
             return true;
         }
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent home = new Intent(Intent.ACTION_MAIN);
+            home.addCategory(Intent.CATEGORY_HOME);
+            startActivity(home);
+            //返回true表示已处理该事件，不再传递
+            return  true;
+        }
         return super.onKeyUp(keyCode, event);
     }
 
@@ -153,20 +158,20 @@ public class IndexCommonActivity extends AppCompatActivity implements ViewPager.
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.index_menu, menu);
-        //通过反射显示菜单的图标
-        if (MenuBuilder.class.isInstance(menu)) {
-            MenuBuilder builder = (MenuBuilder) menu;
-            builder.setShortcutsVisible(true);
-            Method method = null;
-            try {
-                method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
-                method.setAccessible(true);
-                method.invoke(menu, true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+//        getMenuInflater().inflate(R.menu.index_menu, menu);
+//        //通过反射显示菜单的图标
+//        if (MenuBuilder.class.isInstance(menu)) {
+//            MenuBuilder builder = (MenuBuilder) menu;
+//            builder.setShortcutsVisible(true);
+//            Method method = null;
+//            try {
+//                method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
+//                method.setAccessible(true);
+//                method.invoke(menu, true);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -212,8 +217,8 @@ public class IndexCommonActivity extends AppCompatActivity implements ViewPager.
                 Toast.makeText(this,"action feedback ",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.action_scan:
-                Intent intentsc = new Intent(this, MainActivity.class);
-                startActivity(intentsc);
+//                Intent intentsc = new Intent(this, MainActivity.class);
+//                startActivity(intentsc);
                 Toast.makeText(this,"action scan ",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.action_gruop_chat:
@@ -291,13 +296,7 @@ public class IndexCommonActivity extends AppCompatActivity implements ViewPager.
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Intent home = new Intent(Intent.ACTION_MAIN);
-             home.addCategory(Intent.CATEGORY_HOME);
-             startActivity(home);
-            //返回true表示已处理该事件，不再传递
-            return  true;
-        }
+
         return super.onKeyDown(keyCode, event);
     }
 
@@ -315,7 +314,6 @@ public class IndexCommonActivity extends AppCompatActivity implements ViewPager.
         if (serviceManager != null) {
             serviceManager.stopService();
         }
-        MyActivityManager.getInstance().remove(this);
         super.onDestroy();
     }
 

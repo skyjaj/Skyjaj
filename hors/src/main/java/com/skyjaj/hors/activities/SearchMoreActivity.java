@@ -2,7 +2,9 @@ package com.skyjaj.hors.activities;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -46,7 +48,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class SearchMoreActivity extends AppCompatActivity {
+public class SearchMoreActivity extends BaseActivity {
 
     private ListView mListView;
     private ImageView mBack;
@@ -59,6 +61,7 @@ public class SearchMoreActivity extends AppCompatActivity {
     private LinearLayout mTipsView;
     private TextView mTipsTv;
 
+    private String input;
     private View view;
     ImageView imageView;
 
@@ -68,7 +71,6 @@ public class SearchMoreActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_more);
-        MyActivityManager.getInstance().addActivity(this);
 
         initView();
 
@@ -101,7 +103,7 @@ public class SearchMoreActivity extends AppCompatActivity {
                 }
                 task = new NetworkTask(mEditContent.getText().toString());
                 task.execute();
-                Toast.makeText(SearchMoreActivity.this, "searchTv view ", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(SearchMoreActivity.this, "searchTv view ", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -131,6 +133,7 @@ public class SearchMoreActivity extends AppCompatActivity {
                 //当输入框里面的值为空，更新为原来的列表，否则为过滤数据列表
 //                Log.i("skyjaj", "input " + str);
                 String str = s + "";
+                input = str;
                 reflashData(str);
             }
 
@@ -162,6 +165,37 @@ public class SearchMoreActivity extends AppCompatActivity {
                 if (baseMessage.getItemType() == BaseMessage.Type.INCOMING) {
                     Department department = (Department) baseMessage;
                     viewHolder.setText(R.id.index_service_item_text, department.getNameCn());
+                    if (!TextUtils.isEmpty(input)) {
+                        int start = department.getNameCn().indexOf(input);
+//                        Log.i("skyjaj", "start1 : " + start);
+                        int end = -1;
+                        String index = PinYinUtil.getPinYinHeadChar(department.getNameCn());
+                        if (start == -1) {
+//                            Log.i("skyjaj", "index :" + index);
+                            if (!TextUtils.isEmpty(index) && index.length() >= input.length()) {
+                                start = index.indexOf(input);
+                            }
+//                            Log.i("skyjaj", "start3 : " + start);
+                        }
+
+                        int arr[] = null;
+                        if (start == -1) {
+                            arr = isConstants(input.toLowerCase(), department.getNameCn());
+                            if (arr != null) {
+                                start = arr[0];
+//                                Log.i("skyjaj", " contents :" + start + " end " + end);
+                            }
+                        }
+
+                        if (start != -1) {
+                            end = start + input.length();
+                            if (arr != null) {
+                                end = arr[1];
+                            }
+//                            Log.i("skyjaj", "start :" + start + " end :" + end);
+                            viewHolder.setSubTextColor(R.id.index_service_item_text, Color.GREEN, start, end);
+                        }
+                    }
                 } else {
                     Doctor doctor = (Doctor) baseMessage;
                     viewHolder.setText(R.id.index_service_item_text, doctor.getName())
@@ -217,7 +251,6 @@ public class SearchMoreActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         mDatas = null;
-        MyActivityManager.getInstance().remove(this);
     }
 
     /**
@@ -244,7 +277,7 @@ public class SearchMoreActivity extends AppCompatActivity {
 //                mDbDatas = DataSupport.findAll(DBDepartment.class);
 //            }
 
-            List<DBDepartment> ds = (List<DBDepartment>) DataSupport.where("nameIndex like ? or nameCn like ? or nameEn like ?", "%" + input + "%", "%" + input + "%",input + "%")
+            List<DBDepartment> ds = (List<DBDepartment>) DataSupport.where("nameIndex like ? or nameCn like ? or nameEn like ?", "%" + input + "%", "%" + input + "%","%"+input + "%")
                     .find(DBDepartment.class);
 //            List<DBDepartment> ds = new ArrayList<DBDepartment>();
 //            for (DBDepartment d : mDbDatas) {
@@ -271,6 +304,72 @@ public class SearchMoreActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 查找字串 对应位置 ，返回start end
+     * @param input
+     * @param contents
+     * @return
+     */
+    public int[] isConstants(@NonNull String input,@NonNull String contents) {
+        String temp = input;
+        String pinyin = PinYinUtil.getPinYinHeadChar(contents);
+        System.out.println(PinYinUtil.getPingYin(contents));
+        char chars[] = contents.toCharArray();
+        int index = PinYinUtil.getPingYin(contents).indexOf(input);
+        if (index == -1) {
+            return null;
+        }
+        index = pinyin.indexOf(input.charAt(0));
+        if (index == -1) {
+            return null;
+        }
+        int start = -1, end = -1;
+        for (int i = index; i < contents.length(); i++) {
+            String pin = PinYinUtil.getPingYin(chars[i] + "");
+            if (!TextUtils.isEmpty(input) && input.contains(pin) && input.startsWith(pin)) {
+                if (start == -1) {
+                    start = i;
+                    end = i + 1;
+                } else {
+                    end = i + 1;
+                }
+                input = input.replaceAll(pin, "");
+                if (TextUtils.isEmpty(input)) {
+                    break;
+                }
+            } else if (!TextUtils.isEmpty(input) && pin.contains(input) && pin.startsWith(input)) {
+                if (start == -1) {
+                    start = i;
+                    end = i + 1;
+                } else {
+                    end = i + 1;
+                }
+                break;
+            } else {
+                //两者不包含，且未匹配到
+                if (start == -1 && !TextUtils.isEmpty(input))
+                {
+                    continue;
+                }
+                //可能前面子串被包含，重新调整  例子：霸霸白 输入：bai
+                else if (start != -1 &&temp.contains(PinYinUtil.getPingYin(chars[i-1] + "")) && !TextUtils.isEmpty(input))
+                {
+                    input = temp;
+                    start = -1;
+                    end = -1;
+                    i--;
+                    continue;
+                }
+                start = -1;
+                break;
+            }
+        }
+        if (start != -1) {
+            return new int[]{start, end};
+        }
+        return null;
+    }
+
 
     private NetworkTask task;
     private Dialog dialog;
@@ -294,10 +393,10 @@ public class SearchMoreActivity extends AppCompatActivity {
 
             Log.i("skyjaj", result + " input :" + input);
             try {
-                Department department = new Department();
-                department.setItemType(null);
-                department.setId(input);
-                result = OkHttpManager.post(ServerAddress.FIND_DOCTOR_BY_DEPARTMENT_ID_URL, new Gson().toJson(department));
+                Doctor doctor = new Doctor();
+                doctor.setItemType(null);
+                doctor.setName(input);
+                result = OkHttpManager.post(ServerAddress.FIND_DOCTORS_BY_NAME, new Gson().toJson(doctor));
                 Log.i("skyjaj", "result " + result);
             } catch (Exception e) {
                 result = "无法访问网络，请稍候重试";
@@ -306,7 +405,6 @@ public class SearchMoreActivity extends AppCompatActivity {
             }
 
             try {
-
                 Gson gson = new GsonBuilder().registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter()).create();
                 doctors = gson.fromJson(result, new TypeToken<List<Doctor>>() {
                 }.getType());

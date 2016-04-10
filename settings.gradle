@@ -1,1 +1,1 @@
-include ':app', ':study', ':hors'
+include ':study', ':hors'

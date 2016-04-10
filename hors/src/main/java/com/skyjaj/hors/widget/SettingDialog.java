@@ -141,6 +141,16 @@ public class SettingDialog implements View.OnClickListener {
     }
 
 
+    public void setViewVisibility(int viewId,int visibility) {
+
+        switch (viewId) {
+            case R.id.dialog_update_origin_password:
+                riginTv.setVisibility(visibility);
+                break;
+        }
+    }
+
+
     public interface  SettingDialogListener{
         void onClick(View view,String originPassword,String newPassword);
     }

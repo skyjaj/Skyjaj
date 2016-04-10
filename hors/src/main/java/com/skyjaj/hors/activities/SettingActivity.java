@@ -29,7 +29,7 @@ import com.skyjaj.hors.widget.SettingDialog;
 /**
  * 设置导航页面
  */
-public class SettingActivity extends AppCompatActivity {
+public class SettingActivity extends BaseActivity {
 
 
     private Toolbar mToolbar;
@@ -171,6 +171,7 @@ public class SettingActivity extends AppCompatActivity {
                         }
                         Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
                         SettingActivity.this.finish();
+                        MyActivityManager.getInstance().exit();
                         SettingActivity.this.startActivity(intent);
                     }
                 });

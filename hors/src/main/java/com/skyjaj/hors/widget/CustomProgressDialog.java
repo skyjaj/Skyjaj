@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.skyjaj.hors.R;
@@ -24,7 +25,7 @@ public class CustomProgressDialog extends ProgressDialog {
 
 
     private Context mContext;
-    private ImageView mImageView;
+    private ProgressBar progressBar;
     private String mLoadingTip;
     private TextView mLoadingTv;
     private int count;
@@ -64,11 +65,11 @@ public class CustomProgressDialog extends ProgressDialog {
 
     private void initData() {
 
-        mImageView.setBackgroundResource(mResid);
+        progressBar.setBackgroundResource(mResid);
         // 通过ImageView对象拿到背景显示的AnimationDrawable
-        mAnimation = (AnimationDrawable) mImageView.getBackground();
+        mAnimation = (AnimationDrawable) progressBar.getBackground();
         // 为了防止在onCreate方法中只显示第一帧的解决方案之一
-        mImageView.post(new Runnable() {
+        progressBar.post(new Runnable() {
             @Override
             public void run() {
                 mAnimation.start();
@@ -94,7 +95,7 @@ public class CustomProgressDialog extends ProgressDialog {
                 80,
                 80));
         mLoadingTv = (TextView) findViewById(R.id.loadingTv);
-        mImageView = (ImageView) findViewById(R.id.loadingIv);
+        progressBar = (ProgressBar) findViewById(R.id.loadingIv);
     }
 
 }

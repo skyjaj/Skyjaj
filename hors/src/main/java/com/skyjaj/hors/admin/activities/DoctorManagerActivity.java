@@ -6,11 +6,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -22,6 +27,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.skyjaj.hors.R;
+import com.skyjaj.hors.activities.BaseActivity;
 import com.skyjaj.hors.activities.CalenderActivity;
 import com.skyjaj.hors.activities.IndexDoctorAppointmentActivity;
 import com.skyjaj.hors.activities.LoginActivity;
@@ -30,6 +36,7 @@ import com.skyjaj.hors.adapter.TimestampTypeAdapter;
 import com.skyjaj.hors.admin.wigwet.DoctorManagerForOnItemLongClickDialog;
 import com.skyjaj.hors.bean.Department;
 import com.skyjaj.hors.bean.Doctor;
+import com.skyjaj.hors.bean.Reservation;
 import com.skyjaj.hors.utils.CommonAdapter;
 import com.skyjaj.hors.utils.DialogStylel;
 import com.skyjaj.hors.utils.OkHttpManager;
@@ -37,11 +44,13 @@ import com.skyjaj.hors.utils.ServerAddress;
 import com.skyjaj.hors.utils.ToolbarStyle;
 import com.skyjaj.hors.utils.ViewHolder;
 
+import org.xbill.DNS.Update;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DoctorManagerActivity extends AppCompatActivity{
+public class DoctorManagerActivity extends BaseActivity{
 
     private Toolbar mToolbar;
     private NetworkTask mNetworkTask=null;
@@ -52,13 +61,52 @@ public class DoctorManagerActivity extends AppCompatActivity{
     private Dialog dialog;
     private boolean isOnLongClick;
 
+    private final int DELETE = 0,STOP = 1,FALSE = -1;
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                //delete
+                case DELETE:
+                    mDatas.remove(msg.obj);
+                    mAdapter.setmData(mDatas);
+                    mAdapter.notifyDataSetChanged();
+                    Toast.makeText(DoctorManagerActivity.this,"已删除", Toast.LENGTH_SHORT).show();
+                    break;
+                //STOP
+                case STOP:
+                    Doctor doctor = (Doctor) msg.obj;
+                    doctor.setState(0);
+                    mAdapter.setmData(mDatas);
+                    mAdapter.notifyDataSetChanged();
+                    Toast.makeText(DoctorManagerActivity.this,"已停诊", Toast.LENGTH_SHORT).show();
+                    break;
+                case FALSE:
+                    String rs = (String) msg.obj;
+                    Toast.makeText(DoctorManagerActivity.this, rs, Toast.LENGTH_SHORT).show();
+                    break;
+            }
+            if (dialog != null && dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctor_manager);
         mToolbar = ToolbarStyle.initToolbar(this, R.id.mToolbar, "医生管理");
+        setSupportActionBar(mToolbar);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
-        MyActivityManager.getInstance().addActivity(this);
         department = new Department();
         department.setId("15");
         department.setItemType(null);
@@ -106,7 +154,7 @@ public class DoctorManagerActivity extends AppCompatActivity{
                 if (isOnLongClick) {
                     return;
                 }
-                Intent intent = new Intent(DoctorManagerActivity.this, CalenderActivity.class);
+                Intent intent = new Intent(DoctorManagerActivity.this, UpdateDoctorActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("doctor", mDatas.get(position));
                 bundle.putSerializable("department", department);
@@ -127,13 +175,16 @@ public class DoctorManagerActivity extends AppCompatActivity{
                         isOnLongClick = false;
                         switch (resId) {
                             case R.id.manager_doctor_delete:
-                                Toast.makeText(DoctorManagerActivity.this, "resid :" + "manager_doctor_delete ", Toast.LENGTH_SHORT).show();
+                                deleteDoctor(ServerAddress.DOCTOR_DELETE_URL, mDatas.get(position), DELETE);
+//                                Toast.makeText(DoctorManagerActivity.this, "resid :" + "manager_doctor_delete ", Toast.LENGTH_SHORT).show();
                                 break;
                             case R.id.manager_doctor_update:
-                                Toast.makeText(DoctorManagerActivity.this, "resid :" + "manager_doctor_update ", Toast.LENGTH_SHORT).show();
+                                updateDoctor(mDatas.get(position));
+//                                Toast.makeText(DoctorManagerActivity.this, "resid :" + "manager_doctor_update ", Toast.LENGTH_SHORT).show();
                                 break;
                             case R.id.manager_doctor_stop:
-                                Toast.makeText(DoctorManagerActivity.this, "resid :" + "manager_doctor_stop ", Toast.LENGTH_SHORT).show();
+                                deleteDoctor(ServerAddress.DOCTOR_STOP_URL, mDatas.get(position), STOP);
+//                                Toast.makeText(DoctorManagerActivity.this, "resid :" + "manager_doctor_stop ", Toast.LENGTH_SHORT).show();
                                 break;
                         }
                     }
@@ -141,12 +192,12 @@ public class DoctorManagerActivity extends AppCompatActivity{
                     @Override
                     public void onDismissListener(DialogInterface dialog) {
                         isOnLongClick = false;
-                        Toast.makeText(DoctorManagerActivity.this, "resid :" + "onDismissListener ", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(DoctorManagerActivity.this, "resid :" + "onDismissListener ", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onCancelListener(DialogInterface dialog) {
-                        Toast.makeText(DoctorManagerActivity.this, "resid :" + "onCancelListener ", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(DoctorManagerActivity.this, "resid :" + "onCancelListener ", Toast.LENGTH_SHORT).show();
                     }
                 };
 
@@ -160,10 +211,79 @@ public class DoctorManagerActivity extends AppCompatActivity{
     }
 
 
+    public void deleteDoctor(final String url,final Doctor doctor,final int what) {
+        if (dialog != null && !dialog.isShowing()) {
+            dialog.show();
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Doctor doctor1 = new Doctor();
+                doctor1.setId(doctor.getId());
+                doctor1.setItemType(null);
+                String result;
+                try {
+                    Log.i("skyjaj", "new Gson().toJson(doctor1) :" + new Gson().toJson(doctor1));
+                    result = OkHttpManager.post(url, new Gson().toJson(doctor1));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    result = "无法请求服务器,请稍后重试";
+                }
+
+                if (!TextUtils.isEmpty(result)) {
+                    result = result.replaceAll("\"", "");
+                }
+                Message msg = new Message();
+                if ("success".equals(result)) {
+                    msg.what = what;
+                    msg.obj = doctor;
+                    mHandler.sendMessage(msg);
+                } else {
+                    msg.what = FALSE;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                }
+            }
+        }).start();
+    }
+
+
+    public void updateDoctor(final Doctor doctor) {
+
+        //open new activity
+        Intent intent = new Intent(this, UpdateDoctorActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("doctor", doctor);
+        intent.putExtras(bundle);
+        startActivity(intent);
+
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (R.id.action_add == item.getItemId()) {
+            Intent intent = new Intent(this, UpdateDoctorActivity.class);
+            startActivity(intent);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.add_menu, menu);
+        return true;
+    }
+
+
     @Override
     protected void onDestroy() {
         dialog = null;
-        MyActivityManager.getInstance().remove(this);
         super.onDestroy();
     }
 

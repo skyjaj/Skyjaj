@@ -49,7 +49,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class LoginActivity extends AppCompatActivity{
+public class LoginActivity extends BaseActivity{
 
 
 
@@ -71,7 +71,6 @@ public class LoginActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        MyActivityManager.getInstance().addActivity(this);
         mToolbar = (Toolbar) findViewById(R.id.login_toolbar);
         mToolbar.setBackgroundColor(Color.DKGRAY);
         mToolbar.setTitleTextColor(Color.WHITE);
@@ -159,7 +158,11 @@ public class LoginActivity extends AppCompatActivity{
     }
 
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
 
+        return super.onKeyDown(keyCode, event);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -190,6 +193,11 @@ public class LoginActivity extends AppCompatActivity{
                 mToolbar.hideOverflowMenu();
             }
             return true;
+        }
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            finish();
+            return  true;
         }
         return super.onKeyUp(keyCode, event);
     }
@@ -244,6 +252,8 @@ public class LoginActivity extends AppCompatActivity{
             //忘记密码
             case R.id.action_forget_password:
                 DataSupport.deleteAll(LoginInformation.class, "state >=?" , "0");
+                Intent intent = new Intent(this, com.skyjaj.hors.loadtest.MainActivity.class);
+                startActivity(intent);
                 Toast.makeText(this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
                 return  true;
         }
@@ -500,7 +510,6 @@ public class LoginActivity extends AppCompatActivity{
 
     @Override
     protected void onDestroy() {
-        MyActivityManager.getInstance().remove(this);
         super.onDestroy();
         Log.i("login activity ", " : onDestroy");
     }

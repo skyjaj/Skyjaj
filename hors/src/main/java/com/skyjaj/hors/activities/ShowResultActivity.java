@@ -34,7 +34,7 @@ public class ShowResultActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-
+        MyActivityManager.getInstance().addActivity(this);
 
         setContentView(R.layout.activity_show_result);
         initView();
@@ -78,15 +78,16 @@ public class ShowResultActivity extends Activity {
 
 
         if (view.getId() == R.id.result_complete) {
-            Intent intent = new Intent(this, IndexCommonActivity.class);
-            MyActivityManager.getInstance().exit();
-            startActivity(intent);
+            //Intent intent = new Intent(this, IndexCommonActivity.class);
+            MyActivityManager.getInstance().finishButThis(IndexCommonActivity.class.getName());
+            //startActivity(intent);
             finish();
-        }else if (view.getId() == R.id.weixin_shared) {
-
-            Intent intent = new Intent(this, WXEntryActivity.class);
-            startActivity(intent);
         }
+//        else if (view.getId() == R.id.weixin_shared) {
+//
+//            Intent intent = new Intent(this, WXEntryActivity.class);
+//            startActivity(intent);
+//        }
 
     }
 
@@ -94,5 +95,6 @@ public class ShowResultActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        MyActivityManager.getInstance().remove(this);
     }
 }

@@ -48,9 +48,9 @@ import java.util.List;
 
 /**
  * 用户信息显示界面
- * Created by Administrator on 2016/3/5.
+ * Created by skyjaj on 2016/3/5.
  */
-public class UserInformactionAcitvity extends AppCompatActivity {
+public class UserInformactionAcitvity extends BaseActivity {
 
     //UI
     private ImageView mHeadIV;
@@ -108,7 +108,6 @@ public class UserInformactionAcitvity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_informaction);
-        MyActivityManager.getInstance().addActivity(this);
         mToolbar = ToolbarStyle.initToolbar(this, R.id.user_informaction_toolbar, "个人信息");
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -302,7 +301,6 @@ public class UserInformactionAcitvity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        MyActivityManager.getInstance().remove(this);
         super.onDestroy();
     }
 

@@ -2,33 +2,25 @@ package com.skyjaj.hors.index.widget;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 
-import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.skyjaj.hors.R;
-import com.skyjaj.hors.activities.IndexCommonActivity;
 import com.skyjaj.hors.activities.IndexServiceAppointmentActivity;
-import com.skyjaj.hors.activities.LoginActivity;
-import com.skyjaj.hors.activities.MyActivityManager;
 import com.skyjaj.hors.activities.SettingActivity;
 import com.skyjaj.hors.activities.ShowHistoryActivity;
 import com.skyjaj.hors.activities.UserInformactionAcitvity;
 import com.skyjaj.hors.adapter.CommonAdapter;
+import com.skyjaj.hors.baidu.BNMainActivity;
 import com.skyjaj.hors.bean.BaseMessage;
 import com.skyjaj.hors.bean.IndexServiceMenu;
-
-import org.androidpn.client.NotificationService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -113,7 +105,11 @@ public class IndexView {
         menu.setItemType(BaseMessage.Type.INCOMING);
         mDatas.add(menu);
 
-        menu = new IndexServiceMenu(R.drawable.tab_weixin_normal,ctx.getString(R.string.index_found_notification_appointment), 0);
+//        menu = new IndexServiceMenu(R.drawable.tab_weixin_normal,ctx.getString(R.string.index_found_notification_appointment), 0);
+//        menu.setItemType(BaseMessage.Type.INCOMING);
+//        mDatas.add(menu);
+
+        menu = new IndexServiceMenu(R.drawable.tab_find_frd_normal,ctx.getString(R.string.index_me_history), 0);
         menu.setItemType(BaseMessage.Type.INCOMING);
         mDatas.add(menu);
 
@@ -144,6 +140,18 @@ public class IndexView {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(ctx, "position : " + position, Toast.LENGTH_SHORT).show();
 //				view.setBackgroundColor(Color.GRAY);
+
+                final Activity activity = (Activity) ctx;
+                switch (position) {
+                    case 0:
+                        Intent intent = new Intent(ctx, BNMainActivity.class);
+                        ctx.startActivity(intent);
+                        break;
+                    case 1:
+                        Intent intent1 = new Intent(ctx, ShowHistoryActivity.class);
+                        ctx.startActivity(intent1);
+                        break;
+                }
             }
         });
         return view;
@@ -159,9 +167,9 @@ public class IndexView {
         mDatas.add(menu);
 
 
-        menu = new IndexServiceMenu(R.drawable.tab_find_frd_normal,ctx.getString(R.string.index_me_history), 0);
-        menu.setItemType(BaseMessage.Type.INCOMING);
-        mDatas.add(menu);
+//        menu = new IndexServiceMenu(R.drawable.tab_find_frd_normal,ctx.getString(R.string.index_me_history), 0);
+//        menu.setItemType(BaseMessage.Type.INCOMING);
+//        mDatas.add(menu);
 
 
         menu = new IndexServiceMenu(R.drawable.tab_settings_normal,ctx.getString(R.string.index_me_setting), 0);
@@ -204,11 +212,11 @@ public class IndexView {
                         Intent intent = new Intent(ctx, UserInformactionAcitvity.class);
                         ctx.startActivity(intent);
                         break;
+//                    case 1:
+//                        Intent intent1 = new Intent(ctx, ShowHistoryActivity.class);
+//                        ctx.startActivity(intent1);
+//                        break;
                     case 1:
-                        Intent intent1 = new Intent(ctx, ShowHistoryActivity.class);
-                        ctx.startActivity(intent1);
-                        break;
-                    case 2:
                         Intent settingIntent = new Intent(ctx, SettingActivity.class);
                         ctx.startActivity(settingIntent);
                         break;
