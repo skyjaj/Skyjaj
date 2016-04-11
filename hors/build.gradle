@@ -19,11 +19,9 @@ android {
         }
     }
 
-
     sourceSets {
         main {
             jniLibs.srcDirs =['libs']
-
         }
     }
 //添加splits以在模拟器上运行baidu api

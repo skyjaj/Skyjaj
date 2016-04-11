@@ -107,7 +107,6 @@ public class DepartmentManagerActivity extends BaseActivity {
 
     }
 
-
     List<Department> departmentList=new ArrayList<Department>();
     CommonAdapter<Department> mAdapter =null;
     NetworkTask mNetworkTask = null;
@@ -140,7 +139,7 @@ public class DepartmentManagerActivity extends BaseActivity {
                 }
                 Department department = departmentList.get(position);
                 if (department.getItemType() == BaseMessage.Type.INCOMING) {
-                    Intent intent = new Intent(DepartmentManagerActivity.this, IndexDepartmentDoctorActivity.class);
+                    Intent intent = new Intent(DepartmentManagerActivity.this, DoctorManagerActivity.class);
                     Bundle mBundle = new Bundle();
                     mBundle.putSerializable("department", department);
                     intent.putExtras(mBundle);

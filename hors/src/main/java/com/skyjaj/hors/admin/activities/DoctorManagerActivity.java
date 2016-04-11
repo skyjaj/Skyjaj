@@ -107,11 +107,14 @@ public class DoctorManagerActivity extends BaseActivity{
             }
         });
 
-        department = new Department();
-        department.setId("15");
-        department.setItemType(null);
-        initView();
-        attemptToLoadData();
+        department = (Department) getIntent().getSerializableExtra("department");
+        if (department != null) {
+            initView();
+            attemptToLoadData();
+        } else {
+            Toast.makeText(this, "获取数据失败", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void attemptToLoadData() {
