@@ -5,11 +5,13 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -38,6 +40,8 @@ public class CalenderActivity extends Activity implements  CalendarCard.OnCellCl
 
     //UI
     private LinearLayout calendarView;
+    private LinearLayout titleView,tipsView;
+    private TextView titleTv;
 
     private  List<ScheduleOfMonth>  scheduleOfMonths;
     private  List<ScheduleOfMonth>  scheduleOfMonthsOne =  new ArrayList<ScheduleOfMonth>();
@@ -48,6 +52,8 @@ public class CalenderActivity extends Activity implements  CalendarCard.OnCellCl
     private Department mDepartment;
     private Dialog dialog;
 
+    private boolean canClickEnter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,11 +61,26 @@ public class CalenderActivity extends Activity implements  CalendarCard.OnCellCl
         setContentView(R.layout.activity_calender);
         MyActivityManager.getInstance().addActivity(this);
         doctor = (Doctor) getIntent().getSerializableExtra("doctor");
+        String mobile = getIntent().getStringExtra("doctor_mobile");
+        String doctorId = getIntent().getStringExtra("doctor_id");
         mDepartment = (Department) getIntent().getSerializableExtra("department");
 
         calendarView = (LinearLayout) findViewById(R.id.calender_view);
+        tipsView = (LinearLayout) findViewById(R.id.calender_tips_view);
+        titleView = (LinearLayout) findViewById(R.id.calender_title_view);
+        titleTv = (TextView) findViewById(R.id.calender_title);
+
+
         dialog = DialogStylel.createLoadingDialog(this, "加载中...");
         dialog.show();
+        canClickEnter = true;
+        if (!TextUtils.isEmpty(mobile) && doctor == null && !TextUtils.isEmpty(doctorId)) {
+            doctor = new Doctor();
+            doctor.setId(doctorId);
+            doctor.setMobile(mobile);
+            canClickEnter = false;
+            titleTv.setText("排班详情");
+        }
         mTask = new Task();
         mTask.execute();
     }
@@ -77,22 +98,34 @@ public class CalenderActivity extends Activity implements  CalendarCard.OnCellCl
 
     @Override
     public void ensureDate(CustomDate date,ScheduleOfMonth scheduleOfmonth) {
-        if (scheduleOfmonth != null && scheduleOfmonth.getPeriodOfTime() != 3) {
-            Intent intent = new Intent(this, PointOfTimeActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("doctor",doctor);
-            bundle.putSerializable("department", mDepartment);
-            intent.putExtra("workday", DateUtil.Timestamp2String(scheduleOfmonth.getWorkday()));
-            intent.putExtras(bundle);
-            startActivity(intent);
+
+        if (canClickEnter) {
+            if (scheduleOfmonth != null && scheduleOfmonth.getPeriodOfTime() != 3) {
+                Intent intent = new Intent(this, PointOfTimeActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("doctor", doctor);
+                bundle.putSerializable("department", mDepartment);
+                intent.putExtra("workday", DateUtil.Timestamp2String(scheduleOfmonth.getWorkday()));
+                intent.putExtras(bundle);
+                startActivity(intent);
+            } else {
+                Toast.makeText(CalenderActivity.this, "该时间不可预约", Toast.LENGTH_SHORT).show();
+            }
         } else {
-            Toast.makeText(CalenderActivity.this, "该时间不可预约", Toast.LENGTH_SHORT).show();
+
         }
+
     }
 
 
     private void setUI() {
-        calendarView.addView(new CalendarCard(CalenderActivity.this, CalenderActivity.this, scheduleOfMonthsOne, scheduleOfMonthsTwo, customDate));
+        try {
+            calendarView.addView(new CalendarCard(CalenderActivity.this, CalenderActivity.this, scheduleOfMonthsOne, scheduleOfMonthsTwo, customDate));
+        } catch (Exception e) {
+            tipsView.setVisibility(View.VISIBLE);
+            titleView.setVisibility(View.GONE);
+            e.printStackTrace();
+        }
     }
 
 

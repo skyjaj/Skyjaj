@@ -104,7 +104,6 @@ public class IndexServiceAppointmentActivity extends BaseActivity implements Pin
                 break;
         }
 
-
     }
 
 
@@ -274,7 +273,6 @@ public class IndexServiceAppointmentActivity extends BaseActivity implements Pin
 
             Log.d("xys", "doInBackground");
 
-
             try {
                 String str = null;
                 str = OkHttpManager.post(ServerAddress.FIND_ALL_DEPARTMENT_URL);
@@ -363,14 +361,18 @@ public class IndexServiceAppointmentActivity extends BaseActivity implements Pin
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            dialog.dismiss();
+
+            if (dialog != null && dialog.isShowing()) {
+                dialog.dismiss();
+            }
+
             if (success) {
                 Log.i("skyjaj", "请求成功");
                 mAdapter.setmDatas(departmentList);
                 mAdapter.notifyDataSetChanged();
                 //更新数据库
                 updateDb();
-            }else {
+            } else {
                 Toast.makeText(IndexServiceAppointmentActivity.this, "暂时无法连接服务器", Toast.LENGTH_SHORT).show();
                 Log.i("skyjaj", "请求失败");
             }

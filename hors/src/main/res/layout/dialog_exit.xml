@@ -16,7 +16,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:drawableLeft="@drawable/ic_info_black_24dp"
+            android:drawableLeft="@drawable/switcher"
             android:id="@+id/switchOtherAccount"
             android:layout_gravity="center"
             android:gravity="center"
@@ -51,7 +51,7 @@
 
         <!--//android:drawable/ic_lock_power_off-->
         <TextView
-            android:drawableLeft="@drawable/ic_info_black_24dp"
+            android:drawableLeft="@drawable/power"
             android:id="@+id/close_application"
             android:layout_width="wrap_content"
             android:layout_height="50dp"

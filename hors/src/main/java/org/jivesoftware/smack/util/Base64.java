@@ -417,7 +417,7 @@ public class Base64
 
             default:
                 return destination;
-        }   // end switch
+        }   // end switcher
     }   // end encode3to4
 
 

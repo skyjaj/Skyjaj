@@ -2,6 +2,7 @@ package com.skyjaj.hors.activities;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -34,6 +36,7 @@ import com.skyjaj.hors.utils.DialogStylel;
 import com.skyjaj.hors.utils.OkHttpManager;
 import com.skyjaj.hors.utils.ServerAddress;
 import com.skyjaj.hors.utils.ToolbarStyle;
+import com.skyjaj.hors.widget.EditTextDialog;
 import com.skyjaj.hors.widget.ShowHistoryLongClicklistener;
 
 import org.litepal.crud.DataSupport;
@@ -59,28 +62,39 @@ public class ShowHistoryActivity extends BaseActivity {
     private NetworkTask mNetworkTask;
     private boolean isLongClick;
     private Dialog mDialog;
+
+    private static final int DELETE = 0,CANCAL=1,TIPS=2, COMMENT = 3;
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 //delete
-                case 0:
+                case DELETE:
                     mDatas.remove(msg.obj);
                     mAdapter.setmDatas(mDatas);
                     mAdapter.notifyDataSetChanged();
                     Toast.makeText(ShowHistoryActivity.this,"已删除", Toast.LENGTH_SHORT).show();
                     break;
                 //cancel reservation
-                case 1:
+                case CANCAL:
                     Reservation reservation = (Reservation) msg.obj;
                     reservation.setCancel(true);
                     mAdapter.setmDatas(mDatas);
                     mAdapter.notifyDataSetChanged();
                     Toast.makeText(ShowHistoryActivity.this,"已取消", Toast.LENGTH_SHORT).show();
                     break;
-                case 2:
+                case TIPS:
                     Toast.makeText(ShowHistoryActivity.this, (String) msg.obj, Toast.LENGTH_SHORT).show();
+                    break;
+                case COMMENT:
+                    Reservation commentReservation = (Reservation) msg.obj;
+                    commentReservation.setIsComment(1);
+                    mAdapter.setmDatas(mDatas);
+                    mAdapter.notifyDataSetChanged();
+                    Toast.makeText(ShowHistoryActivity.this,"已评论", Toast.LENGTH_SHORT).show();
+                    break;
             }
             if (mDialog != null && mDialog.isShowing()) {
                 mDialog.dismiss();
@@ -98,6 +112,7 @@ public class ShowHistoryActivity extends BaseActivity {
         initDatas();
         initView();
         mDialog = DialogStylel.createLoadingDialog(this, "等待中...");
+        mDialog.setCanceledOnTouchOutside(false);
         mDialog.show();
         mNetworkTask = new NetworkTask();
         mNetworkTask.execute();
@@ -140,7 +155,13 @@ public class ShowHistoryActivity extends BaseActivity {
                 if (isLongClick) {
                     return;
                 }
-                Toast.makeText(ShowHistoryActivity.this, "position :" + position, Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(ShowHistoryActivity.this, HistoryDetails.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("reservation",mDatas.get(position));
+                intent.putExtras(bundle);
+                startActivity(intent);
+//                Toast.makeText(ShowHistoryActivity.this, "position :" + position, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -164,7 +185,34 @@ public class ShowHistoryActivity extends BaseActivity {
                                 cancel(ServerAddress.PATIENT_CANCEL_RESERVATION_URL, reservation);
                                 break;
                             case R.id.show_history_comment:
-                                Toast.makeText(ShowHistoryActivity.this, "resid :" + "show_history_comment ", Toast.LENGTH_SHORT).show();
+
+                                if (reservation.getIsComment() == 1) {
+                                    return;
+                                }
+                                EditTextDialog.OnEditListener listener = new EditTextDialog.OnEditListener() {
+                                    @Override
+                                    public void onDialogItemClick(View view,EditText content) {
+                                        if (view.getId() == R.id.dialog_edit_ok) {
+//                                            mNicknameTv.setText(content.getText());
+                                            String text = content.getText().toString();
+                                            if (TextUtils.isEmpty(text) || text.length() < 5 || text.length() > 50) {
+                                                Toast.makeText(ShowHistoryActivity.this, "输入字符过短", Toast.LENGTH_SHORT).show();
+                                                return;
+                                            }
+                                            reservation.setCommentContent(text);
+                                            sendComment(ServerAddress.PATIENT_COMMENT_RESERVATION_URL, reservation);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void textChange(String s) {
+
+                                    }
+                                };
+                                EditTextDialog commentDialog = new EditTextDialog(ShowHistoryActivity.this, listener);
+                                commentDialog.setTitle("预约评价");
+                                commentDialog.setContent("");
+//                                Toast.makeText(ShowHistoryActivity.this, "resid :" + "show_history_comment ", Toast.LENGTH_SHORT).show();
                                 break;
                             case R.id.show_history_delete:
                                 delete(ServerAddress.PATIENT_DELETE_ERSERVATION_URL, reservation);
@@ -239,6 +287,7 @@ public class ShowHistoryActivity extends BaseActivity {
             public void run() {
                 Reservation reservation1 = new Reservation();
                 reservation1.setId(reservation.getId());
+                reservation1.setCommentContent(reservation.getCommentContent());
                 reservation1.setItemType(null);
                 String result;
                 try {
@@ -250,17 +299,57 @@ public class ShowHistoryActivity extends BaseActivity {
 
                 Message msg = new Message();
                 if ("success".equals(result)) {
-                    msg.what = 0;
+                    msg.what = DELETE;
                     msg.obj = reservation;
                     mHandler.sendMessage(msg);
                 } else {
-                    msg.what = 2;
+                    msg.what = TIPS;
                     msg.obj = result;
                     mHandler.sendMessage(msg);
                 }
             }
         }).start();
     }
+
+    /**
+     * 评论
+     * @param url
+     * @param reservation
+     */
+    public void sendComment(final String url, final Reservation reservation) {
+
+        if (mDialog != null && !mDialog.isShowing()) {
+            mDialog.show();
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Reservation reservation1 = new Reservation();
+                reservation1.setId(reservation.getId());
+                reservation1.setItemType(null);
+                String result;
+                try {
+                    result = OkHttpManager.post(url, new Gson().toJson(reservation1));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    result = "网络异常,请稍后重试";
+                }
+
+                Message msg = new Message();
+                if ("success".equals(result)) {
+                    msg.what = COMMENT;
+                    msg.obj = reservation;
+                    mHandler.sendMessage(msg);
+                } else {
+                    msg.what = TIPS;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                }
+            }
+        }).start();
+
+    }
+
 
     /**
      * 取消预约
@@ -286,11 +375,11 @@ public class ShowHistoryActivity extends BaseActivity {
                 }
                 Message msg = new Message();
                 if ("success".equals(result)) {
-                    msg.what = 1;
+                    msg.what = CANCAL;
                     msg.obj = reservation;
                     mHandler.sendMessage(msg);
                 } else {
-                    msg.what =2 ;
+                    msg.what = TIPS;
                     msg.obj = result;
                     mHandler.sendMessage(msg);
                 }

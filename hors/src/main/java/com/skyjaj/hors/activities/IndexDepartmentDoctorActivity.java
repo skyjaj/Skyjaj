@@ -3,6 +3,7 @@ package com.skyjaj.hors.activities;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.google.gson.Gson;
@@ -84,17 +86,26 @@ public class IndexDepartmentDoctorActivity extends BaseActivity{
                             .setText(R.id.index_doctor_item_registering_fee, "挂号费:" + doctor.getRegisteredFee() + "元")
                             .setText(R.id.index_doctor_item_inspecting_fee, "诊查费:" + doctor.getRegisteredFee() + "元")
                             .setText(R.id.index_doctor_item_address, "诊室地址:" + doctor.getAddress());
-                    holder.getView(R.id.index_doctor_item_details).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(IndexDepartmentDoctorActivity.this, IndexDoctorAppointmentActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("doctor", mDatas.get(position));
-                            bundle.putSerializable("department", department);
-                            intent.putExtras(bundle);
-                            IndexDepartmentDoctorActivity.this.startActivity(intent);
-                        }
-                    });
+                    if (doctor.getState() != 1) {
+                        Button btn = holder.getView(R.id.index_doctor_item_details);
+                        btn.setText("已停诊");
+                        btn.setTextColor(Color.RED);
+                        btn.setBackgroundResource(R.drawable.textview_bg_pressed);
+                        return;
+                    } else {
+                        holder.getView(R.id.index_doctor_item_details).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(IndexDepartmentDoctorActivity.this, IndexDoctorAppointmentActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("doctor", mDatas.get(position));
+                                bundle.putSerializable("department", department);
+                                intent.putExtras(bundle);
+                                IndexDepartmentDoctorActivity.this.startActivity(intent);
+                            }
+                        });
+                    }
+
                 }
             }
         };
@@ -102,6 +113,11 @@ public class IndexDepartmentDoctorActivity extends BaseActivity{
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                if (mDatas.get(position).getState() != 1) {
+                    Toast.makeText(IndexDepartmentDoctorActivity.this, "该医生已被停诊", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 Intent intent = null;
                 if (isNowDay) {
@@ -114,6 +130,7 @@ public class IndexDepartmentDoctorActivity extends BaseActivity{
                     startActivity(intent);
 //                    intent.putExtra("workday", DateUtil.Timestamp2String(scheduleOfmonth.getWorkday()));
                 } else {
+
                     intent = new Intent(IndexDepartmentDoctorActivity.this, CalenderActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("doctor", mDatas.get(position));

@@ -21,6 +21,7 @@ public class DateUtil {
     private final static  SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd HH:mm");
     private final static  SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy年MM月");
     private final static  SimpleDateFormat sdf4 = new SimpleDateFormat("MM-dd HH:mm");
+    private final static  SimpleDateFormat sdf5 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     /**
      * 获取上一天,String格式：yyyyMMdd
      * @param date
@@ -167,6 +168,17 @@ public class DateUtil {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return sdf.format(cal.getTime());
+    }
+
+    /**
+     * yyyy-MM-dd HH:mm:ss
+     * @param date
+     * @return
+     */
+    public static String Timestamp2StringFormat2(Timestamp date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return sdf5.format(cal.getTime());
     }
 
     //形如 MM

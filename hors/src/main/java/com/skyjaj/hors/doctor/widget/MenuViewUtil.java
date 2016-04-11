@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +13,10 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.skyjaj.hors.R;
+import com.skyjaj.hors.activities.CalenderActivity;
 import com.skyjaj.hors.activities.LoginActivity;
 import com.skyjaj.hors.activities.ActionForActivity;
 import com.skyjaj.hors.activities.MyActivityManager;
@@ -23,8 +26,11 @@ import com.skyjaj.hors.activities.UserInformactionAcitvity;
 import com.skyjaj.hors.adapter.CommonAdapter;
 import com.skyjaj.hors.bean.BaseMessage;
 import com.skyjaj.hors.bean.IndexServiceMenu;
+import com.skyjaj.hors.bean.LoginInformation;
 import com.skyjaj.hors.doctor.activities.DoctorWorkRecord;
 import com.skyjaj.hors.doctor.activities.ReservationInformation;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,11 +51,11 @@ public class MenuViewUtil {
         List<IndexServiceMenu> mDatas = new ArrayList<IndexServiceMenu>();
 
 
-        IndexServiceMenu menu = new IndexServiceMenu(R.drawable.menu_feedback_icon,"预约我的病人", 0);
+        IndexServiceMenu menu = new IndexServiceMenu(R.drawable.appointment,"预约我的病人", 0);
         menu.setItemType(BaseMessage.Type.INCOMING);
         mDatas.add(menu);
 
-        menu = new IndexServiceMenu(R.drawable.men_scan_icon,"进入诊室", 0);
+        menu = new IndexServiceMenu(R.drawable.appointment_today,"我的排班", 0);
         menu.setItemType(BaseMessage.Type.INCOMING);
         mDatas.add(menu);
 
@@ -86,9 +92,17 @@ public class MenuViewUtil {
                         ctx.startActivity(intent);
                         break;
                     case 1 :
-                        Intent queueIntent = new Intent(ctx, SearchViewActiviy.class);
-                        queueIntent.putExtra("index_menu", R.string.index_service_queue_waiting);
-                        ctx.startActivity(queueIntent);
+                        List<LoginInformation> lif = DataSupport.where("state = ? and role = ?", "1", "doctor").find(LoginInformation.class);
+                        if (lif == null || lif.size() == 0) {
+                            //未登录
+                            Toast.makeText(ctx, "请用医生帐号登陆!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Intent queueIntent = new Intent(ctx, CalenderActivity.class);
+                            queueIntent.putExtra("doctor_mobile", lif.get(0).getUsername());
+                            queueIntent.putExtra("doctor_id", lif.get(0).getUid());
+                            ctx.startActivity(queueIntent);
+                        }
+
                         break;
                 }
             }
@@ -106,7 +120,7 @@ public class MenuViewUtil {
         mDatas.add(menu);
 
 
-        menu = new IndexServiceMenu(R.drawable.tab_find_frd_normal,"工作记录(患者评价)", 0);
+        menu = new IndexServiceMenu(R.drawable.history,"工作记录(患者评价)", 0);
         menu.setItemType(BaseMessage.Type.INCOMING);
         mDatas.add(menu);
 

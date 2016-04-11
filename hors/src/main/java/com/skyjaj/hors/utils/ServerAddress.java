@@ -44,6 +44,8 @@ public class ServerAddress {
 
     public static final String PATIENT_DELETE_ERSERVATION_URL = REMOTE_SERVER_ULR + "patient/deleteReservation";
     public static final String PATIENT_CANCEL_RESERVATION_URL = REMOTE_SERVER_ULR + "patient/cancelReservation";
+    public static final String PATIENT_COMMENT_RESERVATION_URL = REMOTE_SERVER_ULR + "patient/commentReservation";
+
 
     public static final String DOCTOR_INFORMACTION_URL = REMOTE_SERVER_ULR + "doctor/information";
     public static final String DOCTOR_INFORMACTION_UPDATE_URL = REMOTE_SERVER_ULR + "doctor/updateInformaction";

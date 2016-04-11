@@ -112,7 +112,7 @@ public class LastActivityManager {
                 switch (mode) {
                 case available:
                 case chat:
-                    // We assume that only a switch to available and chat indicates user activity
+                    // We assume that only a switcher to available and chat indicates user activity
                     // since other mode changes could be also a result of some sort of automatism
                     resetIdleTime();
                 }

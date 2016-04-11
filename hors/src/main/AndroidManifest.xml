@@ -10,25 +10,24 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- actvitity可视化 -->
     <uses-permission android:name="android.permission.VIBRATE" />
-    <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位-->
+    <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
-    <!-- 这个权限用于进行网络定位-->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
-    <!-- 这个权限用于访问GPS定位-->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-    <!-- 获取运营商信息，用于支持提供运营商信息相关的接口-->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
-    <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
-    <!-- 用于读取手机当前的状态-->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
-    <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-    <!-- SD卡读取权限，用户写入离线定位数据-->
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"></uses-permission>
-
+    <!-- 这个权限用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 这个权限用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- 用于读取手机当前的状态 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- SD卡读取权限，用户写入离线定位数据 -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
     <uses-permission android:name="android.permission.ACCES_MOCK_LOCATION" />
@@ -36,7 +35,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_GPS" />
     <!-- SDK1.5需要android.permission.GET_TASKS权限判断本程序是否为当前运行的应用? -->
-    <!--<uses-permission android:name="android.permission.GET_TASKS" />-->
+    <!-- <uses-permission android:name="android.permission.GET_TASKS" /> -->
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <!-- 来电消音 -->
@@ -44,11 +43,10 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <!--摄影机-->
+    <!-- 摄影机 -->
     <uses-permission android:name="android.permission.CAMERA" />
 
-
-    <!-- 短信-->
+    <!-- 短信 -->
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.GET_TASKS" />
 
@@ -60,21 +58,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- 百度地图-->
+        <!-- 百度地图 -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="Bg4z2Pli7GYOEBBRV5bqiyQHK88cGm7k" />
 
-        <service android:name="com.baidu.location.f" android:enabled="true" android:process=":remote">
-        </service>
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote"></service>
 
-        <!-- mob-->
+        <!-- mob -->
         <activity
             android:name="com.mob.tools.MobUIShell"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
-
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".activities.SystemLoginActivity"
             android:label="@string/app_name" />
@@ -140,13 +139,17 @@
             android:windowSoftInputMode="stateUnchanged|adjustPan" />
         <activity android:name=".activities.SearchMoreActivity" />
         <activity android:name=".activities.SettingActivity" />
-        <activity android:name=".activities.NowDayPointTime"></activity>
-        <activity android:name=".allipay.PayEnterActivity"></activity>
-        <activity android:name=".weixin.wxapi.WXEntryActivity" android:exported="true"/>
-        <!--<activity android:name=".clipview.MainActivity"/>-->
-        <!--<activity android:name=".clipview.ClipActivity" />-->
-        <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <activity android:name=".activities.NowDayPointTime" />
+        <activity android:name=".allipay.PayEnterActivity" />
+        <activity
+            android:name=".weixin.wxapi.WXEntryActivity"
+            android:exported="true" />
+        <!-- <activity android:name=".clipview.MainActivity"/> -->
+        <!-- <activity android:name=".clipview.ClipActivity" /> -->
+        <!--
+             ATTENTION: This was auto-generated to add Google Play services to your project for
+             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
+        -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -159,14 +162,12 @@
             android:configChanges="orientation|screenSize|keyboard|keyboardHidden" />
         <activity android:name=".baidu.Mylocation" />
         <activity android:name=".baidu.Zhuanhua" />
-        <activity android:name=".baidu.BusLine"></activity>
-
+        <activity android:name=".baidu.BusLine" />
         <activity android:name=".admin.activities.UpdatePatientActivity" />
         <activity android:name=".admin.activities.UpdateDepartmentActivity" />
         <activity android:name=".admin.activities.UpdateDoctorActivity" />
         <activity android:name=".loadtest.MainActivity" />
-
-
+        <activity android:name=".activities.HistoryDetails"></activity>
     </application>
 
 </manifest>

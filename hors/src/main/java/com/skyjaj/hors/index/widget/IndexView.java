@@ -37,11 +37,11 @@ public class IndexView {
         List<IndexServiceMenu> mDatas = new ArrayList<IndexServiceMenu>();
 
 
-        IndexServiceMenu menu = new IndexServiceMenu(R.drawable.menu_feedback_icon,ctx.getString(R.string.index_service_appointment), 0);
+        IndexServiceMenu menu = new IndexServiceMenu(R.drawable.appointment,ctx.getString(R.string.index_service_appointment), 0);
         menu.setItemType(BaseMessage.Type.INCOMING);
         mDatas.add(menu);
 
-        menu = new IndexServiceMenu(R.drawable.menu_feedback_icon, ctx.getString(R.string.index_service_queue_waiting), 0);
+        menu = new IndexServiceMenu(R.drawable.appointment_today, ctx.getString(R.string.index_service_queue_waiting), 0);
         menu.setItemType(BaseMessage.Type.INCOMING);
         mDatas.add(menu);
 
@@ -101,7 +101,7 @@ public class IndexView {
         List<IndexServiceMenu> mDatas = new ArrayList<IndexServiceMenu>();
 
 
-        IndexServiceMenu menu = new IndexServiceMenu(R.drawable.menu_add_icon, ctx.getString(R.string.index_found_map), 0);
+        IndexServiceMenu menu = new IndexServiceMenu(R.drawable.location, ctx.getString(R.string.index_found_map), 0);
         menu.setItemType(BaseMessage.Type.INCOMING);
         mDatas.add(menu);
 
@@ -109,7 +109,7 @@ public class IndexView {
 //        menu.setItemType(BaseMessage.Type.INCOMING);
 //        mDatas.add(menu);
 
-        menu = new IndexServiceMenu(R.drawable.tab_find_frd_normal,ctx.getString(R.string.index_me_history), 0);
+        menu = new IndexServiceMenu(R.drawable.history,ctx.getString(R.string.index_me_history), 0);
         menu.setItemType(BaseMessage.Type.INCOMING);
         mDatas.add(menu);
 
@@ -138,7 +138,7 @@ public class IndexView {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(ctx, "position : " + position, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ctx, "position : " + position, Toast.LENGTH_SHORT).show();
 //				view.setBackgroundColor(Color.GRAY);
 
                 final Activity activity = (Activity) ctx;

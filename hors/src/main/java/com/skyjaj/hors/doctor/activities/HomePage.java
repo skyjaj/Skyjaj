@@ -50,8 +50,6 @@ public class HomePage extends BaseActivity implements ViewPager.OnPageChangeList
         mViewPager.setAdapter(mAdapter);
         mViewPager.addOnPageChangeListener(this);
 
-
-
     }
 
 
