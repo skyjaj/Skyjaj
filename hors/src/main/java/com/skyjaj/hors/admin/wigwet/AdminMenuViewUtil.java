@@ -23,6 +23,7 @@ import com.skyjaj.hors.admin.activities.DepartmentManagerActivity;
 import com.skyjaj.hors.admin.activities.DoctorManagerActivity;
 import com.skyjaj.hors.admin.activities.MessageManagerActivity;
 import com.skyjaj.hors.admin.activities.ReservationManagerActivity;
+import com.skyjaj.hors.admin.activities.UserManagerActivity;
 import com.skyjaj.hors.bean.BaseMessage;
 import com.skyjaj.hors.bean.IndexServiceMenu;
 import com.skyjaj.hors.doctor.activities.DoctorWorkRecord;
@@ -187,9 +188,9 @@ public class AdminMenuViewUtil {
                         Intent intent = new Intent(ctx, DoctorManagerActivity.class);
                         ctx.startActivity(intent);
                         break;
-
                     case 1:
-
+                        Intent userIntent = new Intent(ctx, UserManagerActivity.class);
+                        ctx.startActivity(userIntent);
                         break;
                 }
 

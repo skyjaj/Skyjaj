@@ -21,6 +21,10 @@ public class DepartmentManagerForOnItemLongClick implements View.OnClickListener
 
     private Context mContext;
     private Dialog mDialog;
+
+    TextView deleteTv,updateTv,stopTv,scheduleTv;
+
+
     private DepartmentManagerForOnItemLongClick.OnItemClickListener mListener;
 
 
@@ -35,12 +39,14 @@ public class DepartmentManagerForOnItemLongClick implements View.OnClickListener
         View v = inflater.inflate(R.layout.manager_department_dialog, null);
         LinearLayout layout = (LinearLayout) v.findViewById(R.id.manager_department_dialog_view);
 
-        TextView deleteTv = (TextView) v.findViewById(R.id.manager_department_delete);
-        TextView updateTv = (TextView) v.findViewById(R.id.manager_department_update);
-        TextView stopTv = (TextView) v.findViewById(R.id.manager_department_stop);
+        deleteTv = (TextView) v.findViewById(R.id.manager_department_delete);
+        updateTv = (TextView) v.findViewById(R.id.manager_department_update);
+        stopTv = (TextView) v.findViewById(R.id.manager_department_stop);
+        scheduleTv = (TextView) v.findViewById(R.id.manager_department_schedule);
         deleteTv.setOnClickListener(this);
         updateTv.setOnClickListener(this);
         stopTv.setOnClickListener(this);
+        scheduleTv.setOnClickListener(this);
 
 //        mDialog = new Dialog(mContext, R.style.loading_dialog);
 //
@@ -79,6 +85,36 @@ public class DepartmentManagerForOnItemLongClick implements View.OnClickListener
         if (mDialog != null) {
             mDialog.dismiss();
         }
+    }
+
+
+
+    public void setViewVisible(int resId,int visibale) {
+
+        switch (resId) {
+            case R.id.manager_department_delete:
+                if (deleteTv != null) {
+                    deleteTv.setVisibility(visibale);
+                }
+                break;
+            case R.id.manager_department_stop:
+                if (stopTv != null) {
+                    stopTv.setVisibility(visibale);
+                }
+                break;
+            case R.id.manager_department_update:
+                if (updateTv != null) {
+                    updateTv.setVisibility(visibale);
+                }
+                break;
+            case R.id.manager_department_schedule:
+                if (scheduleTv != null) {
+                    scheduleTv.setVisibility(visibale);
+                }
+                break;
+        }
+
+
     }
 
     //回调接口

@@ -326,6 +326,7 @@ public class ShowHistoryActivity extends BaseActivity {
             public void run() {
                 Reservation reservation1 = new Reservation();
                 reservation1.setId(reservation.getId());
+                reservation1.setCommentContent(reservation.getCommentContent());
                 reservation1.setItemType(null);
                 String result;
                 try {

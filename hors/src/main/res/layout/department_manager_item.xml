@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:paddingLeft="10dp"
+    android:background="@drawable/selector_textview"
+    android:layout_height="55dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/department_manager_item_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:focusable="false"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/department_manager_item_icon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/actionbar_add_icon"
+            android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/department_manager_item_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="菜单"
+            android:paddingLeft="16dp"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+</LinearLayout>

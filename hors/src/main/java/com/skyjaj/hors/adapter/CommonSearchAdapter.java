@@ -29,6 +29,7 @@ public abstract class CommonSearchAdapter <T extends BaseMessage> extends BaseAd
         this.itemViews =itemViews;
         mInflater = LayoutInflater.from(context);
     }
+
     @Override
     public int getCount() {
         return mDatas.size();

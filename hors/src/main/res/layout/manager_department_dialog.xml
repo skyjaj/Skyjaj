@@ -6,7 +6,7 @@
     android:gravity="center"
     android:background="@drawable/radius_dialog_bg"
     android:layout_gravity="center"
-    android:layout_height="122dp">
+    android:layout_height="162dp">
 
 
 
@@ -44,6 +44,18 @@
             android:background="@drawable/selector_textview"
             android:text="停诊该科室"/>
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#8ce6e9ee"/>
+
+        <TextView
+            android:id="@+id/manager_department_schedule"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@drawable/selector_textview"
+            android:text="为该科室排班"/>
 
 
 

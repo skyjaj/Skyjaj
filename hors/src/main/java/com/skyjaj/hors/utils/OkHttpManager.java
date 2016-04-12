@@ -1,5 +1,6 @@
 package com.skyjaj.hors.utils;
 
+import com.google.gson.Gson;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
@@ -14,6 +15,7 @@ import java.io.IOException;
  */
 public class OkHttpManager {
 
+    public static final Gson gson = new Gson();
     private static OkHttpClient client = new OkHttpClient();
     private static final MediaType jSon = MediaType.parse("application/json;charset=utf-8");
 

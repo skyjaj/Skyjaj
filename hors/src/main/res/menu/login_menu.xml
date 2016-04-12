@@ -8,7 +8,8 @@
 
     <item android:id="@+id/action_role"
           android:icon="@drawable/menu_add_icon"
-          android:title="切换角色" android:showAsAction="always">
+          android:title="切换角色"
+        android:showAsAction="always">
 
         <menu>
             <group>

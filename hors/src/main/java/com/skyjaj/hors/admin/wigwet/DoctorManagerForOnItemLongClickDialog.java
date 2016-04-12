@@ -23,6 +23,8 @@ public class DoctorManagerForOnItemLongClickDialog implements View.OnClickListen
     private Context mContext;
 
     private Dialog dialog;
+    TextView deleteTv,updateTv,stopTv,restoreTv;
+
 
     private OnItemClickListener mListener;
 
@@ -42,12 +44,14 @@ public class DoctorManagerForOnItemLongClickDialog implements View.OnClickListen
         //加载最外层view
         LinearLayout layout = (LinearLayout) v.findViewById(R.id.manager_doctor_dialog_view);
 
-        TextView deleteTv = (TextView) v.findViewById(R.id.manager_doctor_delete);
-        TextView updateTv = (TextView) v.findViewById(R.id.manager_doctor_update);
-        TextView stopTv = (TextView) v.findViewById(R.id.manager_doctor_stop);
+        deleteTv = (TextView) v.findViewById(R.id.manager_doctor_delete);
+        updateTv = (TextView) v.findViewById(R.id.manager_doctor_update);
+        stopTv = (TextView) v.findViewById(R.id.manager_doctor_stop);
+        restoreTv = (TextView) v.findViewById(R.id.manager_doctor_restore_work);
         deleteTv.setOnClickListener(this);
         updateTv.setOnClickListener(this);
         stopTv.setOnClickListener(this);
+        restoreTv.setOnClickListener(this);
 
 
         dialog =  new android.support.v7.app.AlertDialog.Builder(mContext)
@@ -77,6 +81,36 @@ public class DoctorManagerForOnItemLongClickDialog implements View.OnClickListen
         }
         mListener.onItemClick(v.getId());
     }
+
+
+    public void setViewVisible(int resId,int visibale) {
+
+        switch (resId) {
+            case R.id.manager_doctor_delete:
+                if (deleteTv != null) {
+                    deleteTv.setVisibility(visibale);
+                }
+                break;
+            case R.id.manager_doctor_update:
+                if (updateTv != null) {
+                    updateTv.setVisibility(visibale);
+                }
+                break;
+            case R.id.manager_doctor_stop:
+                if (stopTv != null) {
+                    stopTv.setVisibility(visibale);
+                }
+                break;
+            case R.id.manager_doctor_restore_work:
+                if (restoreTv != null) {
+                    restoreTv.setVisibility(visibale);
+                }
+                break;
+        }
+
+
+    }
+
 
     public interface OnItemClickListener {
 

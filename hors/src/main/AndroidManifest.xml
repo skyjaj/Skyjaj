@@ -66,7 +66,7 @@
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote"></service>
+            android:process=":remote" />
 
         <!-- mob -->
         <activity
@@ -167,7 +167,8 @@
         <activity android:name=".admin.activities.UpdateDepartmentActivity" />
         <activity android:name=".admin.activities.UpdateDoctorActivity" />
         <activity android:name=".loadtest.MainActivity" />
-        <activity android:name=".activities.HistoryDetails"></activity>
+        <activity android:name=".activities.HistoryDetails" />
+        <activity android:name=".admin.activities.UserManagerActivity"></activity>
     </application>
 
 </manifest>

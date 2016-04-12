@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
@@ -18,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -136,17 +138,24 @@ public class DoctorManagerActivity extends BaseActivity{
                             .setText(R.id.index_doctor_item_registering_fee, "挂号费:" + doctor.getRegisteredFee() + "元")
                             .setText(R.id.index_doctor_item_inspecting_fee, "诊查费:" + doctor.getRegisteredFee() + "元")
                             .setText(R.id.index_doctor_item_address, "诊室地址:" + doctor.getAddress());
-                    holder.getView(R.id.index_doctor_item_details).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(DoctorManagerActivity.this, IndexDoctorAppointmentActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("doctor", mDatas.get(position));
-                            bundle.putSerializable("department", department);
-                            intent.putExtras(bundle);
-                            DoctorManagerActivity.this.startActivity(intent);
-                        }
-                    });
+
+
+                    if (doctor.getState() == 0) {
+                        Button btn = holder.getView(R.id.index_doctor_item_details);
+                        btn.setText("已停诊");
+                        btn.setTextColor(Color.RED);
+                        btn.setBackgroundResource(R.drawable.textview_bg_pressed);
+                    } else if (doctor.getState() == -1) {
+                        Button btn = holder.getView(R.id.index_doctor_item_details);
+                        btn.setText("已删除");
+                        btn.setTextColor(Color.RED);
+                        btn.setBackgroundResource(R.drawable.textview_bg_pressed);
+                    } else {
+                        Button btn = holder.getView(R.id.index_doctor_item_details);
+                        btn.setText("正常");
+                        btn.setTextColor(Color.GREEN);
+                        btn.setBackgroundResource(R.drawable.textview_bg_pressed);
+                    }
                 }
             }
         };
@@ -189,6 +198,10 @@ public class DoctorManagerActivity extends BaseActivity{
                                 deleteDoctor(ServerAddress.DOCTOR_STOP_URL, mDatas.get(position), STOP);
 //                                Toast.makeText(DoctorManagerActivity.this, "resid :" + "manager_doctor_stop ", Toast.LENGTH_SHORT).show();
                                 break;
+                            case R.id.manager_doctor_restore_work:
+//                                Toast.makeText(DoctorManagerActivity.this, "resid :" + "manager_doctor_stop ", Toast.LENGTH_SHORT).show();
+                                break;
+
                         }
                     }
 
@@ -205,6 +218,18 @@ public class DoctorManagerActivity extends BaseActivity{
                 };
 
                 DoctorManagerForOnItemLongClickDialog clickDialog = new DoctorManagerForOnItemLongClickDialog(listener, DoctorManagerActivity.this);
+                Doctor doctor = mDatas.get(position);
+                if (doctor != null && doctor.getState() == 1) {
+                    clickDialog.setViewVisible(R.id.manager_doctor_stop, View.VISIBLE);
+                    clickDialog.setViewVisible(R.id.manager_doctor_restore_work, View.GONE);
+
+                } else if (doctor != null && doctor.getState() == 0){
+                    clickDialog.setViewVisible(R.id.manager_doctor_stop, View.GONE);
+                    clickDialog.setViewVisible(R.id.manager_doctor_restore_work, View.VISIBLE);
+                }else if (doctor != null && doctor.getState() == -1) {
+                    clickDialog.setViewVisible(R.id.manager_doctor_stop, View.GONE);
+                    clickDialog.setViewVisible(R.id.manager_doctor_restore_work, View.GONE);
+                }
                 isOnLongClick = true;
                 return false;
             }

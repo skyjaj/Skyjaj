@@ -3,6 +3,7 @@ package com.skyjaj.hors.admin.activities;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
@@ -15,7 +16,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -26,6 +30,7 @@ import com.skyjaj.hors.activities.BaseActivity;
 import com.skyjaj.hors.activities.IndexDepartmentDoctorActivity;
 import com.skyjaj.hors.activities.MyActivityManager;
 import com.skyjaj.hors.adapter.CommonAdapter;
+import com.skyjaj.hors.adapter.CommonSearchAdapter;
 import com.skyjaj.hors.adapter.TimestampTypeAdapter;
 import com.skyjaj.hors.admin.wigwet.DepartmentManagerForOnItemLongClick;
 import com.skyjaj.hors.admin.wigwet.DoctorManagerForOnItemLongClickDialog;
@@ -34,10 +39,16 @@ import com.skyjaj.hors.bean.Department;
 import com.skyjaj.hors.bean.IndexServiceMenu;
 import com.skyjaj.hors.bean.Reservation;
 import com.skyjaj.hors.bean.SystemUser;
+import com.skyjaj.hors.db.DBDepartment;
+import com.skyjaj.hors.utils.DBUtil;
 import com.skyjaj.hors.utils.DialogStylel;
 import com.skyjaj.hors.utils.OkHttpManager;
+import com.skyjaj.hors.utils.PinYinUtil;
 import com.skyjaj.hors.utils.ServerAddress;
 import com.skyjaj.hors.utils.ToolbarStyle;
+import com.skyjaj.hors.widget.PinyinBarView;
+
+import org.litepal.crud.DataSupport;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -47,7 +58,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DepartmentManagerActivity extends BaseActivity {
+public class DepartmentManagerActivity extends BaseActivity implements PinyinBarView.OnTouchingLetterChangedListener{
 
     private ListView mListView;
 
@@ -57,6 +68,7 @@ public class DepartmentManagerActivity extends BaseActivity {
     private Dialog dialog;
 
     private boolean isLongClick;
+    private boolean showCheckBox;
 
     private final int DELETE = 0,STOP = 1, FALSE = 2;
 
@@ -90,12 +102,13 @@ public class DepartmentManagerActivity extends BaseActivity {
         }
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_department_manager);
-        mToolbar = ToolbarStyle.initToolbar(this, R.id.mToolbar, "科室管理");
+        setContentView(R.layout.activity_index_service_appointment);
+        mToolbar = ToolbarStyle.initToolbar(this, R.id.index_service_appointment_toolbar, "科室管理");
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,27 +117,114 @@ public class DepartmentManagerActivity extends BaseActivity {
             }
         });
         initAppointmentView();
-
     }
 
+
     List<Department> departmentList=new ArrayList<Department>();
-    CommonAdapter<Department> mAdapter =null;
+    CommonSearchAdapter<Department> mAdapter =null;
     NetworkTask mNetworkTask = null;
+    List<Department> checkDepartment = new ArrayList<Department>();
+
+
+    private PinyinBarView mPinyinBarView;
+    private TextView mPinyinTips;
 
     private void initAppointmentView() {
 
-        mListView = (ListView) findViewById(R.id.department_manager_listview);
+        mPinyinBarView = (PinyinBarView) findViewById(R.id.index_service_appointment_pinyinbar);
+        mPinyinTips = (TextView) findViewById(R.id.index_service_appointment_tips);
+        mPinyinBarView.setTextView(mPinyinTips);
+        mPinyinBarView.setOnTouchingLetterChangedListener(this);
+
+        mListView = (ListView) findViewById(R.id.index_service_appointment_listview);
         Map<BaseMessage.Type, Integer> itemViews = new HashMap<BaseMessage.Type, Integer>();
-        itemViews.put(BaseMessage.Type.INCOMING, R.layout.index_service_item);
+        itemViews.put(BaseMessage.Type.INCOMING, R.layout.department_manager_item);
         itemViews.put(BaseMessage.Type.OUTCOMING, R.layout.index_service_item_text);
 
-        mAdapter = new CommonAdapter<Department>(this, departmentList, itemViews) {
+        mAdapter = new CommonSearchAdapter<Department>(this, departmentList, itemViews) {
+
             @Override
-            public void convert(com.skyjaj.hors.adapter.ViewHolder viewHolder, Department department) {
+            public Object[] getSections() {
+                return new Object[0];
+            }
+
+            @Override
+            public int getPositionForSection(int section) {
+                for (int i = 0; i < getCount(); i++) {
+                    String sortStr = mDatas.get(i).getIndex();
+                    if (TextUtils.isEmpty(sortStr)) {
+                        continue;
+                    }
+                    char firstChar = sortStr.toUpperCase().charAt(0);
+                    if (firstChar == section) {
+                        return i;
+                    }
+                }
+                return -1;
+            }
+
+            @Override
+            public int getSectionForPosition(int position) {
+                String str = mDatas.get(position).getIndex();
+                return TextUtils.isEmpty(str)?-1:str.charAt(0);
+            }
+
+            @Override
+            public void convert(com.skyjaj.hors.adapter.ViewHolder viewHolder, final Department department) {
 
                 if (department.getItemType() == BaseMessage.Type.INCOMING) {
-                    viewHolder.setImageResource(R.id.index_service_item_icon, R.drawable.menu_feedback_icon)
-                            .setText(R.id.index_service_item_text, department.getNameCn());
+                    viewHolder.setImageResource(R.id.department_manager_item_icon, R.drawable.menu_feedback_icon);
+
+                    String name = department.getNameCn();
+                    int start = TextUtils.isEmpty(name)?-1:name.length();
+
+                    if (department != null && department.getState() == 0 && start != -1) {
+                        name += "(已停诊)";
+                        viewHolder.setText(R.id.department_manager_item_text, name);
+                        viewHolder.setSubTextColor(R.id.department_manager_item_text, Color.RED, start, name.length());
+                    } else if (department != null && department.getState() == -1 && start != -1) {
+                        name += "(已删除)";
+                        viewHolder.setText(R.id.department_manager_item_text, name);
+                        viewHolder.setSubTextColor(R.id.department_manager_item_text, Color.RED,start,name.length());
+                    } else {
+                        viewHolder.setText(R.id.department_manager_item_text, name);
+                    }
+
+                    CheckBox checkBox = viewHolder.getView(R.id.department_manager_item_check);
+
+                    if (showCheckBox) {
+                        if (department.getState() == -1) {
+                            checkBox.setVisibility(View.GONE);
+                        } else {
+                            checkBox.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        checkBox.setChecked(false);
+                        if (checkDepartment != null) {
+                            checkDepartment.clear();
+                        }
+                        checkBox.setVisibility(View.GONE);
+                    }
+
+                    checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            if (isChecked && checkDepartment != null && !checkDepartment.contains(department)) {
+                                checkDepartment.add(department);
+                                Log.i("skyjaj", "add department :" + department.getId());
+                            } else if (!isChecked && checkDepartment != null && checkDepartment.contains(department)){
+                                checkDepartment.remove(department);
+                                Log.i("skyjaj", "remove department :" + department.getId());
+                            }
+                        }
+                    });
+
+                    if (checkDepartment != null && checkDepartment.contains(department)) {
+                        checkBox.setChecked(true);
+                    } else {
+                        checkBox.setChecked(false);
+                    }
+
                 } else {
                     viewHolder.setText(R.id.index_service_item_tv, department.getNameCn());
                 }
@@ -134,8 +234,8 @@ public class DepartmentManagerActivity extends BaseActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (isLongClick) {
-                    return ;
+                if (isLongClick || showCheckBox) {
+                    return;
                 }
                 Department department = departmentList.get(position);
                 if (department.getItemType() == BaseMessage.Type.INCOMING) {
@@ -167,11 +267,16 @@ public class DepartmentManagerActivity extends BaseActivity {
 //                                        Toast.makeText(DepartmentManagerActivity.this, "manager_department_update", Toast.LENGTH_SHORT).show();
                                         break;
                                     case R.id.manager_department_delete:
-                                        deleteDepartment(ServerAddress.ADMIN_DELETE_DEPARTMENT_URL, departmentList.get(position),DELETE);
+                                        showCheckBox = true;
+                                        mAdapter.notifyDataSetChanged();
+                                        //deleteDepartment(ServerAddress.ADMIN_DELETE_DEPARTMENT_URL, departmentList.get(position),DELETE);
 //                                        Toast.makeText(DepartmentManagerActivity.this, "manager_department_delete", Toast.LENGTH_SHORT).show();
                                         break;
                                     case R.id.manager_department_stop:
-                                        deleteDepartment(ServerAddress.ADMIN_STOP_DEPARTMENT_URL, departmentList.get(position),STOP);
+                                        deleteDepartment(ServerAddress.ADMIN_STOP_DEPARTMENT_URL, departmentList.get(position), STOP);
+//                                        Toast.makeText(DepartmentManagerActivity.this, "manager_department_stop", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case R.id.manager_department_schedule:
 //                                        Toast.makeText(DepartmentManagerActivity.this, "manager_department_stop", Toast.LENGTH_SHORT).show();
                                         break;
                                 }
@@ -189,12 +294,20 @@ public class DepartmentManagerActivity extends BaseActivity {
                             }
                         };
                 DepartmentManagerForOnItemLongClick longClick = new DepartmentManagerForOnItemLongClick(listener, DepartmentManagerActivity.this);
+                Department department = departmentList.get(position);
+                if (department != null && department.getState() == 0) {
+                    longClick.setViewVisible(R.id.manager_department_stop,View.GONE);
+                }else if (department != null && department.getState() == -1) {
+                    longClick.setViewVisible(R.id.manager_department_stop,View.GONE);
+                    longClick.setViewVisible(R.id.manager_department_delete,View.GONE);
+                }
                 isLongClick = true;
                 return false;
             }
         });
 
         dialog = DialogStylel.createLoadingDialog(this, "加载中..");
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
         mNetworkTask = new NetworkTask();
         mNetworkTask.execute();
@@ -240,9 +353,39 @@ public class DepartmentManagerActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if (R.id.action_add == item.getItemId()) {
-            Intent intent = new Intent(this, UpdateDepartmentActivity.class);
-            startActivity(intent);
+        switch (item.getItemId()) {
+            case R.id.action_manager_add:
+                Intent intent = new Intent(this, UpdateDepartmentActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.action_manager_search:
+
+                break;
+
+            case R.id.action_manager_delete:
+
+                if (checkDepartment != null || checkDepartment.size() == 0) {
+                    Toast.makeText(this, "请选择", Toast.LENGTH_SHORT).show();
+                }
+                for (Department d : checkDepartment) {
+
+                    Log.i("skyjaj", "name :"+d.getNameCn());
+                }
+//                showCheckBox = false;
+//                mAdapter.notifyDataSetChanged();
+                break;
+
+            case R.id.action_manager_cancel:
+                showCheckBox = false;
+                mAdapter.notifyDataSetChanged();
+                break;
+
+            case R.id.action_manager_schedule:
+
+                break;
+
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -252,7 +395,7 @@ public class DepartmentManagerActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.add_menu, menu);
+        getMenuInflater().inflate(R.menu.department_manager_menu, menu);
         return true;
     }
 
@@ -265,6 +408,33 @@ public class DepartmentManagerActivity extends BaseActivity {
         super.onDestroy();
 
     }
+
+
+    //update db
+    public void updateDb() {
+        synchronized (DepartmentManagerActivity.class) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    DataSupport.deleteAll(DBDepartment.class, "");
+                    for (Department d : departmentList) {
+                        if (d.getItemType() == BaseMessage.Type.INCOMING) {
+                            DBUtil.turn2DB(d).save();
+                        }
+                    }
+                }
+            }).start();
+        }
+    }
+
+    @Override
+    public void onTouchingLetterChanged(String s) {
+        int position = mAdapter.getPositionForSection(s.charAt(0));
+        if (position != -1) {
+            mListView.setSelection(position);
+        }
+    }
+
 
     //异步任务
     public class NetworkTask extends AsyncTask<Void, Void, Boolean> {
@@ -307,7 +477,7 @@ public class DepartmentManagerActivity extends BaseActivity {
                 departments = new ArrayList<Department>(map.values());
                 Collections.sort(departments, new Comparator<Department>() {
                     public int compare(Department arg0, Department arg1) {
-                        return arg0.getDepartmentOrder().compareTo(arg1.getDepartmentOrder());
+                        return PinYinUtil.getPingYin(arg0.getNameCn()).compareTo(PinYinUtil.getPingYin(arg1.getNameCn()));
                     }
                 });
 
@@ -316,11 +486,30 @@ public class DepartmentManagerActivity extends BaseActivity {
                         Department department = new Department();
                         department.setItemType(BaseMessage.Type.OUTCOMING);
                         department.setNameCn(ds.getNameCn());
+                        //汉字转换成拼音
+                        String pinyin = PinYinUtil.getPingYin(department.getNameCn());
+                        String sortString = TextUtils.isEmpty(pinyin) ? "" :pinyin.substring(0, 1).toUpperCase();
+                        // 正则表达式，判断首字母是否是英文字母
+                        if(!TextUtils.isEmpty(sortString)&&sortString.matches("[A-Z]")){
+                            department.setIndex(sortString.toUpperCase());
+                        }else{
+                            department.setIndex("#");
+                        }
                         departmentList.add(department);
                         departmentList.add(ds);
                     }else{
                         departmentList.add(ds);
                         ds.setItemType(BaseMessage.Type.OUTCOMING);
+
+                        //汉字转换成拼音
+                        String pinyin = PinYinUtil.getPingYin(ds.getNameCn());
+                        String sortString = TextUtils.isEmpty(pinyin) ? "" :pinyin.substring(0, 1).toUpperCase();
+                        // 正则表达式，判断首字母是否是英文字母
+                        if(!TextUtils.isEmpty(sortString)&&sortString.matches("[A-Z]")){
+                            ds.setIndex(sortString.toUpperCase());
+                        }else{
+                            ds.setIndex("#");
+                        }
                         for (Department dd : ds.getChildren()) {
                             departmentList.add(dd);
                         }
@@ -343,6 +532,8 @@ public class DepartmentManagerActivity extends BaseActivity {
                 Log.i("skyjaj", "请求成功");
                 mAdapter.setmDatas(departmentList);
                 mAdapter.notifyDataSetChanged();
+                //更新数据库
+                updateDb();
             }else {
                 Toast.makeText(DepartmentManagerActivity.this, "暂时无法连接服务器", Toast.LENGTH_SHORT).show();
                 Log.i("skyjaj", "请求失败");
