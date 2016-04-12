@@ -26,16 +26,11 @@
         app:showAsAction="always">
 
         <item
-            android:id="@+id/action_manager_cancel"
-            android:icon="@drawable/tab_find_frd_normal"
-            android:title="取消选择"
+            android:id="@+id/action_manager_delete_more"
+            android:icon="@drawable/menu_feedback_icon"
+            android:title="批量删除"
             app:showAsAction="never" />
 
-        <item
-            android:id="@+id/action_manager_delete"
-            android:icon="@drawable/menu_feedback_icon"
-            android:title="删除所选"
-            app:showAsAction="never" />
 
         <item
             android:id="@+id/action_manager_schedule"

@@ -16,9 +16,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,19 +60,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DepartmentManagerActivity extends BaseActivity implements PinyinBarView.OnTouchingLetterChangedListener{
+public class DepartmentManagerActivity extends BaseActivity implements PinyinBarView.OnTouchingLetterChangedListener,View.OnClickListener{
 
     private ListView mListView;
 
     private Toolbar mToolbar;
 
+    private RelativeLayout functionView;//删除更多时显示更多选项
+    private Button cancelBtn,submitBtn;
 
     private Dialog dialog;
 
     private boolean isLongClick;
     private boolean showCheckBox;
 
-    private final int DELETE = 0,STOP = 1, FALSE = 2;
+    private final int DELETE = 0,STOP = 1, FALSE = 2,SCHEDULE = 3,OPEN = 4;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -79,21 +83,35 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
             switch (msg.what) {
                 //delete
                 case DELETE:
-                    departmentList.remove(msg.obj);
-                    mAdapter.setmDatas(departmentList);
-                    mAdapter.notifyDataSetChanged();
+                    if (checkDepartment != null && checkDepartment.size() != 0) {
+                        for (Department d : checkDepartment) {
+                            d.setState(-1);
+                        }
+                        showCheckBox = false;
+                        mAdapter.notifyDataSetChanged();
+                        checkDepartment.clear();
+                    }
                     Toast.makeText(DepartmentManagerActivity.this,"已删除", Toast.LENGTH_SHORT).show();
                     break;
                 //STOP
                 case STOP:
                     Department department = (Department) msg.obj;
                     department.setState(0);
-                    mAdapter.setmDatas(departmentList);
+//                    mAdapter.setmDatas(departmentList);
                     mAdapter.notifyDataSetChanged();
                     Toast.makeText(DepartmentManagerActivity.this,"已停诊该科室", Toast.LENGTH_SHORT).show();
                     break;
+                case OPEN:
+                    Department openDepartment = (Department) msg.obj;
+                    openDepartment.setState(1);
+                    mAdapter.notifyDataSetChanged();
+                    Toast.makeText(DepartmentManagerActivity.this,"已恢复科室状态", Toast.LENGTH_SHORT).show();
+                    break;
                 case FALSE:
                     Toast.makeText(DepartmentManagerActivity.this,(String)msg.obj, Toast.LENGTH_SHORT).show();
+                    break;
+                case SCHEDULE:
+                    Toast.makeText(DepartmentManagerActivity.this,"已排班", Toast.LENGTH_SHORT).show();
                     break;
             }
             if (dialog != null && dialog.isShowing()) {
@@ -135,6 +153,12 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
         mPinyinTips = (TextView) findViewById(R.id.index_service_appointment_tips);
         mPinyinBarView.setTextView(mPinyinTips);
         mPinyinBarView.setOnTouchingLetterChangedListener(this);
+        functionView = (RelativeLayout) findViewById(R.id.index_service_appointment_more_view);
+        cancelBtn = (Button) findViewById(R.id.index_service_appointment_cancel);
+        submitBtn = (Button) findViewById(R.id.index_service_appointment_submit);
+
+        cancelBtn.setOnClickListener(this);
+        submitBtn.setOnClickListener(this);
 
         mListView = (ListView) findViewById(R.id.index_service_appointment_listview);
         Map<BaseMessage.Type, Integer> itemViews = new HashMap<BaseMessage.Type, Integer>();
@@ -252,6 +276,10 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 
+                if (showCheckBox) {
+                    return false;
+                }
+
                 DepartmentManagerForOnItemLongClick.OnItemClickListener listener =
                         new DepartmentManagerForOnItemLongClick.OnItemClickListener() {
                             @Override
@@ -267,17 +295,23 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
 //                                        Toast.makeText(DepartmentManagerActivity.this, "manager_department_update", Toast.LENGTH_SHORT).show();
                                         break;
                                     case R.id.manager_department_delete:
-                                        showCheckBox = true;
-                                        mAdapter.notifyDataSetChanged();
+                                        checkDepartment.clear();
+                                        checkDepartment.add(departmentList.get(position));
+                                        deleteDepartment(ServerAddress.ADMIN_DELETE_DEPARTMENT_URL,DELETE);
                                         //deleteDepartment(ServerAddress.ADMIN_DELETE_DEPARTMENT_URL, departmentList.get(position),DELETE);
 //                                        Toast.makeText(DepartmentManagerActivity.this, "manager_department_delete", Toast.LENGTH_SHORT).show();
                                         break;
                                     case R.id.manager_department_stop:
-                                        deleteDepartment(ServerAddress.ADMIN_STOP_DEPARTMENT_URL, departmentList.get(position), STOP);
+                                        stopDepartment(ServerAddress.ADMIN_STOP_DEPARTMENT_URL, departmentList.get(position), STOP);
 //                                        Toast.makeText(DepartmentManagerActivity.this, "manager_department_stop", Toast.LENGTH_SHORT).show();
                                         break;
+                                    case R.id.manager_department_working:
+                                        enableDepartment(ServerAddress.ADMIN_OPEN_DEPARTMENT_URL, departmentList.get(position), OPEN);
+//                                        Toast.makeText(DepartmentManagerActivity.this, "manager_department_working", Toast.LENGTH_SHORT).show();
+                                        break;
                                     case R.id.manager_department_schedule:
-//                                        Toast.makeText(DepartmentManagerActivity.this, "manager_department_stop", Toast.LENGTH_SHORT).show();
+
+//                                        Toast.makeText(DepartmentManagerActivity.this, "manager_department_schedule", Toast.LENGTH_SHORT).show();
                                         break;
                                 }
                             }
@@ -295,11 +329,15 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
                         };
                 DepartmentManagerForOnItemLongClick longClick = new DepartmentManagerForOnItemLongClick(listener, DepartmentManagerActivity.this);
                 Department department = departmentList.get(position);
+                longClick.setViewVisible(R.id.manager_department_schedule, View.GONE);
                 if (department != null && department.getState() == 0) {
-                    longClick.setViewVisible(R.id.manager_department_stop,View.GONE);
-                }else if (department != null && department.getState() == -1) {
-                    longClick.setViewVisible(R.id.manager_department_stop,View.GONE);
-                    longClick.setViewVisible(R.id.manager_department_delete,View.GONE);
+                    longClick.setViewVisible(R.id.manager_department_stop, View.GONE);
+                    longClick.setViewVisible(R.id.manager_department_working, View.VISIBLE);
+                } else if (department != null && department.getState() == -1) {
+                    longClick.setViewVisible(R.id.manager_department_stop, View.GONE);
+                    longClick.setViewVisible(R.id.manager_department_delete, View.GONE);
+                } else {
+                    longClick.setViewVisible(R.id.manager_department_working, View.GONE);
                 }
                 isLongClick = true;
                 return false;
@@ -314,7 +352,7 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
     }
 
 
-    public void deleteDepartment(final String url,final Department department,final int what) {
+    public void stopDepartment(final String url,final Department department,final int what) {
         if (dialog != null && !dialog.isShowing()) {
             dialog.show();
         }
@@ -349,6 +387,101 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
     }
 
 
+    public void enableDepartment(final String url,final Department department,final int what) {
+        if (dialog != null && !dialog.isShowing()) {
+            dialog.show();
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SystemUser systemUser = new SystemUser();
+                systemUser.setId(department.getId());
+                systemUser.setRemark(department.getId());
+                String result="";
+                try {
+                    result = OkHttpManager.post(url, new Gson().toJson(systemUser));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    result = "无法请求服务器,请稍后重试";
+                }
+                Message msg = new Message();
+                if (!TextUtils.isEmpty(result)) {
+                    result = result.replaceAll("\"", "");
+                }
+                if ("已恢复".equals(result)) {
+                    msg.what = what;
+                    msg.obj = department;
+                    mHandler.sendMessage(msg);
+                } else {
+                    msg.what = FALSE;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                }
+            }
+        }).start();
+    }
+
+    public void deleteDepartment(final String url,final int what) {
+        if (dialog != null && !dialog.isShowing()) {
+            dialog.show();
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String result = "";
+                try {
+                    result = OkHttpManager.post(url, new Gson().toJson(checkDepartment));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    result = "无法请求服务器,请稍后重试";
+                }
+                Message msg = new Message();
+                if (!TextUtils.isEmpty(result)) {
+                    result = result.replaceAll("\"", "");
+                }
+                if ("已停".equals(result) || "已删除".equals(result)) {
+                    msg.what = what;
+                    mHandler.sendMessage(msg);
+                } else {
+                    msg.what = FALSE;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                }
+            }
+        }).start();
+    }
+
+
+    public void setScheduleForAllDepartment(final String url,final int what) {
+        if (dialog != null && !dialog.isShowing()) {
+            dialog.show();
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String result = "";
+                try {
+                    result = OkHttpManager.post(url, new Gson().toJson(checkDepartment));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    result = "无法请求服务器,请稍后重试";
+                }
+                Message msg = new Message();
+                if (!TextUtils.isEmpty(result)) {
+                    result = result.replaceAll("\"", "");
+                }
+                if ("success".equals(result)) {
+                    msg.what = what;
+                    mHandler.sendMessage(msg);
+                } else {
+                    msg.what = FALSE;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                }
+            }
+        }).start();
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -363,33 +496,21 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
 
                 break;
 
-            case R.id.action_manager_delete:
-
-                if (checkDepartment != null || checkDepartment.size() == 0) {
-                    Toast.makeText(this, "请选择", Toast.LENGTH_SHORT).show();
-                }
-                for (Department d : checkDepartment) {
-
-                    Log.i("skyjaj", "name :"+d.getNameCn());
-                }
-//                showCheckBox = false;
-//                mAdapter.notifyDataSetChanged();
-                break;
-
-            case R.id.action_manager_cancel:
-                showCheckBox = false;
+            case R.id.action_manager_delete_more:
+                showCheckBox = true;
                 mAdapter.notifyDataSetChanged();
+                functionView.setVisibility(View.VISIBLE);
                 break;
 
             case R.id.action_manager_schedule:
-
+                setScheduleForAllDepartment(ServerAddress.ADMIN_SET_SCHEDULE_URL, SCHEDULE);
                 break;
-
 
         }
 
         return super.onOptionsItemSelected(item);
     }
+
 
 
 
@@ -432,6 +553,27 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
         int position = mAdapter.getPositionForSection(s.charAt(0));
         if (position != -1) {
             mListView.setSelection(position);
+        }
+    }
+
+    //批量删除按钮监听
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.index_service_appointment_cancel:
+                showCheckBox = false;
+                functionView.setVisibility(View.GONE);
+                checkDepartment.clear();
+                mAdapter.notifyDataSetChanged();
+                break;
+            case R.id.index_service_appointment_submit:
+                if (checkDepartment == null || checkDepartment.size() == 0 && showCheckBox) {
+                    Toast.makeText(this, "请选择", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                deleteDepartment(ServerAddress.ADMIN_DELETE_DEPARTMENT_URL, DELETE);
+                break;
+
         }
     }
 

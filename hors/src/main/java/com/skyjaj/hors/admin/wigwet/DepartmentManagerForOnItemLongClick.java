@@ -22,7 +22,7 @@ public class DepartmentManagerForOnItemLongClick implements View.OnClickListener
     private Context mContext;
     private Dialog mDialog;
 
-    TextView deleteTv,updateTv,stopTv,scheduleTv;
+    TextView deleteTv,updateTv,stopTv,scheduleTv,workingTv;
 
 
     private DepartmentManagerForOnItemLongClick.OnItemClickListener mListener;
@@ -43,10 +43,12 @@ public class DepartmentManagerForOnItemLongClick implements View.OnClickListener
         updateTv = (TextView) v.findViewById(R.id.manager_department_update);
         stopTv = (TextView) v.findViewById(R.id.manager_department_stop);
         scheduleTv = (TextView) v.findViewById(R.id.manager_department_schedule);
+        workingTv = (TextView) v.findViewById(R.id.manager_department_working);
         deleteTv.setOnClickListener(this);
         updateTv.setOnClickListener(this);
         stopTv.setOnClickListener(this);
         scheduleTv.setOnClickListener(this);
+        workingTv.setOnClickListener(this);
 
 //        mDialog = new Dialog(mContext, R.style.loading_dialog);
 //
@@ -110,6 +112,11 @@ public class DepartmentManagerForOnItemLongClick implements View.OnClickListener
             case R.id.manager_department_schedule:
                 if (scheduleTv != null) {
                     scheduleTv.setVisibility(visibale);
+                }
+                break;
+            case R.id.manager_department_working:
+                if (workingTv != null) {
+                    workingTv.setVisibility(visibale);
                 }
                 break;
         }

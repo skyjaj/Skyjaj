@@ -16,9 +16,11 @@
         app:theme="@style/AppTheme.indexCommonActivity"/>
 
 
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
 
         <ListView
@@ -49,6 +51,33 @@
 
 
     </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/index_service_appointment_more_view"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:visibility="gone">
+        <Button
+            android:id="@+id/index_service_appointment_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:text="取 消"
+            android:layout_margin="5dp"
+            android:background="@drawable/selector_button"/>
+
+        <Button
+            android:id="@+id/index_service_appointment_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:text="确 定"
+            android:layout_margin="5dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/selector_button"/>
+    </RelativeLayout>
 
 
 

@@ -166,13 +166,21 @@ public class DoctorManagerActivity extends BaseActivity{
                 if (isOnLongClick) {
                     return;
                 }
-                Intent intent = new Intent(DoctorManagerActivity.this, UpdateDoctorActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("doctor", mDatas.get(position));
-                bundle.putSerializable("department", department);
-                intent.putExtras(bundle);
-                intent.putExtra("department_name", department.getNameCn());
-                DoctorManagerActivity.this.startActivity(intent);
+                Intent intent = new Intent(DoctorManagerActivity.this, CalenderActivity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("doctor", mDatas.get(position));
+//                bundle.putSerializable("department", department);
+//                intent.putExtras(bundle);
+//                intent.putExtra("department_name", department.getNameCn());
+                Doctor doctor = mDatas.get(position);
+                if (doctor != null) {
+                    intent.putExtra("doctor_mobile", doctor.getMobile());
+                    intent.putExtra("doctor_id", doctor.getId());
+                    DoctorManagerActivity.this.startActivity(intent);
+                } else {
+                    Toast.makeText(DoctorManagerActivity.this, "该医生没有任何信息", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 

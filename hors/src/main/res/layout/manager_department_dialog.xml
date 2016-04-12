@@ -43,6 +43,13 @@
             android:gravity="center"
             android:background="@drawable/selector_textview"
             android:text="停诊该科室"/>
+        <TextView
+            android:id="@+id/manager_department_working"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@drawable/selector_textview"
+            android:text="取消停诊状态"/>
 
         <ImageView
             android:layout_width="match_parent"

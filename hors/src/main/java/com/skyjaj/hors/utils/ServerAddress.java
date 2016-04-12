@@ -62,6 +62,7 @@ public class ServerAddress {
     public static final String ADMIN_DELETE_DEPARTMENT_URL = REMOTE_SERVER_ULR + "admin/deleteDepartment";
     public static final String ADMIN_ADD_DEPARTMENT_URL = REMOTE_SERVER_ULR + "admin/addDepartment";
     public static final String ADMIN_STOP_DEPARTMENT_URL = REMOTE_SERVER_ULR + "admin/stopDepartment";
+    public static final String ADMIN_OPEN_DEPARTMENT_URL = REMOTE_SERVER_ULR + "admin/openDepartment";
     public static final String ADMIN_FIND_PATIENT_URL = REMOTE_SERVER_ULR + "admin/findPatientByPage";
     public static final String ADMIN_FIND_RESERVATION_URL = REMOTE_SERVER_ULR + "admin/findReservationByPage";
     public static final String ADMIN_SET_SCHEDULE_URL = REMOTE_SERVER_ULR + "admin/setSchedule";
