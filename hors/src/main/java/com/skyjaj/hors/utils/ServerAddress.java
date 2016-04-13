@@ -7,10 +7,10 @@ public class ServerAddress {
 
 
     //本地服务器地址
-    public static final String LOCAL_SERVER = "http://192.168.243.2:8080/";//http://192.168.31.230:8080/
+    public static final String LOCAL_SERVER = "http://192.168.31.230:8080/";//http://192.168.243.2:8080/
     //远程服务端地址
     public static final String REMOTE_SERVER = "http://139.129.8.184:8080/entrance-service/";
-    public static final String REMOTE_SERVER_ULR = REMOTE_SERVER;
+    public static final String REMOTE_SERVER_ULR = LOCAL_SERVER;
 
     //患者登录
     public static final String PATIENT_LOGIN_URL = REMOTE_SERVER_ULR+"patient/login";
@@ -66,6 +66,14 @@ public class ServerAddress {
     public static final String ADMIN_FIND_PATIENT_URL = REMOTE_SERVER_ULR + "admin/findPatientByPage";
     public static final String ADMIN_FIND_RESERVATION_URL = REMOTE_SERVER_ULR + "admin/findReservationByPage";
     public static final String ADMIN_SET_SCHEDULE_URL = REMOTE_SERVER_ULR + "admin/setSchedule";
+
+    //以下四个URL为对admin对patient的操作
+    public static final String ADMIN_DISABLE_PATIENT_URL = REMOTE_SERVER_ULR + "admin/disablePatient";
+    public static final String ADMIN_ENABLE_PATIENT_URL = REMOTE_SERVER_ULR + "admin/enablePatient";
+    public static final String ADMIN_DELETE_PATIENT_URL = REMOTE_SERVER_ULR + "admin/deletePatient";
+    public static final String ADMIN_UPDATE_PATIENT_URL = REMOTE_SERVER_ULR + "admin/updatePatient";
+    public static final String ADMIN_INSERT_PATIENT_URL = REMOTE_SERVER_ULR + "admin/insertPatient";
+
     //支持批量删除
     public static final String ADMIN_DELETE_DOCTOR_URL = REMOTE_SERVER_ULR + "admin/deleteDoctor";
 

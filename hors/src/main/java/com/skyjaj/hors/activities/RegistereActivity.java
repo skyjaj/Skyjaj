@@ -282,7 +282,7 @@ public class RegistereActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.register_getCode:
                 if (canSend&&attempToGetCode()) {
-//				SMSSDK.getVerificationCode("86", phone.getText().toString());
+				SMSSDK.getVerificationCode("86", mMobileView.getText().toString());
                     sendedMSM();
                 }
                 break;

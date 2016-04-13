@@ -402,7 +402,7 @@ public class ShowHistoryActivity extends BaseActivity {
 
         private String result;
         private boolean isEmpty;
-        //通过时间线拉取数据
+
         private String time;
 
         public void setTime(String time) {

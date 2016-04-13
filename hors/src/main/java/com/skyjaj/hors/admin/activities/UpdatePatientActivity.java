@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import com.skyjaj.hors.bean.Doctor;
 import com.skyjaj.hors.bean.Patient;
 import com.skyjaj.hors.utils.DialogStylel;
 import com.skyjaj.hors.utils.OkHttpManager;
+import com.skyjaj.hors.utils.ServerAddress;
 import com.skyjaj.hors.utils.ToolbarStyle;
 import com.skyjaj.hors.widget.ChooseSexDialog;
 import com.skyjaj.hors.widget.EditTextDialog;
@@ -37,7 +39,7 @@ public class UpdatePatientActivity extends BaseActivity {
     private MenuItem menuItem;
     private Dialog mDialog;
     private Patient mPatient;
-    private final int UPDATE = 1 , INSERT = 2;
+    private final int UPDATE = 1 , INSERT = 2, MESSAGE = 3;
 
     private Handler mHandler = new Handler(){
 
@@ -50,14 +52,22 @@ public class UpdatePatientActivity extends BaseActivity {
                     if (mDialog != null && mDialog.isShowing()) {
                         mDialog.dismiss();
                     }
-                    Toast.makeText(UpdatePatientActivity.this, (String)msg.obj.toString().replaceAll("\"",""), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UpdatePatientActivity.this, "已更新", Toast.LENGTH_SHORT).show();
                 break;
 
                 case INSERT:
                     if (mDialog != null && mDialog.isShowing()) {
                         mDialog.dismiss();
                     }
-                    Toast.makeText(UpdatePatientActivity.this, (String)msg.obj.toString().replaceAll("\"",""), Toast.LENGTH_SHORT).show();
+                    setUIEmpty();
+                    Toast.makeText(UpdatePatientActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+                    break;
+
+                case MESSAGE:
+                    if (mDialog != null && mDialog.isShowing()) {
+                        mDialog.dismiss();
+                    }
+                    Toast.makeText(UpdatePatientActivity.this, (String)msg.obj, Toast.LENGTH_SHORT).show();
                     break;
             }
 
@@ -106,6 +116,7 @@ public class UpdatePatientActivity extends BaseActivity {
             mSexTv.setText(mPatient.getSex() == 1 ? "男" : "女");
             mSignitureTv.setText(mPatient.getSignature());
             mRegionTv.setText(mPatient.getRegion());
+            mPasswordTv.setText(mPatient.getPassword());
         } else {
             mAccountTv.setText("");
             mNicknameTv.setText("");
@@ -116,6 +127,18 @@ public class UpdatePatientActivity extends BaseActivity {
         }
     }
 
+    public void setUIEmpty() {
+        try {
+            mAccountTv.setText("");
+            mNicknameTv.setText("");
+            mSexTv.setText("男");
+            mSignitureTv.setText("");
+            mRegionTv.setText("");
+            mPasswordTv.setText("");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void onClick(View view) {
         switch (view.getId()) {
@@ -257,6 +280,7 @@ public class UpdatePatientActivity extends BaseActivity {
                 };
                 SettingDialog settingDialog = new SettingDialog(this, pswListener);
                 settingDialog.setTitleContent("修改密码");
+                settingDialog.setDialogType(SettingDialog.DialogType.ADMIN);
                 settingDialog.setViewVisibility(R.id.dialog_update_origin_password,View.GONE);
                 break;
         }
@@ -279,24 +303,35 @@ public class UpdatePatientActivity extends BaseActivity {
                         patient.setUsername(mNicknameTv.getText().toString());
                         patient.setSex("男".equals(mSexTv.getText().toString()) == true ? 1 : 0);
                         patient.setRegion(mRegionTv.getText().toString());
-                        patient.setMobile(mPatient == null ? "" : mPatient.getMobile());
+                        patient.setMobile(mPatient.getMobile());
                         patient.setSignature(mSignitureTv.getText().toString());
                         patient.setPassword(mPasswordTv.getText().toString());
-                        updateResult = OkHttpManager.post(null, gson.toJson(patient));
+                        updateResult = OkHttpManager.post(ServerAddress.ADMIN_UPDATE_PATIENT_URL, gson.toJson(patient));
                     } catch (Exception e) {
                         e.printStackTrace();
                         updateResult = "网络异常，修改失败";
                     }
+
+                    if (!TextUtils.isEmpty(updateResult)) {
+                        updateResult = updateResult.replaceAll("\"", "");
+                    }
                     Message msg = new Message();
-                    msg.what = UPDATE;
-                    msg.obj = updateResult;
-                    mHandler.sendMessage(msg);
+                    if ("success".equals(updateResult)) {
+                        msg.what = UPDATE;
+                        msg.obj = updateResult;
+                        mHandler.sendMessage(msg);
+                    } else {
+                        msg.what = MESSAGE;
+                        msg.obj = updateResult;
+                        mHandler.sendMessage(msg);
+                    }
+
                 }
             }).start();
         }
     }
 
-    private void insertDoctor() {
+    private void insertPatient() {
         synchronized (UpdatePatientActivity.class) {
             if (menuItem != null && menuItem.isVisible()) {
                 menuItem.setVisible(false);
@@ -304,27 +339,37 @@ public class UpdatePatientActivity extends BaseActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.i("skyjaj", "insertDoctor thread run");
-                    String updateResult = "";
+                    Log.i("skyjaj", "insertPatient thread run");
+                    String result = "";
                     Gson gson = new Gson();
                     try {
-                        Doctor doctor = new Doctor();
-                        doctor.setUsername(mNicknameTv.getText().toString());
-                        doctor.setSex("男".equals(mSexTv.getText().toString()) == true ? 1 : 0);
-                        doctor.setAddress(mRegionTv.getText().toString());
-                        doctor.setMobile(mPatient == null ? "" : mPatient.getMobile());
-                        doctor.setSignature(mSignitureTv.getText().toString());
-                        doctor.setPassword(mPasswordTv.getText().toString());
-                        doctor.setItemType(null);
-                        updateResult = OkHttpManager.post(null, gson.toJson(doctor));
+                        Patient patient = new Patient();
+                        patient.setUsername(mNicknameTv.getText().toString());
+                        patient.setSex("男".equals(mSexTv.getText().toString()) == true ? 1 : 0);
+                        patient.setRegion(mRegionTv.getText().toString());
+                        patient.setMobile(mAccountTv.getText().toString());
+                        patient.setSignature(mSignitureTv.getText().toString());
+                        patient.setPassword(mPasswordTv.getText().toString());
+                        result = OkHttpManager.post(ServerAddress.ADMIN_INSERT_PATIENT_URL, gson.toJson(patient));
                     } catch (Exception e) {
                         e.printStackTrace();
-                        updateResult = "网络异常，修改失败";
+                        result = "网络异常，修改失败";
+                    }
+
+                    if (!TextUtils.isEmpty(result)) {
+                        result = result.replaceAll("\"", "");
                     }
                     Message msg = new Message();
-                    msg.what = INSERT;
-                    msg.obj = updateResult;
-                    mHandler.sendMessage(msg);
+                    if ("success".equals(result)) {
+                        msg.what = INSERT;
+                        msg.obj = result;
+                        mHandler.sendMessage(msg);
+                    } else {
+                        msg.what = MESSAGE;
+                        msg.obj = result;
+                        mHandler.sendMessage(msg);
+                    }
+
                 }
             }).start();
         }
@@ -337,6 +382,7 @@ public class UpdatePatientActivity extends BaseActivity {
         if (R.id.action_bar_save == item.getItemId()) {
             if (mDialog == null) {
                 mDialog = DialogStylel.createLoadingDialog(this, "正在保存..");
+                mDialog.setCanceledOnTouchOutside(false);
                 mDialog.show();
             } else if (!mDialog.isShowing()){
                 mDialog.show();
@@ -344,7 +390,7 @@ public class UpdatePatientActivity extends BaseActivity {
             Log.i("skyjaj", " sex :" + mSexTv.getText().toString());
 
             if (mPatient == null) {
-                insertDoctor();
+                insertPatient();
             } else {
                 updateInformation();
             }

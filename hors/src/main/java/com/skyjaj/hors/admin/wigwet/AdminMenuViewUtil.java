@@ -150,7 +150,7 @@ public class AdminMenuViewUtil {
         mDatas.add(menu);
 
 
-
+        //1
         menu = new IndexServiceMenu(R.drawable.tab_settings_normal,"患者管理", 0);
         menu.setItemType(BaseMessage.Type.INCOMING);
         mDatas.add(menu);

@@ -159,6 +159,7 @@ public class DoctorManagerActivity extends BaseActivity{
                 }
             }
         };
+
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

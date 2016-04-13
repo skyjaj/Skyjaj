@@ -88,8 +88,9 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
                             d.setState(-1);
                         }
                         showCheckBox = false;
-                        mAdapter.notifyDataSetChanged();
+                        functionView.setVisibility(View.GONE);
                         checkDepartment.clear();
+                        mAdapter.notifyDataSetChanged();
                     }
                     Toast.makeText(DepartmentManagerActivity.this,"已删除", Toast.LENGTH_SHORT).show();
                     break;
@@ -276,7 +277,10 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 
-                if (showCheckBox) {
+                Department department = departmentList.get(position);
+
+                Log.i("skyjaj", "deaprtment :" + department +"  "+ new Gson().toJson(department));
+                if (showCheckBox || department.getItemType()== BaseMessage.Type.OUTCOMING) {
                     return false;
                 }
 
@@ -328,7 +332,6 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
                             }
                         };
                 DepartmentManagerForOnItemLongClick longClick = new DepartmentManagerForOnItemLongClick(listener, DepartmentManagerActivity.this);
-                Department department = departmentList.get(position);
                 longClick.setViewVisible(R.id.manager_department_schedule, View.GONE);
                 if (department != null && department.getState() == 0) {
                     longClick.setViewVisible(R.id.manager_department_stop, View.GONE);
@@ -336,6 +339,7 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
                 } else if (department != null && department.getState() == -1) {
                     longClick.setViewVisible(R.id.manager_department_stop, View.GONE);
                     longClick.setViewVisible(R.id.manager_department_delete, View.GONE);
+                    longClick.setViewVisible(R.id.manager_department_working, View.GONE);
                 } else {
                     longClick.setViewVisible(R.id.manager_department_working, View.GONE);
                 }
@@ -373,7 +377,7 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
                 if (!TextUtils.isEmpty(result)) {
                     result = result.replaceAll("\"", "");
                 }
-                if ("已停".equals(result) || "已删除".equals(result)) {
+                if ("success".equals(result)) {
                     msg.what = what;
                     msg.obj = department;
                     mHandler.sendMessage(msg);
@@ -400,6 +404,7 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
                 String result="";
                 try {
                     result = OkHttpManager.post(url, new Gson().toJson(systemUser));
+                    Log.i("skyjaj " ,"pre result :"+ result);
                 } catch (Exception e) {
                     e.printStackTrace();
                     result = "无法请求服务器,请稍后重试";
@@ -408,7 +413,8 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
                 if (!TextUtils.isEmpty(result)) {
                     result = result.replaceAll("\"", "");
                 }
-                if ("已恢复".equals(result)) {
+                Log.i("skyjaj " ,"post result :"+ result);
+                if ("success".equals(result)) {
                     msg.what = what;
                     msg.obj = department;
                     mHandler.sendMessage(msg);
@@ -429,8 +435,17 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
             @Override
             public void run() {
                 String result = "";
+                List<Department> temp = new ArrayList<Department>();
                 try {
-                    result = OkHttpManager.post(url, new Gson().toJson(checkDepartment));
+
+                    for (Department d : checkDepartment) {
+                        Department db = new Department();
+                        db.setId(d.getId());
+                        db.setItemType(null);
+                        temp.add(db);
+                    }
+
+                    result = OkHttpManager.post(url, new Gson().toJson(temp));
                 } catch (Exception e) {
                     e.printStackTrace();
                     result = "无法请求服务器,请稍后重试";
@@ -447,6 +462,9 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
                     msg.obj = result;
                     mHandler.sendMessage(msg);
                 }
+                temp.clear();
+                temp = null;
+
             }
         }).start();
     }

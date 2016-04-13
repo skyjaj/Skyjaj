@@ -34,6 +34,12 @@ public class SettingDialog implements View.OnClickListener {
 
     private Button ok,cancel;
 
+    private DialogType type = DialogType.COMMON;
+
+    public enum DialogType{
+        COMMON,ADMIN
+    }
+
 
     public SettingDialog(Context mContext, SettingDialogListener listener) {
         this.mContext = mContext;
@@ -90,6 +96,7 @@ public class SettingDialog implements View.OnClickListener {
     }
 
 
+
 //    public void invalidate2Psw(String s1, String s2) {
 //        if (TextUtils.isEmpty(s1) || TextUtils.isEmpty(s2)) {
 //            Toast.makeText(mContext, "两次密码不一样，不能为空", Toast.LENGTH_SHORT).show();
@@ -112,14 +119,22 @@ public class SettingDialog implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.dialog_update_password_ok:
 
-                if (TextUtils.isEmpty(riginTv.getText()+"") || TextUtils.isEmpty(password1.getText()+"") ||
-                        !(password1.getText()+"").equals(password2.getText()+"")) {
-//                    Log.i("skyjaj", "psw :" + riginTv.getText());
-//                    Log.i("skyjaj", "psw :" + password1.getText());
-//                    Log.i("skyjaj", "psw :" + password2.getText());
-//                    Log.i("skyjaj", "psw :" + (password1.getText()+"").equals(password2.getText()+""));
-                    Toast.makeText(mContext, "两次密码不一样,不能为空", Toast.LENGTH_SHORT).show();
-                    return;
+                String re = riginTv.getText() + "";
+                String psw1 = password2.getText() + "";
+                String psw2 = password1.getText() + "";
+
+                if (DialogType.COMMON == type) {
+                    if (TextUtils.isEmpty(re) || TextUtils.isEmpty(psw1) ||
+                            !(psw1).equals(psw2)) {
+                        Toast.makeText(mContext, "两次密码不一样,不能为空", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }else if (DialogType.ADMIN == type) {
+                    if (TextUtils.isEmpty(psw1) ||
+                            !psw1.equals(psw2)) {
+                        Toast.makeText(mContext, "两次密码不一样,不能为空", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                 }
                 listener.onClick(v,riginTv.getText()+"",password2.getText()+"");
                 break;
@@ -150,6 +165,9 @@ public class SettingDialog implements View.OnClickListener {
         }
     }
 
+    public void setDialogType(DialogType type) {
+        this.type = type;
+    }
 
     public interface  SettingDialogListener{
         void onClick(View view,String originPassword,String newPassword);

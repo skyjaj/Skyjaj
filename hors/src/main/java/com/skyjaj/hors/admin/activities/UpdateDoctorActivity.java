@@ -113,6 +113,7 @@ public class UpdateDoctorActivity extends BaseActivity {
             mRegionTv.setText(mDoctor.getAddress());
             mIntroductionTv.setText(mDoctor.getIntroduction());
             mTitleTv.setText(mDoctor.getTitle());
+            mPasswordTv.setText(mDoctor.getPassword());
         } else {
             mAccountTv.setText("");
             mNicknameTv.setText("");
@@ -309,6 +310,7 @@ public class UpdateDoctorActivity extends BaseActivity {
                 };
                 SettingDialog settingDialog = new SettingDialog(this, pswListener);
                 settingDialog.setTitleContent("修改密码");
+                settingDialog.setDialogType(SettingDialog.DialogType.ADMIN);
                 settingDialog.setViewVisibility(R.id.dialog_update_origin_password,View.GONE);
                 break;
         }

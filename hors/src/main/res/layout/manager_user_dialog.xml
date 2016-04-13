@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/manager_user_dialog_view"
+    android:orientation="vertical"
+    android:layout_width="240dp"
+    android:gravity="center"
+    android:background="@drawable/radius_dialog_bg"
+    android:layout_gravity="center"
+    android:layout_height="122dp">
+
+
+
+        <TextView
+            android:id="@+id/manager_user_dialog_delete"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@drawable/selector_textview"
+            android:text="删除该用户"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#8ce6e9ee"/>
+
+        <TextView
+            android:id="@+id/manager_user_dialog_disable"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@drawable/selector_textview"
+            android:text="禁用该用户"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#8ce6e9ee"/>
+
+        <TextView
+            android:id="@+id/manager_user_dialog_enable"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@drawable/selector_textview"
+            android:text="取消禁用"/>
+
+</LinearLayout>

@@ -31,7 +31,7 @@
                 android:orientation="horizontal"
                 android:paddingTop="6dp">
                 <TextView
-                    android:id="@+id/manager_user_item_item_name"
+                    android:id="@+id/manager_user_item_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="姓名"
@@ -103,8 +103,7 @@
             android:layout_marginRight="5dp"
             android:layout_marginLeft="5dp"
             android:gravity="right"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
+            android:layout_gravity="center"
             android:descendantFocusability="blocksDescendants">
 
             <Button
@@ -116,6 +115,10 @@
                 android:textColor="#ffffff"
                 android:textSize="12dp"
                 android:focusable="false"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/selector_button"/>
         </LinearLayout>
 

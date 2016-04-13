@@ -1,12 +1,13 @@
 package com.skyjaj.hors.bean;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * Created by Administrator on 2016/1/22.
  * 病人表
  */
-public class Patient {
+public class Patient implements Serializable{
 
     private String id;
     /*登陆帐号*/
