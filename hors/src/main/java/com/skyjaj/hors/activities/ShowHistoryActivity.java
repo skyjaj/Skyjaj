@@ -36,6 +36,7 @@ import com.skyjaj.hors.utils.DialogStylel;
 import com.skyjaj.hors.utils.OkHttpManager;
 import com.skyjaj.hors.utils.ServerAddress;
 import com.skyjaj.hors.utils.ToolbarStyle;
+import com.skyjaj.hors.widget.DialogTips;
 import com.skyjaj.hors.widget.EditTextDialog;
 import com.skyjaj.hors.widget.ShowHistoryLongClicklistener;
 
@@ -152,13 +153,16 @@ public class ShowHistoryActivity extends BaseActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (isLongClick) {
+//                if (isLongClick) {
+//                    return;
+//                }
+                final Reservation reservation = mDatas.get(position);
+                if (isLongClick || reservation == null || reservation.getItemType() == BaseMessage.Type.OUTCOMING) {
                     return;
                 }
-
                 Intent intent = new Intent(ShowHistoryActivity.this, HistoryDetails.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("reservation",mDatas.get(position));
+                bundle.putSerializable("reservation",reservation);
                 intent.putExtras(bundle);
                 startActivity(intent);
 //                Toast.makeText(ShowHistoryActivity.this, "position :" + position, Toast.LENGTH_SHORT).show();
@@ -182,7 +186,22 @@ public class ShowHistoryActivity extends BaseActivity {
                                     Toast.makeText(ShowHistoryActivity.this, "当前已取消", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
-                                cancel(ServerAddress.PATIENT_CANCEL_RESERVATION_URL, reservation);
+                                DialogTips.OnDialogItemClickListener deleteListener =
+                                        new DialogTips.OnDialogItemClickListener() {
+                                            @Override
+                                            public void onDialogItemClick(View view) {
+                                                switch (view.getId()) {
+                                                    case R.id.dialog_tips_cancel:
+                                                        break;
+                                                    case R.id.dialog_tips_ok:
+                                                        cancel(ServerAddress.PATIENT_CANCEL_RESERVATION_URL, reservation);
+                                                        break;
+                                                }
+                                            }
+                                        };
+
+                                DialogTips tips = new DialogTips(ShowHistoryActivity.this, deleteListener);
+                                tips.setTitle("您确定要删除吗?");
                                 break;
                             case R.id.show_history_comment:
 
@@ -214,9 +233,9 @@ public class ShowHistoryActivity extends BaseActivity {
                                 commentDialog.setContent("");
 //                                Toast.makeText(ShowHistoryActivity.this, "resid :" + "show_history_comment ", Toast.LENGTH_SHORT).show();
                                 break;
-                            case R.id.show_history_delete:
-                                delete(ServerAddress.PATIENT_DELETE_ERSERVATION_URL, reservation);
-                                break;
+//                            case R.id.show_history_delete:
+                                //delete(ServerAddress.PATIENT_DELETE_ERSERVATION_URL, reservation);
+//                                break;
                         }
                     }
 

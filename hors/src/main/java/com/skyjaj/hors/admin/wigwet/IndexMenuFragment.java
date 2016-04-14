@@ -1,6 +1,7 @@
 package com.skyjaj.hors.admin.wigwet;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
@@ -17,13 +18,15 @@ import com.skyjaj.hors.R;
 public class IndexMenuFragment extends ListFragment {
 
 
-    private static final int SIZE_MENU_ITEM = 5;
+    private static final int SIZE_MENU_ITEM = 4;
 
     private IndexMenuItem[] mItems = new IndexMenuItem[SIZE_MENU_ITEM];
 
     private IndexMenuAdapter mAdapter;
 
     private LayoutInflater mInflater;
+
+    private OnMenuItemSelectedListener mMenuItemSelectedListener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,19 +41,19 @@ public class IndexMenuFragment extends ListFragment {
                     //预约管理
                     menuItem = new IndexMenuItem(getResources().getStringArray(R.array.index_array_left_menu)[i], false, R.drawable.menu_add_icon, R.drawable.menu_add_icon);
                     break;
+//                case 1:
+//                    //消息管理
+//                    menuItem = new IndexMenuItem(getResources().getStringArray(R.array.index_array_left_menu)[i], false, R.drawable.menu_add_icon, R.drawable.menu_add_icon);
+//                    break;
                 case 1:
-                    //消息管理
-                    menuItem = new IndexMenuItem(getResources().getStringArray(R.array.index_array_left_menu)[i], false, R.drawable.menu_add_icon, R.drawable.menu_add_icon);
-                    break;
-                case 2:
                     //用户管理
                     menuItem = new IndexMenuItem(getResources().getStringArray(R.array.index_array_left_menu)[i], false, R.drawable.menu_feedback_icon, R.drawable.menu_feedback_icon);
                     break;
-                case 3:
+                case 2:
                     //科室管理
                     menuItem = new IndexMenuItem(getResources().getStringArray(R.array.index_array_left_menu)[i], false, R.drawable.ic_menu_start_conversation, R.drawable.ic_menu_start_conversation);
                     break;
-                case 4:
+                case 3:
                     //我
                     menuItem = new IndexMenuItem(getResources().getStringArray(R.array.index_array_left_menu)[i], false, R.drawable.me, R.drawable.me);
                     break;
@@ -69,8 +72,9 @@ public class IndexMenuFragment extends ListFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.setBackgroundColor(0xffffffff);
-        setListAdapter(mAdapter = new IndexMenuAdapter(getActivity(), mItems));
+        view.setBackgroundColor(Color.WHITE);
+        mAdapter = new IndexMenuAdapter(getActivity(), mItems);
+        setListAdapter(mAdapter);
 
     }
 
@@ -91,7 +95,6 @@ public class IndexMenuFragment extends ListFragment {
         void menuItemSelected(String title);
     }
 
-    private OnMenuItemSelectedListener mMenuItemSelectedListener;
 
     public void setOnMenuItemSelectedListener(OnMenuItemSelectedListener menuItemSelectedListener) {
         this.mMenuItemSelectedListener = menuItemSelectedListener;

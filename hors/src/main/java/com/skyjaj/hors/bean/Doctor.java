@@ -136,7 +136,7 @@ public class Doctor extends BaseMessage implements Serializable{
         return departmentId;
     }
 
-    public void setDepartment_id(String departmentId) {
+    public void setDepartmentId(String departmentId) {
         this.departmentId = departmentId;
     }
 

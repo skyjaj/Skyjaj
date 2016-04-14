@@ -48,6 +48,7 @@ import com.skyjaj.hors.utils.OkHttpManager;
 import com.skyjaj.hors.utils.PinYinUtil;
 import com.skyjaj.hors.utils.ServerAddress;
 import com.skyjaj.hors.utils.ToolbarStyle;
+import com.skyjaj.hors.widget.DialogTips;
 import com.skyjaj.hors.widget.PinyinBarView;
 
 import org.litepal.crud.DataSupport;
@@ -84,13 +85,16 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
                 //delete
                 case DELETE:
                     if (checkDepartment != null && checkDepartment.size() != 0) {
-                        for (Department d : checkDepartment) {
-                            d.setState(-1);
-                        }
+//                        for (Department d : checkDepartment) {
+//                            departmentList.remove(d);
+//                        }
+                        departmentList.clear();
                         showCheckBox = false;
                         functionView.setVisibility(View.GONE);
                         checkDepartment.clear();
-                        mAdapter.notifyDataSetChanged();
+//                        mAdapter.notifyDataSetChanged();
+                        mNetworkTask = new NetworkTask();
+                        mNetworkTask.execute();
                     }
                     Toast.makeText(DepartmentManagerActivity.this,"已删除", Toast.LENGTH_SHORT).show();
                     break;
@@ -207,11 +211,7 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
                         name += "(已停诊)";
                         viewHolder.setText(R.id.department_manager_item_text, name);
                         viewHolder.setSubTextColor(R.id.department_manager_item_text, Color.RED, start, name.length());
-                    } else if (department != null && department.getState() == -1 && start != -1) {
-                        name += "(已删除)";
-                        viewHolder.setText(R.id.department_manager_item_text, name);
-                        viewHolder.setSubTextColor(R.id.department_manager_item_text, Color.RED,start,name.length());
-                    } else {
+                    }else {
                         viewHolder.setText(R.id.department_manager_item_text, name);
                     }
 
@@ -301,7 +301,22 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
                                     case R.id.manager_department_delete:
                                         checkDepartment.clear();
                                         checkDepartment.add(departmentList.get(position));
-                                        deleteDepartment(ServerAddress.ADMIN_DELETE_DEPARTMENT_URL,DELETE);
+                                        DialogTips.OnDialogItemClickListener deleteListener =
+                                                new DialogTips.OnDialogItemClickListener() {
+                                                    @Override
+                                                    public void onDialogItemClick(View view) {
+                                                        switch (view.getId()) {
+                                                            case R.id.dialog_tips_cancel:
+                                                                break;
+                                                            case R.id.dialog_tips_ok:
+                                                                deleteDepartment(ServerAddress.ADMIN_DELETE_DEPARTMENT_URL, DELETE);
+                                                                break;
+                                                        }
+                                                    }
+                                                };
+
+                                        DialogTips tips = new DialogTips(DepartmentManagerActivity.this, deleteListener);
+                                        tips.setTitle("您确定要删除吗?");
                                         //deleteDepartment(ServerAddress.ADMIN_DELETE_DEPARTMENT_URL, departmentList.get(position),DELETE);
 //                                        Toast.makeText(DepartmentManagerActivity.this, "manager_department_delete", Toast.LENGTH_SHORT).show();
                                         break;
@@ -336,10 +351,6 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
                 if (department != null && department.getState() == 0) {
                     longClick.setViewVisible(R.id.manager_department_stop, View.GONE);
                     longClick.setViewVisible(R.id.manager_department_working, View.VISIBLE);
-                } else if (department != null && department.getState() == -1) {
-                    longClick.setViewVisible(R.id.manager_department_stop, View.GONE);
-                    longClick.setViewVisible(R.id.manager_department_delete, View.GONE);
-                    longClick.setViewVisible(R.id.manager_department_working, View.GONE);
                 } else {
                     longClick.setViewVisible(R.id.manager_department_working, View.GONE);
                 }
@@ -589,7 +600,22 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
                     Toast.makeText(this, "请选择", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                deleteDepartment(ServerAddress.ADMIN_DELETE_DEPARTMENT_URL, DELETE);
+                DialogTips.OnDialogItemClickListener deleteListener =
+                        new DialogTips.OnDialogItemClickListener() {
+                            @Override
+                            public void onDialogItemClick(View view) {
+                                switch (view.getId()) {
+                                    case R.id.dialog_tips_cancel:
+                                        break;
+                                    case R.id.dialog_tips_ok:
+                                        deleteDepartment(ServerAddress.ADMIN_DELETE_DEPARTMENT_URL, DELETE);
+                                        break;
+                                }
+                            }
+                        };
+
+                DialogTips tips = new DialogTips(DepartmentManagerActivity.this, deleteListener);
+                tips.setTitle("您确定要删除吗?");
                 break;
 
         }

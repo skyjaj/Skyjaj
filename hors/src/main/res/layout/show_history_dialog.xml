@@ -29,12 +29,14 @@
             android:layout_height="40dp"
             android:gravity="center"
             android:background="@drawable/selector_textview"
+            android:visibility="gone"
             android:text="删除记录"/>
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#8ce6e9ee"/>
+            android:background="#8ce6e9ee"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/show_history_comment"

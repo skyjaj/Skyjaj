@@ -11,7 +11,48 @@
     <ListView
         android:id="@+id/reservation_manager_listview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
     </ListView>
+
+    <LinearLayout
+        android:id="@+id/reservation_manager_menu_view"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:visibility="gone">
+        <Button
+            android:id="@+id/reservation_manager_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:text="取 消"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/selector_button"/>
+
+        <Button
+            android:id="@+id/reservation_manager_choose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:layout_weight="1"
+            android:text="全 选"
+            android:layout_margin="5dp"
+            android:background="@drawable/selector_button"/>
+
+        <Button
+            android:id="@+id/reservation_manager_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:layout_weight="1"
+            android:text="确 定"
+            android:layout_margin="5dp"
+            android:background="@drawable/selector_button"/>
+    </LinearLayout>
+
 
 </LinearLayout>

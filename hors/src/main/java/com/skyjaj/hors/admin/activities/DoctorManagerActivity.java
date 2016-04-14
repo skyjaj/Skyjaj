@@ -39,12 +39,14 @@ import com.skyjaj.hors.admin.wigwet.DoctorManagerForOnItemLongClickDialog;
 import com.skyjaj.hors.bean.Department;
 import com.skyjaj.hors.bean.Doctor;
 import com.skyjaj.hors.bean.Reservation;
+import com.skyjaj.hors.bean.SystemUser;
 import com.skyjaj.hors.utils.CommonAdapter;
 import com.skyjaj.hors.utils.DialogStylel;
 import com.skyjaj.hors.utils.OkHttpManager;
 import com.skyjaj.hors.utils.ServerAddress;
 import com.skyjaj.hors.utils.ToolbarStyle;
 import com.skyjaj.hors.utils.ViewHolder;
+import com.skyjaj.hors.widget.DialogTips;
 
 import org.xbill.DNS.Update;
 
@@ -63,7 +65,7 @@ public class DoctorManagerActivity extends BaseActivity{
     private Dialog dialog;
     private boolean isOnLongClick;
 
-    private final int DELETE = 0,STOP = 1,FALSE = -1;
+    private final int DELETE = 0,ENABLE = 1,DISASBLE = 2 ,MESSAGE = 3;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -78,14 +80,21 @@ public class DoctorManagerActivity extends BaseActivity{
                     Toast.makeText(DoctorManagerActivity.this,"已删除", Toast.LENGTH_SHORT).show();
                     break;
                 //STOP
-                case STOP:
+                case DISASBLE:
                     Doctor doctor = (Doctor) msg.obj;
                     doctor.setState(0);
                     mAdapter.setmData(mDatas);
                     mAdapter.notifyDataSetChanged();
                     Toast.makeText(DoctorManagerActivity.this,"已停诊", Toast.LENGTH_SHORT).show();
                     break;
-                case FALSE:
+                case ENABLE:
+                    Doctor enableDoctor = (Doctor) msg.obj;
+                    enableDoctor.setState(1);
+                    mAdapter.setmData(mDatas);
+                    mAdapter.notifyDataSetChanged();
+                    Toast.makeText(DoctorManagerActivity.this,"已恢复", Toast.LENGTH_SHORT).show();
+                    break;
+                case MESSAGE:
                     String rs = (String) msg.obj;
                     Toast.makeText(DoctorManagerActivity.this, rs, Toast.LENGTH_SHORT).show();
                     break;
@@ -111,6 +120,7 @@ public class DoctorManagerActivity extends BaseActivity{
 
         department = (Department) getIntent().getSerializableExtra("department");
         if (department != null) {
+            mToolbar.setTitle("医生管理("+department.getNameCn()+")");
             initView();
             attemptToLoadData();
         } else {
@@ -140,14 +150,9 @@ public class DoctorManagerActivity extends BaseActivity{
                             .setText(R.id.index_doctor_item_address, "诊室地址:" + doctor.getAddress());
 
 
-                    if (doctor.getState() == 0) {
+                    if (doctor.getState() != 1) {
                         Button btn = holder.getView(R.id.index_doctor_item_details);
                         btn.setText("已停诊");
-                        btn.setTextColor(Color.RED);
-                        btn.setBackgroundResource(R.drawable.textview_bg_pressed);
-                    } else if (doctor.getState() == -1) {
-                        Button btn = holder.getView(R.id.index_doctor_item_details);
-                        btn.setText("已删除");
                         btn.setTextColor(Color.RED);
                         btn.setBackgroundResource(R.drawable.textview_bg_pressed);
                     } else {
@@ -190,13 +195,31 @@ public class DoctorManagerActivity extends BaseActivity{
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 
+                final Doctor doctor = mDatas.get(position);
+
                 DoctorManagerForOnItemLongClickDialog.OnItemClickListener listener = new DoctorManagerForOnItemLongClickDialog.OnItemClickListener() {
                     @Override
                     public void onItemClick(int resId) {
                         isOnLongClick = false;
                         switch (resId) {
                             case R.id.manager_doctor_delete:
-                                deleteDoctor(ServerAddress.DOCTOR_DELETE_URL, mDatas.get(position), DELETE);
+                                DialogTips.OnDialogItemClickListener deleteListener =
+                                        new DialogTips.OnDialogItemClickListener() {
+                                            @Override
+                                            public void onDialogItemClick(View view) {
+                                                switch (view.getId()) {
+                                                    case R.id.dialog_tips_cancel:
+                                                        break;
+                                                    case R.id.dialog_tips_ok:
+                                                        switchDoctor(ServerAddress.ADMIN_DELETE_DOCTOR_URL, mDatas.get(position), DELETE);
+                                                        break;
+                                                }
+                                            }
+                                        };
+
+                                DialogTips tips = new DialogTips(DoctorManagerActivity.this, deleteListener);
+                                tips.setTitle("您确定要删除" + doctor.getName() + "医生吗?");
+//                                disableDoctor(ServerAddress.DOCTOR_DELETE_URL, mDatas.get(position), DELETE);
 //                                Toast.makeText(DoctorManagerActivity.this, "resid :" + "manager_doctor_delete ", Toast.LENGTH_SHORT).show();
                                 break;
                             case R.id.manager_doctor_update:
@@ -204,10 +227,12 @@ public class DoctorManagerActivity extends BaseActivity{
 //                                Toast.makeText(DoctorManagerActivity.this, "resid :" + "manager_doctor_update ", Toast.LENGTH_SHORT).show();
                                 break;
                             case R.id.manager_doctor_stop:
-                                deleteDoctor(ServerAddress.DOCTOR_STOP_URL, mDatas.get(position), STOP);
+                                switchDoctor(ServerAddress.ADMIN_DISABLE_DOCTOR_URL, mDatas.get(position), DISASBLE);
+                                //DOCTOR_STOP_URL
 //                                Toast.makeText(DoctorManagerActivity.this, "resid :" + "manager_doctor_stop ", Toast.LENGTH_SHORT).show();
                                 break;
                             case R.id.manager_doctor_restore_work:
+                                switchDoctor(ServerAddress.ADMIN_ENABLE_DOCTOR_URL, mDatas.get(position), ENABLE);
 //                                Toast.makeText(DoctorManagerActivity.this, "resid :" + "manager_doctor_stop ", Toast.LENGTH_SHORT).show();
                                 break;
 
@@ -227,17 +252,13 @@ public class DoctorManagerActivity extends BaseActivity{
                 };
 
                 DoctorManagerForOnItemLongClickDialog clickDialog = new DoctorManagerForOnItemLongClickDialog(listener, DoctorManagerActivity.this);
-                Doctor doctor = mDatas.get(position);
                 if (doctor != null && doctor.getState() == 1) {
                     clickDialog.setViewVisible(R.id.manager_doctor_stop, View.VISIBLE);
                     clickDialog.setViewVisible(R.id.manager_doctor_restore_work, View.GONE);
 
-                } else if (doctor != null && doctor.getState() == 0){
+                } else{
                     clickDialog.setViewVisible(R.id.manager_doctor_stop, View.GONE);
                     clickDialog.setViewVisible(R.id.manager_doctor_restore_work, View.VISIBLE);
-                }else if (doctor != null && doctor.getState() == -1) {
-                    clickDialog.setViewVisible(R.id.manager_doctor_stop, View.GONE);
-                    clickDialog.setViewVisible(R.id.manager_doctor_restore_work, View.GONE);
                 }
                 isOnLongClick = true;
                 return false;
@@ -248,20 +269,19 @@ public class DoctorManagerActivity extends BaseActivity{
     }
 
 
-    public void deleteDoctor(final String url,final Doctor doctor,final int what) {
+    public void switchDoctor(final String url,final Doctor doctor,final int what) {
         if (dialog != null && !dialog.isShowing()) {
             dialog.show();
         }
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Doctor doctor1 = new Doctor();
-                doctor1.setId(doctor.getId());
-                doctor1.setItemType(null);
+                SystemUser systemUser = new SystemUser();
+                systemUser.setRemark(doctor.getId());
                 String result;
                 try {
-                    Log.i("skyjaj", "new Gson().toJson(doctor1) :" + new Gson().toJson(doctor1));
-                    result = OkHttpManager.post(url, new Gson().toJson(doctor1));
+                    Log.i("skyjaj", "new Gson().toJson(doctor1) :" + new Gson().toJson(systemUser));
+                    result = OkHttpManager.post(url, new Gson().toJson(systemUser));
                 } catch (Exception e) {
                     e.printStackTrace();
                     result = "无法请求服务器,请稍后重试";
@@ -276,7 +296,7 @@ public class DoctorManagerActivity extends BaseActivity{
                     msg.obj = doctor;
                     mHandler.sendMessage(msg);
                 } else {
-                    msg.what = FALSE;
+                    msg.what = MESSAGE;
                     msg.obj = result;
                     mHandler.sendMessage(msg);
                 }
@@ -303,7 +323,13 @@ public class DoctorManagerActivity extends BaseActivity{
 
         if (R.id.action_add == item.getItemId()) {
             Intent intent = new Intent(this, UpdateDoctorActivity.class);
-            startActivity(intent);
+            if (department != null) {
+                intent.putExtra("department_id", department.getId());
+                intent.putExtra("department_name", department.getNameCn());
+                startActivity(intent);
+            } else {
+                Toast.makeText(this,"获取部门信息失败",Toast.LENGTH_SHORT).show();
+            }
         }
 
         return super.onOptionsItemSelected(item);

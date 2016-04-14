@@ -17,9 +17,9 @@
     <!-- indexActivity-->
     <string-array name="index_array_left_menu">
         <item>用户管理</item>
-        <item>科室管理</item>
+        <item>科室、医生管理</item>
         <item>预约管理</item>
-        <item>消息管理</item>
+        <!--<item>消息管理</item>-->
         <item>我</item>
 
     </string-array>

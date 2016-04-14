@@ -1,0 +1,29 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--<item-->
+        <!--android:id="@+id/action_manager_search"-->
+        <!--android:icon="@drawable/actionbar_search_icon"-->
+        <!--android:title="搜索"-->
+        <!--android:visible="true"-->
+        <!--app:showAsAction="always" />-->
+
+
+
+    <item
+        android:id="@+id/action_reservation_more"
+        android:icon="@drawable/actionbar_add_icon"
+        android:title="更多"
+        android:visible="true">
+<!--
+            app:showAsAction="never"-->
+        <item
+            android:id="@+id/action_reservation_delete"
+            android:icon="@drawable/menu_feedback_icon"
+            android:title="批量删除" />
+
+    </item>
+
+
+
+
+</menu>

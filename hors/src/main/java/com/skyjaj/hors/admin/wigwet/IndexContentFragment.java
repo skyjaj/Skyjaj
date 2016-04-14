@@ -32,8 +32,6 @@ public class IndexContentFragment extends Fragment{
     }
 
 
-
-
     public View fragmentView;
 
     public ListView mListView;
@@ -67,12 +65,13 @@ public class IndexContentFragment extends Fragment{
                 this.fragmentView = AdminMenuViewUtil.getReservationManagerView(inflater, container, getContext(), mTitle);
                 mListView = (ListView) fragmentView.findViewById(R.id.index_service_one);
                 return fragmentView;
-            }else if (mTitle.equals( getResources().getStringArray(
-                    R.array.index_array_left_menu)[3])) {
-                this.fragmentView = AdminMenuViewUtil.getMessageManagerView(inflater, container, getContext(), mTitle);
-                return fragmentView;
+//                else if (mTitle.equals( getResources().getStringArray(
+//                        R.array.index_array_left_menu)[3])) {
+//                    this.fragmentView = AdminMenuViewUtil.getMessageManagerView(inflater, container, getContext(), mTitle);
+//                    return fragmentView;
+//                }
             } else if (mTitle.equals( getResources().getStringArray(
-                    R.array.index_array_left_menu)[4])) {
+                    R.array.index_array_left_menu)[3])) {
                 this.fragmentView = AdminMenuViewUtil.getIndexMeView(inflater, container, getContext(), mTitle);
                 return fragmentView;
             }else {

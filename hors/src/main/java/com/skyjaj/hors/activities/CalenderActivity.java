@@ -174,14 +174,16 @@ public class CalenderActivity extends Activity implements  CalendarCard.OnCellCl
                 return false;
             }
 
-            if (scheduleOfMonths != null) {
-                Date date =DateUtil.getLastDate(scheduleOfMonths.get(0).getWorkday());
+            if (scheduleOfMonths != null && scheduleOfMonths.size() > 0) {
+                Date date = DateUtil.getLastDate(scheduleOfMonths.get(0).getWorkday());
                 if (date != null) {
-                    customDate = new CustomDate(DateUtil.getYear(date),DateUtil.getMonth(date),DateUtil.getDay(date));
+                    customDate = new CustomDate(DateUtil.getYear(date), DateUtil.getMonth(date), DateUtil.getDay(date));
                 }
+            } else {
+                return false;
             }
 
-            if (scheduleOfMonths != null) {
+            if (scheduleOfMonths != null && scheduleOfMonths.size() > 0) {
                 for (ScheduleOfMonth s : scheduleOfMonths) {
                     Date date = DateUtil.Timestamp2Date(s.getWorkday());
                     if (customDate != null && customDate.month == DateUtil.getMonth(date)) {
@@ -208,7 +210,7 @@ public class CalenderActivity extends Activity implements  CalendarCard.OnCellCl
             }
 
             if (scheduleOfMonths == null || scheduleOfMonths.size() == 0) {
-                Toast.makeText(CalenderActivity.this, "暂无数据", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CalenderActivity.this, "暂无排班数据", Toast.LENGTH_SHORT).show();
                 finish();
                 return;
             }

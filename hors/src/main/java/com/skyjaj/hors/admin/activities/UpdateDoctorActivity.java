@@ -6,6 +6,7 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +21,7 @@ import com.google.gson.Gson;
 import com.skyjaj.hors.R;
 import com.skyjaj.hors.activities.BaseActivity;
 import com.skyjaj.hors.bean.Doctor;
+import com.skyjaj.hors.bean.SystemUser;
 import com.skyjaj.hors.utils.DialogStylel;
 import com.skyjaj.hors.utils.OkHttpManager;
 import com.skyjaj.hors.utils.RoleConstant;
@@ -40,7 +42,9 @@ public class UpdateDoctorActivity extends BaseActivity {
     private MenuItem menuItem;
     private Dialog mDialog;
     private Doctor mDoctor;
-    private final int UPDATE = 1 , INSERT = 2;
+    private String mDepartmentId;
+    private String mDepartmentName;
+    private final int UPDATE = 1 , INSERT = 2, MESSAGE = 3;
 
     private Handler mHandler = new Handler(){
 
@@ -53,10 +57,16 @@ public class UpdateDoctorActivity extends BaseActivity {
                     if (mDialog != null && mDialog.isShowing()) {
                         mDialog.dismiss();
                     }
-                    Toast.makeText(UpdateDoctorActivity.this, (String)msg.obj.toString().replaceAll("\"",""), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UpdateDoctorActivity.this, "已修改", Toast.LENGTH_SHORT).show();
                     break;
 
                 case INSERT:
+                    if (mDialog != null && mDialog.isShowing()) {
+                        mDialog.dismiss();
+                    }
+                    Toast.makeText(UpdateDoctorActivity.this, "已增加", Toast.LENGTH_SHORT).show();
+                    break;
+                case MESSAGE:
                     if (mDialog != null && mDialog.isShowing()) {
                         mDialog.dismiss();
                     }
@@ -75,9 +85,11 @@ public class UpdateDoctorActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_doctor);
         mDoctor = (Doctor) getIntent().getSerializableExtra("doctor");
+        mDepartmentId = getIntent().getStringExtra("department_id");
+        mDepartmentName = getIntent().getStringExtra("department_name");
 
         if (mDoctor == null) {
-            mToolbar = ToolbarStyle.initToolbar(this, R.id.mToolbar, "添加医生");
+            mToolbar = ToolbarStyle.initToolbar(this, R.id.mToolbar, "添加医生("+mDepartmentName+")");
         } else {
             mToolbar = ToolbarStyle.initToolbar(this, R.id.mToolbar, "修改医生信息");
         }
@@ -254,7 +266,7 @@ public class UpdateDoctorActivity extends BaseActivity {
                     @Override
                     public void onDialogItemClick(View view,EditText content) {
                         if (view.getId() == R.id.dialog_edit_ok) {
-                            mRegionTv.setText(content.getText());
+                            mTitleTv.setText(content.getText());
                         }
                     }
 
@@ -291,7 +303,7 @@ public class UpdateDoctorActivity extends BaseActivity {
                 };
                 EditTextDialog introductionDialog= new EditTextDialog(UpdateDoctorActivity.this, introductionListener);
                 introductionDialog.setTitle("修改简介");
-                introductionDialog.setContent(mTitleTv.getText().toString());
+                introductionDialog.setContent(mIntroductionTv.getText().toString());
                 break;
             case R.id.update_doctor_password_view:
                 SettingDialog.SettingDialogListener pswListener = new SettingDialog.SettingDialogListener() {
@@ -326,11 +338,11 @@ public class UpdateDoctorActivity extends BaseActivity {
                 @Override
                 public void run() {
                     Log.i("skyjaj", "thread run");
-                    String updateResult = "";
+                    String result = "";
                     Gson gson = new Gson();
                     try {
                         Doctor doctor = new Doctor();
-                        doctor.setUsername(mNicknameTv.getText().toString());
+                        doctor.setName(mNicknameTv.getText().toString());
                         doctor.setSex("男".equals(mSexTv.getText().toString()) == true ? 1 : 0);
                         doctor.setAddress(mRegionTv.getText().toString());
                         doctor.setMobile(mDoctor==null?"":mDoctor.getMobile());
@@ -339,15 +351,24 @@ public class UpdateDoctorActivity extends BaseActivity {
                         doctor.setPassword(mPasswordTv.getText().toString());
                         doctor.setIntroduction(mIntroductionTv.getText().toString());
                         doctor.setItemType(null);
-                        updateResult = OkHttpManager.post(null, gson.toJson(doctor));
+                        result = OkHttpManager.post(ServerAddress.ADMIN_UPDATE_DOCTOR_URL, gson.toJson(doctor));
                     } catch (Exception e) {
                         e.printStackTrace();
-                        updateResult = "网络异常，修改失败";
+                        result = "网络异常，修改失败";
+                    }
+                    if (!TextUtils.isEmpty(result)) {
+                        result = result.replaceAll("\"", "");
                     }
                     Message msg = new Message();
-                    msg.what = UPDATE;
-                    msg.obj = updateResult;
-                    mHandler.sendMessage(msg);
+                    if ("success".equals(result)) {
+                        msg.what = UPDATE;
+                        msg.obj = null;
+                        mHandler.sendMessage(msg);
+                    } else {
+                        msg.what = MESSAGE;
+                        msg.obj = result;
+                        mHandler.sendMessage(msg);
+                    }
                 }
             }).start();
         }
@@ -358,32 +379,46 @@ public class UpdateDoctorActivity extends BaseActivity {
             if (menuItem != null && menuItem.isVisible()) {
                 menuItem.setVisible(false);
             }
+            if (mDialog != null && !mDialog.isShowing()) {
+                mDialog.show();
+            }
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     Log.i("skyjaj", "insertDoctor thread run");
-                    String updateResult = "";
+                    String result = "";
                     Gson gson = new Gson();
                     try {
                         Doctor doctor = new Doctor();
-                        doctor.setUsername(mNicknameTv.getText().toString());
+                        doctor.setName(mNicknameTv.getText().toString());
                         doctor.setSex("男".equals(mSexTv.getText().toString()) == true ? 1 : 0);
                         doctor.setAddress(mRegionTv.getText().toString());
-                        doctor.setMobile(mDoctor==null?"":mDoctor.getMobile());
+                        doctor.setMobile(mAccountTv.getText().toString());
                         doctor.setSignature(mSignitureTv.getText().toString());
                         doctor.setTitle(mTitleTv.getText().toString());
                         doctor.setPassword(mPasswordTv.getText().toString());
                         doctor.setIntroduction(mIntroductionTv.getText().toString());
+                        doctor.setDepartmentId(mDepartmentId);
                         doctor.setItemType(null);
-                        updateResult = OkHttpManager.post(null, gson.toJson(doctor));
+                        result = OkHttpManager.post(ServerAddress.ADMIN_INSERT_DOCTOR_URL, gson.toJson(doctor));
                     } catch (Exception e) {
                         e.printStackTrace();
-                        updateResult = "网络异常，修改失败";
+                        result = "网络异常，修改失败";
+                    }
+
+                    if (!TextUtils.isEmpty(result)) {
+                        result = result.replaceAll("\"", "");
                     }
                     Message msg = new Message();
-                    msg.what = INSERT;
-                    msg.obj = updateResult;
-                    mHandler.sendMessage(msg);
+                    if ("success".equals(result)) {
+                        msg.what = INSERT;
+                        msg.obj = null;
+                        mHandler.sendMessage(msg);
+                    } else {
+                        msg.what = MESSAGE;
+                        msg.obj = result;
+                        mHandler.sendMessage(msg);
+                    }
                 }
             }).start();
         }
@@ -418,7 +453,7 @@ public class UpdateDoctorActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.user_information, menu);
         menuItem = menu.getItem(0);
-        Log.i("skyjaj", "title "+menu.getItem(0).getTitle().toString());
+        Log.i("skyjaj", "title " + menu.getItem(0).getTitle().toString());
         return true;
     }
 

@@ -145,20 +145,16 @@ public class AdminMenuViewUtil {
     public static View getUserManagerView(final LayoutInflater inflater, ViewGroup container, final Context ctx,String mTitle) {
         List<IndexServiceMenu> mDatas = new ArrayList<IndexServiceMenu>();
 
-        IndexServiceMenu menu = new IndexServiceMenu(R.drawable.me, "医生管理", 0);
-        menu.setItemType(BaseMessage.Type.INCOMING);
-        mDatas.add(menu);
 
 
-        //1
-        menu = new IndexServiceMenu(R.drawable.tab_settings_normal,"患者管理", 0);
+        //0
+        IndexServiceMenu menu = new IndexServiceMenu(R.drawable.tab_settings_normal,"患者管理", 0);
         menu.setItemType(BaseMessage.Type.INCOMING);
         mDatas.add(menu);
 
         menu = new IndexServiceMenu(0, "", 0);
         menu.setItemType(BaseMessage.Type.OUTCOMING);
         mDatas.add(menu);
-
 
 
         Map<BaseMessage.Type, Integer> itemViews = new HashMap<BaseMessage.Type, Integer>();
@@ -185,12 +181,8 @@ public class AdminMenuViewUtil {
                 final Activity activity = (Activity) ctx;
                 switch (position) {
                     case 0:
-                        Intent intent = new Intent(ctx, DoctorManagerActivity.class);
+                        Intent intent = new Intent(ctx, UserManagerActivity.class);
                         ctx.startActivity(intent);
-                        break;
-                    case 1:
-                        Intent userIntent = new Intent(ctx, UserManagerActivity.class);
-                        ctx.startActivity(userIntent);
                         break;
                 }
 

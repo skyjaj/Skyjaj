@@ -19,7 +19,7 @@ public class ShowHistoryLongClicklistener implements View.OnClickListener{
     private Context mContext;
     private Dialog mDialog;
     private ShowHistoryLongClicklistener.OnClickListener mListener;
-    private TextView cancel,delete,comment;
+    private TextView cancel,comment;
 
     public ShowHistoryLongClicklistener(OnClickListener listener,Context mContext) {
         this.mContext = mContext;
@@ -35,10 +35,10 @@ public class ShowHistoryLongClicklistener implements View.OnClickListener{
         LinearLayout layout = (LinearLayout) v.findViewById(R.id.show_history_dialog_view);
 
         cancel = (TextView) v.findViewById(R.id.show_history_cancel);
-        delete = (TextView) v.findViewById(R.id.show_history_delete);
+//        delete = (TextView) v.findViewById(R.id.show_history_delete);
         comment = (TextView) v.findViewById(R.id.show_history_comment);
         cancel.setOnClickListener(this);
-        delete.setOnClickListener(this);
+//        delete.setOnClickListener(this);
         comment.setOnClickListener(this);
 
 
@@ -76,9 +76,9 @@ public class ShowHistoryLongClicklistener implements View.OnClickListener{
      */
     public void setViewGone(int resId) {
         switch (resId) {
-            case R.id.show_history_delete:
-                delete.setVisibility(View.GONE);
-                break;
+//            case R.id.show_history_delete:
+//                delete.setVisibility(View.GONE);
+//                break;
             case R.id.show_history_cancel:
                 cancel.setVisibility(View.GONE);
                 break;
@@ -94,9 +94,9 @@ public class ShowHistoryLongClicklistener implements View.OnClickListener{
      */
     public void setViewVisible(int resId) {
         switch (resId) {
-            case R.id.show_history_delete:
-                delete.setVisibility(View.VISIBLE);
-                break;
+//            case R.id.show_history_delete:
+//                delete.setVisibility(View.VISIBLE);
+//                break;
             case R.id.show_history_cancel:
                 cancel.setVisibility(View.VISIBLE);
                 break;
