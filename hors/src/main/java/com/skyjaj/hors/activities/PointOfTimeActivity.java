@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -48,7 +49,7 @@ public class PointOfTimeActivity extends Activity implements PointOfTimeView.OnI
     private LinearLayout output;
     private TextView chooseTime;
     private TextView title;
-    private ImageButton buttonBack;
+    private Button buttonBack;
     //时间点的数目
     private int total;
     private List<String> results;
@@ -83,7 +84,7 @@ public class PointOfTimeActivity extends Activity implements PointOfTimeView.OnI
         output = (LinearLayout) findViewById(R.id.point_of_time_point);
         title = (TextView) findViewById(R.id.point_of_time_title);
         chooseTime = (TextView) findViewById(R.id.point_of_time_choose_time);
-        buttonBack = (ImageButton) findViewById(R.id.point_of_time_btn_left);
+        buttonBack = (Button) findViewById(R.id.point_of_time_btn_left);
     }
 
 

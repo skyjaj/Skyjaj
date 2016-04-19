@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
@@ -29,6 +30,8 @@ public class Zhuanhua extends Activity implements OnGetGeoCoderResultListener {
     BaiduMap mBaiduMap = null;
     MapView mMapView = null;
 
+    EditText tv;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //在使用SDK各组件之前初始化context信息，传入ApplicationContext
@@ -47,6 +50,7 @@ public class Zhuanhua extends Activity implements OnGetGeoCoderResultListener {
         // 初始化搜索模块，注册事件监听
         mSearch = GeoCoder.newInstance();
         mSearch.setOnGetGeoCodeResultListener(this);
+        tv = (EditText) findViewById(R.id.location_xy);
     }
 
     /**
@@ -106,6 +110,7 @@ public class Zhuanhua extends Activity implements OnGetGeoCoderResultListener {
                 .getLocation()));
         String strInfo = String.format("纬度：%f 经度：%f",
                 result.getLocation().latitude, result.getLocation().longitude);
+        tv.setText(result.getLocation().latitude+" "+result.getLocation().longitude);
         Toast.makeText(Zhuanhua.this, strInfo, Toast.LENGTH_LONG).show();
     }
 

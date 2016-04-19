@@ -12,7 +12,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -35,17 +34,16 @@ import com.skyjaj.hors.admin.activities.AdminMainActivity;
 import com.skyjaj.hors.bean.LoginInformation;
 import com.skyjaj.hors.bean.Patient;
 import com.skyjaj.hors.doctor.activities.HomePage;
+import com.skyjaj.hors.loadtest.ForgetPasswordActivity;
 import com.skyjaj.hors.network.LoginResult;
 import com.skyjaj.hors.utils.OkHttpManager;
 import com.skyjaj.hors.utils.RoleConstant;
 import com.skyjaj.hors.utils.ServerAddress;
 
-import org.androidpn.client.ServiceManager;
 import org.litepal.crud.DataSupport;
 import org.litepal.tablemanager.Connector;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -252,7 +250,7 @@ public class LoginActivity extends BaseActivity{
             //忘记密码
             case R.id.action_forget_password:
                 DataSupport.deleteAll(LoginInformation.class, "state >=?" , "0");
-                Intent intent = new Intent(this, com.skyjaj.hors.loadtest.MainActivity.class);
+                Intent intent = new Intent(this, ForgetPasswordActivity.class);
                 startActivity(intent);
                 Toast.makeText(this, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
                 return  true;

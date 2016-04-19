@@ -68,8 +68,8 @@ public class IndexCommonActivity extends BaseActivity implements ViewPager.OnPag
         mViewPager.addOnPageChangeListener(this);
         sharedPreferences = this.getSharedPreferences("horsUserInfo", MODE_PRIVATE);
 
-        mTask = new ServiceTask();
-        mTask.execute();
+//        mTask = new ServiceTask();
+//        mTask.execute();
     }
 
     private void initDatas() {
@@ -217,7 +217,7 @@ public class IndexCommonActivity extends BaseActivity implements ViewPager.OnPag
                 Toast.makeText(this,"action feedback ",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.action_scan:
-//                Intent intentsc = new Intent(this, MainActivity.class);
+//                Intent intentsc = new Intent(this, ForgetPasswordActivity.class);
 //                startActivity(intentsc);
                 Toast.makeText(this,"action scan ",Toast.LENGTH_SHORT).show();
                 break;

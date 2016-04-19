@@ -23,9 +23,9 @@ import com.skyjaj.hors.R;
 public class ChangeColorIconWithText extends View
 {
 
-	private int mColor = 0xFF45C01A;
 	private Bitmap mIconBitmap;
 	private String mText = "hors";
+	private int mColor = 0xFF45C01A;
 	private int mTextSize = (int) TypedValue.applyDimension(
 			TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics());
 

@@ -73,6 +73,8 @@ public class DateUtil {
     }
 
 
+
+
     /**
      * time 形如  yyyy-MM-dd HH:mm 返回的格式：yyyyMMdd HH:mm
      * @param time
@@ -201,10 +203,10 @@ public class DateUtil {
         }
 
         int[] arr = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };  
-        int days = 0;  
-  
+        int days = 0;
+        // 闰年2月29天
         if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {  
-            arr[1] = 29; // 闰年2月29天  
+            arr[1] = 29;
         }  
   
         try {  

@@ -1,6 +1,7 @@
 package com.skyjaj.hors.doctor.activities;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.google.gson.Gson;
@@ -16,6 +18,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.skyjaj.hors.R;
 import com.skyjaj.hors.activities.BaseActivity;
+import com.skyjaj.hors.activities.HistoryDetails;
 import com.skyjaj.hors.activities.MyActivityManager;
 import com.skyjaj.hors.adapter.CommonAdapter;
 import com.skyjaj.hors.adapter.TimestampTypeAdapter;
@@ -73,39 +76,23 @@ public class ReservationInformation extends BaseActivity {
 
         mDatas = new ArrayList<Reservation>();
 
-//        Reservation reservation = new Reservation();
-//        reservation.setName("小明");
-//        reservation.setAppointmentTime("2016-03-10 14:20");
-//        reservation.setPatientId("13631158354");
-//        mDatas.add(reservation);
-//
-//        reservation = new Reservation();
-//        reservation.setName("小红");
-//        reservation.setAppointmentTime("2016-03-10 14:20");
-//        reservation.setPatientId("13631158354");
-//        mDatas.add(reservation);
-//
-//        reservation = new Reservation();
-//        reservation.setRemark("2016年03月");
-//        reservation.setItemType(BaseMessage.Type.OUTCOMING);
-//        mDatas.add(reservation);
-//
-//        reservation = new Reservation();
-//        reservation.setName("小白");
-//        reservation.setAppointmentTime("2016-03-10 14:20");
-//        reservation.setPatientId("13631158354");
-//        mDatas.add(reservation);
 
         mAdapter = new CommonAdapter<Reservation>(this,mDatas,mViews) {
             @Override
             public void convert(ViewHolder viewHolder, Reservation reservation) {
                 if (reservation.getItemType() == BaseMessage.Type.INCOMING) {
                     viewHolder.setText(R.id.show_reservation_name, reservation.getName())
-                            .setText(R.id.show_reservation_mobile, reservation.getPatientId())
+                            .setText(R.id.show_reservation_mobile, reservation.getName())
                             .setText(R.id.show_reservation_time, ""+DateUtil.string2TimeFormatThree(reservation.getAppointmentTime()));
                 }else if (reservation.getItemType() == BaseMessage.Type.OUTCOMING) {
                     viewHolder.setText(R.id.index_service_item_tv, reservation.getAppointmentTime());
                 }
+
+                Button btn = (Button) viewHolder.getView(R.id.show_reservation_remark_btn);
+                if (btn != null) {
+                    btn.setVisibility(View.GONE);
+                }
+
             }
         };
 
@@ -115,7 +102,13 @@ public class ReservationInformation extends BaseActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(ReservationInformation.this, "position :" + position, Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(ReservationInformation.this, HistoryDetails.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("reservation", mDatas.get(position));
+                intent.putExtras(bundle);
+                startActivity(intent);
+//                Toast.makeText(ReservationInformation.this, "position :" + position, Toast.LENGTH_SHORT).show();
             }
         });
 

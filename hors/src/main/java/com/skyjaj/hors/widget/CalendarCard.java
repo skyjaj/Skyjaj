@@ -19,7 +19,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 /** 
- * 自定义日历卡 
+ * 自定义日历卡
  *
  */  
 public class CalendarCard extends View {  

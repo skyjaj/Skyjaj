@@ -313,6 +313,32 @@
                     android:paddingLeft="15dp"
                     android:textSize="16dp"/>
             </LinearLayout>
+
+            <LinearLayout
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:orientation="horizontal"
+                android:background="#eee7e7e7"
+                android:gravity="center_vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:text="评论内容 :"
+                    android:textSize="18dp"/>
+
+                <TextView
+                    android:id="@+id/history_details_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxWidth="250dp"
+                    android:scrollbars="vertical"
+                    android:text="内容容内容内容内容内容内容容内容内容内容"
+                    android:paddingLeft="15dp"
+                    android:textSize="16dp"/>
+            </LinearLayout>
     </LinearLayout>
     </ScrollView>
 

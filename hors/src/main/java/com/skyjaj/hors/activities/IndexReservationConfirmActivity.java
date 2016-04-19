@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -90,7 +91,11 @@ public class IndexReservationConfirmActivity extends BaseActivity {
             checkingFeeTv.setText(intent.getStringExtra("checking_fee"));
             doctorTv.setText(intent.getStringExtra("doctor_name"));
             departmentTv.setText(intent.getStringExtra("department_name"));
-            timeTv.setText(DateUtil.string2TimeFormatOne(intent.getStringExtra("appointment_time")));
+            String time = intent.getStringExtra("appointment_time");
+            if (!TextUtils.isEmpty(time)) {
+                time = time.replaceAll("-", "");
+            }
+            timeTv.setText(DateUtil.string2TimeFormatOne(time));
             patientTv.setText(intent.getStringExtra("patient_name"));
         }
     }

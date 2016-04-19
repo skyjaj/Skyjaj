@@ -1,6 +1,7 @@
 package com.skyjaj.hors.doctor.activities;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.skyjaj.hors.R;
 import com.skyjaj.hors.activities.BaseActivity;
+import com.skyjaj.hors.activities.HistoryDetails;
 import com.skyjaj.hors.activities.MyActivityManager;
 import com.skyjaj.hors.adapter.CommonAdapter;
 import com.skyjaj.hors.adapter.TimestampTypeAdapter;
@@ -92,7 +94,12 @@ public class DoctorWorkRecord extends BaseActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(DoctorWorkRecord.this, "position :" + position, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(DoctorWorkRecord.this, HistoryDetails.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("reservation", mDatas.get(position));
+                intent.putExtras(bundle);
+                startActivity(intent);
+//                Toast.makeText(DoctorWorkRecord.this, "position :" + position, Toast.LENGTH_SHORT).show();
             }
         });
 

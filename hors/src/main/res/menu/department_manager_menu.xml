@@ -1,13 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/action_manager_search"
-        android:icon="@drawable/actionbar_search_icon"
-        android:title="搜索"
-        android:visible="true"
-        app:showAsAction="always" />
-
 
 
     <item

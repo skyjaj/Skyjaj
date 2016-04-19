@@ -56,7 +56,7 @@
     <string name="tab_service">医疗服务</string>
     <string name="tab_contact">通讯录</string>
     <string name="tab_me">我</string>
-    <string name="tab_found">发现</string>
+    <string name="tab_found">更多</string>
 
 
     <!-- index views 主页每个页面的相关信息定义-->

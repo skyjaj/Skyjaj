@@ -521,10 +521,6 @@ public class DepartmentManagerActivity extends BaseActivity implements PinyinBar
                 startActivity(intent);
                 break;
 
-            case R.id.action_manager_search:
-
-                break;
-
             case R.id.action_manager_delete_more:
                 showCheckBox = true;
                 mAdapter.notifyDataSetChanged();

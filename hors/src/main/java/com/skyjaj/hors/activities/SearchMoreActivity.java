@@ -215,7 +215,16 @@ public class SearchMoreActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 BaseMessage baseMessage = mDatas.get(position);
                 if (baseMessage.getItemType() == BaseMessage.Type.INCOMING) {
-                    Intent intent = new Intent(SearchMoreActivity.this, IndexDepartmentDoctorActivity.class);Department department = (Department) baseMessage;
+                    Intent intent = new Intent(SearchMoreActivity.this, IndexDepartmentDoctorActivity.class);
+                    Department department = (Department) baseMessage;
+                    try {
+                        if (department != null && department.getState() != 1) {
+                            Toast.makeText(SearchMoreActivity.this, "该科室已停诊", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     department.setId(department.getId());
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("department", department);
@@ -225,6 +234,14 @@ public class SearchMoreActivity extends BaseActivity {
                     Intent intent = new Intent(SearchMoreActivity.this, CalenderActivity.class);
                     Bundle bundle = new Bundle();
                     Doctor doctor = (Doctor) baseMessage;
+                    try {
+                        if (doctor != null && doctor.getState() != 1) {
+                            Toast.makeText(SearchMoreActivity.this, "该医生已停诊", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     bundle.putSerializable("doctor", doctor);
                     Department department = new Department();
                     department.setId(doctor.getDepartmentId());

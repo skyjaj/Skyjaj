@@ -9,15 +9,18 @@
             android:layout_height="50dp"
             android:background="#5e5d5c">
 
-            <ImageButton
+            <Button
                 android:id="@+id/point_of_time_btn_left"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="5dp"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="33dip"
                 android:onClick="onClick"
+                android:text="X"
+                android:textColor="#ffffff"
                 android:src="@drawable/ic_menu_back"
-                android:background="@drawable/selector_button"/>
+                android:background="@drawable/selector_circular_button"/>
 
 
             <TextView

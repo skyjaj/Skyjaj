@@ -242,6 +242,7 @@ public class ReservationManagerActivity extends BaseActivity implements View.OnC
                             dialog.show();
                         }
                         mTask = new NetWorkTask();
+                        Log.i("skyjaj", "onscroll " + mDatas.get(mDatas.size() - 1).getRemark());
                         mTask.setTime(mDatas.get(mDatas.size() - 1).getRemark());
                         mTask.execute();
                     }
@@ -417,6 +418,7 @@ public class ReservationManagerActivity extends BaseActivity implements View.OnC
             }
             try {
                 systemUser.setRemark(time);
+                Log.i("skyjaj ", new Gson().toJson(systemUser));
                 result = OkHttpManager.post(ServerAddress.ADMIN_FIND_RESERVATION_URL, new Gson().toJson(systemUser));
                 Log.i("skyjaj", result);
             } catch (Exception e) {

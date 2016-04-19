@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
@@ -66,8 +67,16 @@ public class ShowResultActivity extends Activity {
             inspectingFeeTv.setText(intent.getStringExtra("inspecting_fee"));
             checkingFeeTv.setText(intent.getStringExtra("checking_fee"));
             doctorTv.setText(intent.getStringExtra("doctor_name"));
-            departmentTv.setText(intent.getStringExtra("department_name"));
-            timeTv.setText(DateUtil.string2TimeFormatOne(intent.getStringExtra("appointment_time")));
+            String departmentName = intent.getStringExtra("department_name");
+            if (TextUtils.isEmpty(departmentName)) {
+                departmentTv.setVisibility(View.GONE);
+            }
+            departmentTv.setText(departmentName);
+            String time = intent.getStringExtra("appointment_time");
+            if (!TextUtils.isEmpty(time)) {
+                time = time.replaceAll("-", "");
+            }
+            timeTv.setText(DateUtil.string2TimeFormatOne(time));
             patientTv.setText(intent.getStringExtra("patient_name"));
         }
         title.setText("预约结果");

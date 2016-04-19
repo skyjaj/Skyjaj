@@ -1,6 +1,7 @@
 package com.skyjaj.hors.admin.activities;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,15 +16,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.skyjaj.hors.R;
 import com.skyjaj.hors.activities.BaseActivity;
+import com.skyjaj.hors.adapter.CalendarTypeAdapter;
+import com.skyjaj.hors.admin.wigwet.ChooseParentDepartmentDialog;
+import com.skyjaj.hors.bean.BaseMessage;
 import com.skyjaj.hors.bean.Department;
+import com.skyjaj.hors.bean.ScheduleOfMonth;
 import com.skyjaj.hors.utils.DialogStylel;
 import com.skyjaj.hors.utils.OkHttpManager;
 import com.skyjaj.hors.utils.PinYinUtil;
 import com.skyjaj.hors.utils.ServerAddress;
 import com.skyjaj.hors.utils.ToolbarStyle;
 import com.skyjaj.hors.widget.EditTextDialog;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UpdateDepartmentActivity extends BaseActivity {
 
@@ -34,7 +45,9 @@ public class UpdateDepartmentActivity extends BaseActivity {
     private MenuItem menuItem;
     private Dialog mDialog;
     private Department mDepartment;
-    private final int UPDATE = 1 , INSERT = 2;
+    private Department mParent;
+
+    private final int UPDATE = 1 , INSERT = 2 , MESSAGE = 3 , PARENT_DEPARTMENT = 4;
 
     private Handler mHandler = new Handler(){
 
@@ -60,6 +73,18 @@ public class UpdateDepartmentActivity extends BaseActivity {
                     break;
 
                 case INSERT:
+                    if (mDialog != null && mDialog.isShowing()) {
+                        mDialog.dismiss();
+                    }
+                    Toast.makeText(UpdateDepartmentActivity.this, (String)msg.obj.toString().replaceAll("\"",""), Toast.LENGTH_SHORT).show();
+                    break;
+                case PARENT_DEPARTMENT:
+                    if (mDialog != null && mDialog.isShowing()) {
+                        mDialog.dismiss();
+                    }
+                    openParentDepartmentChooseDialog((List) msg.obj);
+                    break;
+                case MESSAGE:
                     if (mDialog != null && mDialog.isShowing()) {
                         mDialog.dismiss();
                     }
@@ -94,6 +119,7 @@ public class UpdateDepartmentActivity extends BaseActivity {
 
 
         initView();
+        mParent = null;
     }
 
 
@@ -118,6 +144,8 @@ public class UpdateDepartmentActivity extends BaseActivity {
             mEnNameTv.setText("");
             mIsParentTv.setText("");
         }
+
+        mDialog = DialogStylel.createLoadingDialog(this, "加载中..");
     }
 
 
@@ -177,7 +205,7 @@ public class UpdateDepartmentActivity extends BaseActivity {
                 if (mDepartment != null) {
                     return;
                 }
-
+                getParentDepartment();
                 break;
             case R.id.update_department_mobile_view:
 
@@ -207,6 +235,95 @@ public class UpdateDepartmentActivity extends BaseActivity {
     }
 
 
+    /**
+     * 弹出父级科室对话框的选择
+     * @param departments
+     */
+    private void openParentDepartmentChooseDialog(List departments) {
+        ChooseParentDepartmentDialog.OnItemClickListener listener = new
+                ChooseParentDepartmentDialog.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Department department) {
+                        if (department != null) {
+                            mIsParentTv.setText(department.getNameCn());
+                            if (department.getItemType() != BaseMessage.Type.OUTCOMING) {
+                                mParent = department;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onDismissListener(DialogInterface dialog) {
+
+                    }
+
+                    @Override
+                    public void onCancelListener(DialogInterface dialog) {
+
+                    }
+                };
+        ChooseParentDepartmentDialog chooseDialog = new ChooseParentDepartmentDialog(listener, this, departments);
+
+    }
+
+    /**
+     * 获取父级科室信息
+     */
+    private void getParentDepartment() {
+        if (mDialog != null && !mDialog.isShowing()) {
+            mDialog.show();
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String result = "";
+                List<Department> departments = null;
+                Message msg = new Message();
+                try {
+                    result = OkHttpManager.post(ServerAddress.ADMIN_FIND_PARENT_DEPARTMENT_URL);
+                    Log.i("skyjaj", "result :" + result);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    result = "网络异常，请稍后重试";
+                    msg.what = MESSAGE;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                    return;
+                }
+                try {
+                    Gson gson = new GsonBuilder().registerTypeAdapter(Timestamp.class, new CalendarTypeAdapter()).create();
+                    departments = gson.fromJson(result,new TypeToken<List<Department>>() {}.getType());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    result = "解释数据失败，请重试";
+                    msg.what = MESSAGE;
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                    return;
+                }
+
+                if (departments == null || departments.size() == 0) {
+                    msg.what = MESSAGE;
+                    departments = new ArrayList<Department>();
+                    Department d = new Department();
+                    d.setNameCn("无");
+                    d.setItemType(BaseMessage.Type.OUTCOMING);
+                    msg.obj = departments;
+                } else {
+                    msg.what = PARENT_DEPARTMENT;
+                    Department d = new Department();
+                    d.setNameCn("无");
+                    d.setItemType(BaseMessage.Type.OUTCOMING);
+                    departments.add(0,d);
+                    msg.obj = departments;
+                }
+                mHandler.sendMessage(msg);
+
+            }
+        }).start();
+    }
+    
+    
     private void updateInformation() {
         synchronized (UpdateDepartmentActivity.class) {
             if (menuItem != null && menuItem.isVisible()) {
@@ -261,7 +378,7 @@ public class UpdateDepartmentActivity extends BaseActivity {
                         depart.setNameEn(mEnNameTv.getText().toString());
                         depart.setAddress(mAddressTv.getText().toString());
                         depart.setMobile(mMobileTv.getText().toString());
-                        depart.setParentId("0");
+                        depart.setParentId(mParent!=null?mParent.getId():"0");
                         updateResult = OkHttpManager.post(ServerAddress.ADMIN_ADD_DEPARTMENT_URL, gson.toJson(depart));
                     } catch (Exception e) {
                         e.printStackTrace();

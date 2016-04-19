@@ -101,7 +101,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="是否一级科室"
+                android:text="父科室"
                 android:layout_gravity="center"/>
             <TextView
                 android:id="@+id/update_department_isparent"

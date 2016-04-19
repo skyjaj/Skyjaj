@@ -64,7 +64,7 @@ public class RegistereActivity extends BaseActivity {
 
     private static Thread th;
     private static boolean canSend;
-    private static final int UPDATECODE = 0, UPDATEUI = 1;
+    private static final int UPDATECODE = 0, UPDATEUI = 1, MESSAGE = 2,SEND_SMS = 3;
     private static Context ctx;
     private boolean ready;
     private Dialog dialog;
@@ -103,6 +103,11 @@ public class RegistereActivity extends BaseActivity {
             } else if (msg.what == UPDATEUI) {
                 getCodeBtn.setBackgroundResource(R.drawable.edittext_focus);
                 getCodeBtn.setText(data + "");
+            } else if (msg.what == MESSAGE) {
+                Toast.makeText(ctx,(String)data, Toast.LENGTH_SHORT).show();
+            }else if (msg.what == SEND_SMS) {
+                SMSSDK.getVerificationCode("86", msg.obj+"");
+                sendedMSM();
             } else {
                 ((Throwable) data).printStackTrace();
             }
@@ -277,19 +282,50 @@ public class RegistereActivity extends BaseActivity {
         }
     }
 
+    public void tryToSendSms() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String result = "";
+                String phone = mMobileView.getText().toString();
+                try {
+                    result = OkHttpManager.post(ServerAddress.PATIENT_HAS_MOBILE_URL, phone);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    result = "网络异常，发送失败";
+                }
+
+                if (!TextUtils.isEmpty(result)) {
+                    result = result.replaceAll("'\"", "");
+                }
+                Message msg = new Message();
+                if ("no".equals(result)) {
+                    msg.what = SEND_SMS;
+                    msg.obj = phone;
+                }else if ("yes".equals(result)) {
+                    msg.obj = "该用户已存在";
+                    msg.what = MESSAGE;
+                }else {
+                    msg.what = MESSAGE;
+                    msg.obj = result;
+                }
+                handler.sendMessage(msg);
+            }
+        }).start();
+    }
+
     public void onClick(View view) {
 
         switch (view.getId()) {
             case R.id.register_getCode:
                 if (canSend&&attempToGetCode()) {
-				SMSSDK.getVerificationCode("86", mMobileView.getText().toString());
-                    sendedMSM();
+				    tryToSendSms();
                 }
                 break;
         }
     }
 
-    private synchronized void sendedMSM() {
+    private synchronized static void sendedMSM() {
         canSend = false;
         getCodeBtn.setBackgroundResource(R.drawable.edittext_focus);
         th =new Thread(new Runnable() {

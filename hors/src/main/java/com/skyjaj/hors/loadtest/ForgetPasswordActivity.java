@@ -6,9 +6,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Handler.Callback;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -29,7 +27,7 @@ import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
 //请注意：测试短信条数限制发送数量：20条/天，APP开发完成后请到mob.com后台提交审核，获得不限制条数的免费短信权限。
-public class MainActivity extends BaseActivity {
+public class ForgetPasswordActivity extends BaseActivity {
 
 	private static String APPKEY = "116fb12b1951f";
 	private static String APPSECRET = "2f86e61f4c737a55d4387c2f6ccae290";
@@ -47,7 +45,7 @@ public class MainActivity extends BaseActivity {
 	private Dialog mDialog;
 	private static Context ctx;
 
-	private static final int UPDATECODE = 0, UPDATEUI = 1;
+	private static final int UPDATECODE = 0, UPDATEUI=1,MESSAGE = 2, SEND_SMS = 3;
 
 	private static  final Handler handler = new Handler(){
 		@Override
@@ -82,6 +80,11 @@ public class MainActivity extends BaseActivity {
 			} else if (msg.what == UPDATEUI) {
 				getCodeBtn.setBackgroundResource(R.drawable.edittext_focus);
 				getCodeBtn.setText(data + "");
+			}else if (msg.what == MESSAGE) {
+				Toast.makeText(ctx, (String) data, Toast.LENGTH_SHORT).show();
+			}else if (msg.what == SEND_SMS) {
+				SMSSDK.getVerificationCode("86", msg.obj+"");
+				sendedMSM();
 			} else {
 				((Throwable) data).printStackTrace();
 			}
@@ -168,6 +171,37 @@ public class MainActivity extends BaseActivity {
 	}
 
 
+	public void tryToSendSms() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				String result = "";
+				String phoneNumber = phone.getText().toString();
+				try {
+					result = OkHttpManager.post(ServerAddress.PATIENT_HAS_MOBILE_URL, phoneNumber);
+				} catch (Exception e) {
+					e.printStackTrace();
+					result = "网络异常，发送失败";
+				}
+
+				if (!TextUtils.isEmpty(result)) {
+					result = result.replaceAll("'\"", "");
+				}
+				Message msg = new Message();
+				if ("yes".equals(result)) {
+					msg.what = SEND_SMS;
+					msg.obj = phoneNumber;
+				}else if ("no".equals(result)) {
+					msg.obj = "该用户不存在";
+					msg.what = MESSAGE;
+				}else {
+					msg.what = MESSAGE;
+					msg.obj = result;
+				}
+				handler.sendMessage(msg);
+			}
+		}).start();
+	}
 
 
 	public void onClick(View v) {
@@ -178,8 +212,7 @@ public class MainActivity extends BaseActivity {
 //			SMSSDK.submitVerificationCode(String country, String phone, String code)
 			// 请求获取短信验证码，在监听中返回
 			if (canSend && attempToGetCode()) {
-				SMSSDK.getVerificationCode("86", phone.getText().toString());
-				sendedMSM();
+				tryToSendSms();
 			}
 
 			break;
@@ -189,14 +222,17 @@ public class MainActivity extends BaseActivity {
 		}
 	}
 
-	private synchronized void sendedMSM() {
+	private synchronized static void sendedMSM() {
+		if (!canSend) {
+			return;
+		}
 		canSend = false;
 		getCodeBtn.setBackgroundResource(R.drawable.edittext_focus);
-		th =new Thread(new Runnable() {
+		th = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				int i=60;
-				while (i>0) {
+				int i = 60;
+				while (i > 0) {
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
@@ -205,7 +241,7 @@ public class MainActivity extends BaseActivity {
 					i--;
 					Message msg = new Message();
 					msg.what = UPDATEUI;
-					msg.obj = i+"";
+					msg.obj = i + "";
 					handler.sendMessage(msg);
 				}
 				Message msg = new Message();
@@ -319,7 +355,7 @@ public class MainActivity extends BaseActivity {
 				findViewById(R.id.forget_password_tips_view).setVisibility(View.VISIBLE);
 				findViewById(R.id.forget_password_all_view).setVisibility(View.GONE);
 			} else {
-				Toast.makeText(MainActivity.this, result, Toast.LENGTH_SHORT).show();
+				Toast.makeText(ForgetPasswordActivity.this, result, Toast.LENGTH_SHORT).show();
 			}
 
 		}

@@ -155,6 +155,18 @@ public class IndexServiceAppointmentActivity extends BaseActivity implements Pin
                 if (department.getItemType() == BaseMessage.Type.INCOMING) {
                     viewHolder.setImageResource(R.id.index_service_item_icon, R.drawable.menu_feedback_icon)
                             .setText(R.id.index_service_item_text, department.getNameCn());
+
+                    String name = department.getNameCn();
+                    int start = TextUtils.isEmpty(name)?-1:name.length();
+
+                    if (department != null && department.getState() != 1 && start != -1) {
+                        name += "(已停诊)";
+                        viewHolder.setText(R.id.index_service_item_text, name);
+                        viewHolder.setSubTextColor(R.id.index_service_item_text, Color.RED, start, name.length());
+                    }else {
+                        viewHolder.setText(R.id.index_service_item_text, name);
+                    }
+
                 } else {
                     viewHolder.setText(R.id.index_service_item_tv, department.getNameCn())
                             .setTextColor(R.id.index_service_item_tv, Color.parseColor("#9f9d9d")) //white
@@ -168,6 +180,11 @@ public class IndexServiceAppointmentActivity extends BaseActivity implements Pin
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                Toast.makeText(IndexServiceAppointmentActivity.this, "position :" + position, Toast.LENGTH_SHORT).show();
                 Department department = departmentList.get(position);
+                if (department.getState() != 1) {
+                    Toast.makeText(IndexServiceAppointmentActivity.this, "该部门已停诊", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if (department.getItemType() == BaseMessage.Type.INCOMING) {
                     Intent intent = new Intent(IndexServiceAppointmentActivity.this, IndexDepartmentDoctorActivity.class);
                     Bundle mBundle = new Bundle();

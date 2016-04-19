@@ -46,6 +46,7 @@ public class DBUtil {
 
         Department department = new Department();
         department.setId(dbDepartment.getDepartId());
+        department.setState(dbDepartment.getState());
         department.setNameCn(dbDepartment.getNameCn());
         department.setNameEn(dbDepartment.getNameEn());
         return department;

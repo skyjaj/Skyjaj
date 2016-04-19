@@ -56,6 +56,16 @@
             android:text="ReverseGeo" />
     </LinearLayout>
 
+
+    <EditText
+        android:id="@+id/location_xy"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_margin="5dp"
+        android:text="x"/>
+
+
+
     <com.baidu.mapapi.map.MapView
         android:id="@+id/bmapView"
         android:layout_width="fill_parent"

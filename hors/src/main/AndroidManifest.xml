@@ -144,7 +144,7 @@
         <activity
             android:name=".weixin.wxapi.WXEntryActivity"
             android:exported="true" />
-        <!-- <activity android:name=".clipview.MainActivity"/> -->
+        <!-- <activity android:name=".clipview.ForgetPasswordActivity"/> -->
         <!-- <activity android:name=".clipview.ClipActivity" /> -->
         <!--
              ATTENTION: This was auto-generated to add Google Play services to your project for
@@ -166,7 +166,7 @@
         <activity android:name=".admin.activities.UpdatePatientActivity" />
         <activity android:name=".admin.activities.UpdateDepartmentActivity" />
         <activity android:name=".admin.activities.UpdateDoctorActivity" />
-        <activity android:name=".loadtest.MainActivity" />
+        <activity android:name=".loadtest.ForgetPasswordActivity" />
         <activity android:name=".activities.HistoryDetails" />
         <activity android:name=".admin.activities.UserManagerActivity"></activity>
     </application>

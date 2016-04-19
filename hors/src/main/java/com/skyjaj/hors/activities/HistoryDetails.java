@@ -26,6 +26,7 @@ public class HistoryDetails extends BaseActivity {
     private TextView checkingFeeTv;
     private TextView statusTv;
     private TextView createdTimeTv;
+    private TextView commentTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,7 @@ public class HistoryDetails extends BaseActivity {
             timeTv.setText(DateUtil.string2TimeFormatOne(reservation.getAppointmentTime()));
             patientTv.setText(reservation.getName());
             statusTv.setText(reservation.getCancel() == true ? "预约已取消" : "预约成功");
+            commentTv.setText(reservation.getIsComment()==1?reservation.getCommentContent():"暂无评论");
             if (!reservation.getCancel()) {
                 statusTv.setTextColor(Color.GREEN);
             } else {
@@ -77,6 +79,7 @@ public class HistoryDetails extends BaseActivity {
         checkingFeeTv = (TextView) findViewById(R.id.history_details_checking_fee);
         statusTv = (TextView) findViewById(R.id.history_details_status);
         createdTimeTv = (TextView) findViewById(R.id.history_details_create_time);
+        commentTv = (TextView) findViewById(R.id.history_details_comment);
     }
 
 

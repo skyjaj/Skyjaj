@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/action_mylocation"
+        android:icon="@drawable/actionbar_add_icon"
+        android:title="更多"
+        android:visible="true"
+        app:showAsAction="never">
+
+        <item
+            android:id="@+id/action_bus_line"
+            android:icon="@drawable/menu_feedback_icon"
+            android:title="批量删除"
+            app:showAsAction="never" />
+
+    </item>
+
+
+
+
+</menu>
